@@ -1,0 +1,280 @@
+<style type="text/css">
+	.monst1w{
+		z-index: 26 !important;
+	}
+	.margin_categary
+	{
+		margin-bottom: 7px;
+		margin-left: 12px
+	}
+	.margin_subcategary
+	{
+		margin-top: -25px;
+		margin-left: 228px;
+	}
+
+</style>
+<div class="main_container">
+	<div class="container mpro_container">
+		<%= render(:partial => 'dashboard_header') %>
+		<div class="row">
+			<div class="col-md-8 sd_content">
+				<div class="row sd_gbox">
+					<div class="col-xs-2 col-sm-6 col-md-1 st_lbl alg_reg">Status</div>
+					<div class="col-xs-12 col-sm-6 col-md-3 sd_sbw">
+						<label class="field select monst1" style="z-index: 26">
+							<select id="search_status_project" class="select">
+								<option value="all">All</option>
+								<option value="opened">Hiring Open</option>
+								<option value="awarded">Working</option>
+								<option value="completed">Completed</option>
+								<option value="closed">Hiring Closed</option>
+							</select>
+							<i class="arrow"></i>               
+						</label>
+					</div>
+					<div class="col-xs-12  col-md-8 sd_sbw ssrch">
+						<form class="search-box" action="/projects" method="get">
+							<div class="input-group search_bs">
+								<input type="search" placeholder="Search My Projects" class="search form-control pull-left" name="sq" value="<%= @searchseller %>">
+								<button type="submit" class="input-group-addon" value=""><i class="fa fa-search"></i></button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="row srch_result fprojec sd_slec">
+					<!-- <div class='margin_categary main_label'>Category:</div>
+					<div class="col-xs-12 catgs col-md-4 main_fc ssctg">
+						
+						<label class="field select">
+							<%#=select("person", "category", @categories.collect{ |u| [u.name, u.id] },{:prompt => "All" })%>
+							<i class="arrow"></i>                  
+						</label>
+					</div>
+
+					<%# if @subcat_show %>
+					<div class='margin_subcategary main_label'>Subcategory:</div>
+					<div class="col-xs-12 catgs col-md-4 main_fc ssctg" id="subcategory_div">
+						
+						<label class="field select">
+							<%#=select("subperson", "subcategory", @subcategories.collect{ |u| [u.name, u.id] },{:prompt => "All" })%>
+							<i class="arrow"></i>                 
+						</label>
+					</div>
+					<%#else%>
+					<div class="col col-md-4"></div>
+					<%# end %>
+ -->
+					<div class="col-xs-12 col-sm-4 col-md-4 pull-right"  style="padding: 0px 0 0 15px">
+						<label class="pull-left alg_reg">Sort by</label>
+						<label class="field select">
+							<select id="search_posted_project">
+								<option value="all">All Posted</option>
+								<option value="asc">Posted Date ASC</option>
+								<option value="desc">Posted Date DESC</option>
+							</select>
+							<i class="arrow"></i>                
+						</label>
+					</div>
+				</div>
+				<% if @projects.count >= 1%>
+				<% @projects.each do |project| %>
+				<% if project.present? %>
+				<div class="ds row my_pro">
+					<div>
+						<div class="row" style="padding-left: 15px;">
+							<div class="col-md-8 pro_title pull-left gotham_medium">
+								<%= link_to project.full_title, project_path(project.id), :class=>"pro_title title_anchor"%>
+							</div>
+							<div class="col-md-3 pull-right alg_reg">
+								<% if (bid_accepted?(project.id) && project.project_awarded? == true) %>
+								<%= link_to 'Manage Project', projects_action_milestone_path(id:project.id), :class=>"btn btn-warning mproj"%>
+								<% elsif (bid_declined?(project.id) && project.project_awarded? == false || project.rehire_project == true ) %>
+								<%= link_to 'Submit Bid', project_path(project.id),:class=>"btn btn-warning mproj"%>
+								<% elsif project.project_awarded? == false %>
+								<%= link_to 'Update Bid', project_path(project.id),:class=>"btn btn-warning mproj"%>
+								<% end %>
+							</div>
+						</div>
+
+						<div class="pr_tlbl alg_reg">
+							<div class="pull-left" style="padding-left: 15px;"><span class="main_label">Project Status:</span>&nbsp;
+								<% status = project.current_state %>
+								<span class="value_proj"><%=status%></span>&nbsp;&nbsp;|&nbsp;&nbsp; 
+							</div>
+							<div class="pull-left ">
+								<% if project.project_accepted? %>
+								<span class="main_label">Buyer:</span>&nbsp;<span class="blue_txt1">
+								<a class="title_anchor" style="color: #004A82;" href="/account/user_public_profile?id=<%= project.user.try(:id)%>">
+									<%= project.user.try(:full_name) %></a>
+								</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+								<% else %>
+								<span class="main_label">Ends:</span>&nbsp;<span class="blue_txt1"></span>
+								<%= user_time_zone(project.end_date) %>&nbsp;|&nbsp;&nbsp;
+								<% end %>
+							</div>
+							<div class="pull-left"><%= project.bid_count %>&nbsp;<span class="main_label">Proposals</span> </div> 
+						</div>
+						<button class="ds_narrow pdtls search_nav gotham_medium navbar-toggle " data-toggle="collapse" data-target="#<%= project.id %>">
+							<span class="main_label">Project Details</span> <span class="pull-right"><i class="fa fa-chevron-down"></i></span></span>
+						</button>
+						
+						<div id="<%= project.id %>" class="navbar-collapse collapse" >
+							<div class="pr_tlbl alg_reg">
+								<div class="pull-left">
+									<% if bid_awarded?(project.id) %>
+									<span class="main_label">Awarded On:</span>&nbsp;<%= user_time_zone project.project_awarded_date%>
+									<% elsif project.bids.present? %>
+									<span class="main_label">Bidded On:</span>&nbsp;<%= user_time_zone bid_date(project.id)%> 
+									<% else %>
+									<span class="main_label">Posted On:</span>&nbsp;<%= user_time_zone project.created_at %>
+									<% end %>&nbsp;&nbsp;
+								</div>
+								<div class="pull-left">
+									<a onclick="show_popup('send_message_buyer_seller_dash_<%=project.id%>')">Send Message <i class="fa fa-envelope"></i></a>&nbsp;
+								</div>
+							</div>
+							<!-- Message start -->
+							<div class="pv_lbl col-md-12 check_message_open msg_rhtbox" id="send_message_buyer_seller_dash_<%=project.id%>"
+								style="display:none;">
+								<div style="color: green;"></div>
+								<%= form_for Message.new,url: {:controller=>"messages", action: "send_praposal_message"},:html => {"data-parsley-validate" => true} do |f| %>
+								<input type="hidden" name="message[to]" id="to_email" value="<%=project.user.email%>">
+								<input type="hidden" name="message[subject]" id="message_subject"
+								value="Message from seller for project <%= project.full_title%>">
+								<input type="hidden" name="message[type]" id="message_subject" value="Normal">
+								<div class="row">
+									<div class="col-md-12">
+										<%= f.text_area :body,:rows => "4",'data-parsley-required'=>"true", :style=>"color:#666666;font-size:12px;width:100%;height:90px;border: 1px solid #999999;resize:none;",:value=> ''%>
+									</div>
+								</div>
+								<div class="row" style="padding-left: 16px;">
+									<div class="col-md-2">
+										<%= f.submit 'Send',name: 'BidMessage', class: 'btn btn-warning save alg_reg'%>
+									</div>
+									<div class="col-md-2">
+										<a href="javascript:void(0);" onclick="hide_popup_without_load('send_message_buyer_seller_dash_<%=project.id%>')">
+											<span class="cancel_button alg_reg">Cancel</span></a>
+										</div>
+									</div>
+									<% end %>
+								</div>
+								<!-- Message End -->
+								<div class="pv_lbl col-md-12 project_details alg_reg">
+									<span class="main_label">Project Description:</span>&nbsp;&nbsp;
+									<span><%= project.description[0...300] %></span>
+									<span class="full_state2_<%=project.id%>" style="display:none;">
+										<%= project.description[300..-1]%>
+									</span>
+									<% if project.description.length >= 300%>
+									<br>
+									<a href="javascript:void(0);" class="flip2_<%=project.id%>" style="color:#001FE2;" onclick="show_read_more(<%= project.id %>)">
+										<i class="fa fa-sort-desc fa-2x "></i> More</a>
+										<% end %>
+									</div>
+									<div class="pr_tlbl alg_reg">
+										<div class="pull-left"><span class="main_label">Category:</span>&nbsp;
+											<span class="value_proj"><%= project.try(:category_name)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										</div>  
+										<div class="pull-left"><span class="main_label">Subcategory:</span>&nbsp;
+											<span class="value_proj"><%= project.try(:subcategory_name)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										</div>  
+										<div class="pull-left"><span class="main_label">Project Tags:</span>&nbsp;
+											<span class="value_proj"><%= project.try(:tags) %></span>
+										</div>
+									</div>
+									<div class="pr_tlbl alg_reg">
+										<div class="pull-left"><span class="main_label">Skills Required:</span>&nbsp;
+											<span class="value_proj"><%= project.try(:skills)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										</div>  
+										<div class="pull-left"><span class="main_label">Budget:</span>&nbsp;
+											<span class="value_proj"><%= project.try(:budget)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										</div>
+										<div class="pull-left"><span class="main_label">Estimated Time Frame:</span>&nbsp;
+											<span class="value_proj"><%= project.try(:estimated_time)%></span>
+										</div>
+										<div class="pr_tlbl alg_reg">
+											<div class="pull-left"><span class="main_label">Location:</span>&nbsp;
+												<span class="value_proj"><%= project.location%></span>&nbsp;&nbsp;
+											</div>
+										</div>
+									</div>
+									<% if bid_awarded?(project.id) && !bid_accepted?(project.id) %>
+									<div class="pr_tlbl alg_reg">
+										<div class="row">
+										<div class="col-md-6">
+										Your proposal has been selected for this project&nbsp;&nbsp;
+										</div>
+										<div class="col-md-6">
+										<%= link_to "Accept", {:controller => "bids", :action => "change_bid_status", id: project.id, accepted: true },method: :post, data: { confirm: "Are you sure?" },:style=>"color:green;" %>
+										&nbsp;<span style="color:#666666;">|</span>&nbsp;
+										<%= link_to "Decline", {:controller => "bids", :action => "change_bid_status", id: project.id, declined: true },method: :post, data: { confirm: "Are you sure?" }, :style=>"color:red;" %>
+									</div>
+									</div>
+									</div>
+
+									<% end %>
+								</div>
+							</div>
+						</div>
+						<% end %>
+						<% end %>
+						<% else %>
+						<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Projects Found</div>
+						<%end %>
+						<div class="clearfix pagination_box">
+							<div class="pull-left">Page <%= @projects.current_page%> of <%= @projects.total_pages%></div>
+							<div class="pull-right">
+								<%= paginate @projects %>
+							</div>
+						</div>
+					</div>
+					<%=render(:partial=>'profile_complete')	%>
+					<div class=" pull-right col-md-4">
+						<%= render :partial=>'advertisements/show_ads', locals: { page_no: "6"} %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function(){
+			$('select#search_status_project').change( function() {
+				window.location = '/projects?find_status='+$(this).val();
+			});
+			$('select#search_posted_project').change( function() {
+				window.location = '/projects?find_posted='+$(this).val();
+			});
+		});	
+		$(document).ready(function() {
+			var url= window.location.href;
+			if(/=/i.test(url)){
+				var result = url.split('=').pop();
+				var status = getUrlVars()["find_status"];
+				var find_posted = getUrlVars()["find_posted"];
+
+				if (typeof(status) == 'undefined')
+				{
+					$("#search_status_project").val('all');  
+				}
+				else
+				{
+					$("#search_status_project").val(status);
+				} 
+			}
+		});
+	</script>	
+	<script type="text/javascript">
+
+		$('#person_category').change(function(){
+			window.location = '/projects?find_category='+$(this).val();
+		});
+
+		$('#subperson_subcategory').change(function(){
+			var category_id = $('#person_category').val();
+			window.location = '/projects?find_category='+category_id+'&find_subcategory='+$(this).val();
+		});
+	</script>
+
+	

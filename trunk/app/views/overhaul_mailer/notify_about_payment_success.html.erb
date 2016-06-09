@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <%= @buyer.visible_name%>,</p>
+
+	<p>You have successfully paid $<%= @milestone.price %> to <%= @seller.visible_name %></p>
+
+	<p><%= @project.full_title%></p>
+
+	<p><b>Milestone Details</b></p>
+	<p><b>Description:</b>&nbsp;<%= @milestone.description %></p>
+	<p><b>Amount:</b>&nbsp;US$<%= @milestone.price %></p>
+
+	<p>If you feel this is an error, please let us know right away.</p><br>
+	
+	<p>Sincerely,</p>
+	<img src="<%= @logo%>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

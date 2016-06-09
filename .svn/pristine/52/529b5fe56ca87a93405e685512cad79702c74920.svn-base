@@ -1,0 +1,7 @@
+# Load the Rails application.
+require File.expand_path('../application', __FILE__)
+
+# Initialize the Rails application.
+Rails.application.initialize!
+
+find . -name *.rb | xargs grep -P "[\x80-\xFF]" -l | xargs sed "1i # encoding: utf-8" -i

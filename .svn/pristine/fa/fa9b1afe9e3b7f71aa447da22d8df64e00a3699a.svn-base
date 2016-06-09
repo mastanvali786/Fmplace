@@ -1,0 +1,58 @@
+<section class="carousel-section"> 
+    <div id="carousel-example-generic" class="carousel carousel-razon slide" data-ride="carousel" data-interval="5000">
+        <% if @banners.present? %>
+        <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <% @banners.each_with_index do |banner, index| %>
+                    <% if index == 0 %>
+                        <div class="item active">
+                            <%= image_tag banner.slider_image, style: "width: 100%;" %>
+                        </div>
+                    <% else %>
+                        <div class="item">
+                            <%= image_tag banner.slider_image, style: "width: 100%;" %>
+                        </div>
+                    <% end %>
+                <% end %>
+            </div>
+
+            <% if @banners.count > 1 %>
+                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+
+                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            <% end %>
+
+        <% else %>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="/assets/nslider.png">
+					 <div class="container ">
+						<div class="carousel-caption">
+							<div class="gotham_medium slider_orange_box">Hire Expert Freelancers</div>
+							<div class="gotham_medium gray_box_slider">For Your Projects</div>
+							<div class="white_sub_txt">
+								Accomplish your projects by hiring experienced professionals at a price that's right for you.
+							</div>
+						</div>
+					 </div>
+                </div>
+				<div class="item">
+                    <img src="/assets/nslider1.png">
+					 <div class="container ">
+						<div class="carousel-caption">
+							<div class="gotham_medium slider_orange_box">Hire Expert Freelancers</div>
+							<div class="gotham_medium gray_box_slider">For Your Projects</div>
+							<div class="white_sub_txt">
+								Accomplish your projects by hiring experienced professionals at a price that's right for you.
+							</div>
+						</div>
+					 </div>
+                </div>
+            </div>
+        <% end %>
+</div>
+</section>

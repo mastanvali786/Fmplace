@@ -1,0 +1,200 @@
+<style type="text/css">
+  .mile_field{
+    margin:5px 0px 0px 0px;
+  }
+  .mile_div{
+    margin: 10px 0px 10px 0px;
+  }
+</style>
+<script>
+
+  function tip_archfee_show()
+  {
+    $("#archfee").show("slow");
+  }
+  function tip_archfee_hide()
+  {
+    $("#archfee").hide("slow");
+  }
+
+</script>
+<div class="bid_form_class alg_reg">
+  <%= form_for bid , html: {"data-parsley-validate" => true, style: "margin:0px",class:'ajax-form',  :multipart => true, :id => "bid-form" } do |f| %>
+    <input type="hidden" name="bid[project_id]" value="<%= bid.project_id %>"/>
+    <input type="hidden" name="bid[user_id]" value="<%= bid.user_id %>"/>
+    <input type="hidden" name="bid[declined]" value="false"/>
+
+     <div class="row">
+        <div class="col-md-12">
+			<span class="my_plbl gotham_medium">Describe Your proposal</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+			Enter your proposal details*
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+		<div style="padding-left:5px;padding-top:10px;">
+          <%= f.text_area :details,:class =>"form-control", style:"height:280px;border-bottom:none;color:#666666;font-size:12px;resize: none;",'data-parsley-required'=>"true" %>
+            <div class ="sadd_attach">
+          <span style="cursor:pointer !important;">
+            Add Attachments
+          <input class="add-attachments" name="attachments[]" type="file"></input>
+          </span>
+          <div id="add-attachments-list">
+          <% if @attachments %>
+          <% unless @attachments.empty? %>
+            <div style="width:262px;background-color:#F5F5F5;border-left: 2px solid #D2DCEF;border-bottom: 2px solid #D2DCEF;border-right: 2px solid #D2DCEF;padding:4px;">
+              <span>
+                Attachments
+              </span>
+              <ul style="list-style-type:none">
+                <% @attachments.each do |attachment| %>
+                  <li>
+                    <a class="remove-attachment" data-id="<%= attachment.id %>"
+                      href="javascript:void(0)" style="font-size:1em">x
+                      <%= attachment.name %>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <% end %>
+          </div>           
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="font-size:14px;padding-top:15px;font-weight:bold;font-family: 'GothamMedium' !important;">Cost & Timing</div>
+          <div class="row mamount">
+              <div class="col-md-5" style="padding-right: 0px;"><img src="/assets/currency_$.png"/>&nbsp;<span style="color:#666666;">My Proposal Amount*:</span></div>
+              <div class="col-md-6">
+              <span class="input-group-addon" style="float: left;height: 34px;width: 33px;">
+                <i class="fa fa-dollar" style="padding-top: 3px;"></i>
+              </span>
+			  <div class="input-group">
+                <%= f.text_field :proposed_amount, required:true, class:"form-control numeric", style:"border: 1px solid #CCCCCC;color:#666666;",
+                  'data-parsley-required'=>"true"  %>
+				</div>
+              </div>
+            </div>
+            <div class="row mamount">
+              <div class="col-md-5" style="padding-right: 0px;">
+					<div style="font-size:14px;">What I will Earn<br/>
+					<span style="font-size:10px;padding-right:43px;">Includes
+					<a href="javascript:void(0);" onmouseover="tip_archfee_show();" onmouseout="tip_archfee_hide()" style="color:#001FE2;"> <p><%= SITE_NAME_SHORT %> fee</p></a></span></div>
+                 </div>
+				<div class="col-md-6">
+                    <div class="input-group">
+			  <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                    <%= f.text_field :earned_amount, class:"form-control numeric",:readonly => true, style:"border: 1px solid #CCCCCC;color:#666666;"%><div></div>
+                  </div>
+				  </div>
+                <div style="clear:both;"></div>
+                <div style="background-image:url(<%= url_base %>/images/yellow_box_bg.png);  z-index: 9999;display:none;position:absolute;margin-top:-15px;width:243px;height:65px;" id="archfee">
+                  <p style="padding:5px;"><%= SITE_NAME_SHORT %> will deduct &nbsp;<%= current_user.membership_plan.service_fee %>% (<%= SITE_NAME_SHORT %> fee) from the amount paid by the Buyer</p>
+                </div>
+              </div>
+            </div>
+		</div>
+            <div class="row">
+             <div class="col-md-12">
+                <div style="width:100%;padding-top:10px;color:#666666;">
+                  <div style="float:left;font-size:12px;"><img src="/assets/date.jpg"/>&nbsp;</div>
+                  <div style="float:left;color:#666666;padding-top:0px;">Estimated <br/>
+                    Delivery Date*:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                  <div style="float:left;padding-top:5px;padding-left:0px;">
+                    <select id="bid_estimated_days" name="bid[estimated_days]" style="width:140px;border: 1px solid #CCCCCC;color:#666666;" required>
+                      <option value="">Select one</option><option value="1">Within 24 hours</option>
+                      <option value="3">Within 3 days</option><option value="7">Within 1 week </option>
+                      <option value="14">Within 2 weeks </option><option value="21">Within 3 weeks </option>
+                      <option value="30">Within 1 month </option><option value="60">Within 2 months </option>
+                      <option value="90">Within 3 months </option><option value="100">More than 3 months </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+      <div class="row">
+        <div class="col-md-12">
+        <div style="font-size:14px;padding-top:20px;font-weight:bold;font-family: 'GothamMedium' !important;">  Enhance Your Proposal</div>
+        <% if  my_membership?(current_user) == false %>
+           <div>
+             Upgrade your membership to enhance your proposal.<a href="/memberships">Membership Plan</a>
+           </div>
+        <% else %>
+            <% if current_user.can_do_feature_bid? %>
+              <div style="color:#666666;padding-top:px;padding-left:5px;">
+                <%= f.check_box :featured, class:"pull-left"%>&nbsp;&nbsp;Feature your proposal for increased visibility.<span>(US$10.00)</span>
+              </div>
+            <% else %>
+              <div style="color:#666666;padding-top:px;padding-left:5px;">
+                <%= f.check_box :featured, class:"pull-left", disabled:true %>&nbsp;&nbsp;Feature your proposal for increased visibility.<span>(US$10.00)</span>
+              </div><br>
+              <div style="background-image:url(/assets/yellow_box_bg.png);padding:10px;" id="featured_id">
+                <p>You have insufficient funds on your <%= SITE_NAME_SHORT %> account for this feature.
+                 Please deposit US$10.00 <a href="/accounting/deposits">here</a> or continue without this feature.</p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="font-size:14px;padding-top:10px;font-weight:bold;font-family: 'GothamMedium' !important;">Guarantee</div>
+          <div style="color:#666666;padding-top:5px;padding-left:5px;">
+            <span style="float:left;"><img src="/assets/bank_gray.gif"/>&nbsp;&nbsp;</span>
+            <span style="float:left;">Payments are guaranteed with <%= SITE_NAME_SHORT %> Escrow</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="padding-top:10px;">
+          <%= f.submit 'Submit',:class=>"btn btn-warning pull-right",id: 'submit_bid_form'%>
+          <input type="button" class="btn btn-warning pull-right" id='show_message_button' style="display:none;" value="Please Wait...."%>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="padding-top:14px;">
+            <span style="font-size:11px;color:#999999;">Proposal amount is only displayed to the Buyer.</span>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>
+<%= render partial:"bids/add_milestone_template" %>
+
+
+    <script>
+      $(document).ready(function(){
+        var days= "<%= @bid.estimated_days if @bid%>";
+        if(days){
+          $('#bid_estimated_days').val(days);
+        }
+        $('#submit_bid_form').click(function(){
+          if(false == $('#bid-form').parsley().validate()){
+            return false;
+          }else{
+            if($('#bid_proposed_amount').val() <= 0){
+              var msg = "Proposed amount must be greater than 0";
+              $('#bid .messages').html(msg);
+              $('html, body').animate({
+                scrollTop: $("#bid").offset().top
+              });
+              return false;
+            }else{
+              $('#loading_spinner').show();
+              return true;
+            }
+          }
+        });
+      });
+    </script>

@@ -1,0 +1,15 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+    merged_title_cell_style = s.add_style(:bg_color => "FF", :b => true, :sz => 10, :border => { :style => :thin, :color => "00" }, :alignment => { :horizontal => :center, :vertical => :center , :wrap_text => true}, :fg_color => "E81B55")
+    head_cell_style = s.add_style(:bg_color => "FF", :b => true, :sz => 10, :border => { :style => :thin, :color => "E81B55" }, :alignment => { :horizontal => :center, :vertical => :center , :wrap_text => true}, :fg_color => "FFFFFF")
+    wb.add_worksheet(name: "Freelancers") do |sheet|
+        sheet.add_row %w(Freelancers), :style => merged_title_cell_style, :height => 30
+        sheet.merge_cells "A1:F1"
+        sheet.add_row ['ID', 'FIRST NAME', 'LAST NAME', 'DISPLAY NAME', 'ADDRESS', 'PLAN' ], :style => merged_title_cell_style, :height => 20
+        if @users.present?
+            @users.each do |user|
+                sheet.add_row [user.id, user.first_name, user.last_name, user.display_name, user.full_location, user.membership_plan_name ]
+            end
+        end
+    end
+end

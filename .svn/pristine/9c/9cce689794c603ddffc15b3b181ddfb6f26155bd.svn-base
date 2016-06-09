@@ -1,0 +1,51 @@
+<style type="text/css">
+  #withdrawal-requests a{
+    color: #1A9BD4
+  }
+</style>
+
+<div class="main_container">
+  <div class="container mpro_container" style="min-height: 400px;">
+     <%= render partial: "shared/header_back" %>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+      <span>
+        Withdrawal Requests
+      </span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover" border="0" cellpadding="3" cellspacing="6" id="withdrawal-requests" style="padding-left:20px;">
+        <thead class="md_hide">
+          <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Requested On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @requests.each do |request| %>
+            <tr>
+              <td data-label="Id" class="account_p_lbl">
+                <%= link_to request.id, withdrawal_request_path(request) %>
+              </td>
+              <td data-label="Type" class="account_p_lbl">
+                <%= request.klass %>
+              </td>
+              <td data-label="Amount" class="account_p_lbl">
+                <%= to_currency request.amount %>
+              </td>
+              <td data-label="Requested" class="account_p_lbl">
+                <%= request.requested_on.to_date %>
+              </td>
+              <td data-label="Status" class="account_p_lbl">
+                <%= request.status.titleize %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= paginate @requests %>
+  </div>
+</div>

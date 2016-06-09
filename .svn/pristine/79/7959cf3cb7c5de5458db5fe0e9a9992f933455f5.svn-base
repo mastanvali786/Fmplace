@@ -1,0 +1,9 @@
+
+<style>
+</style>
+<div class="alert alert-block" style="display:none">
+  <a class="close" href="#" style="color:none">
+    &times;
+  </a>
+  <div class="content"></div>
+</div>

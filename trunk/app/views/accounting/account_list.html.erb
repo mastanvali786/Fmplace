@@ -1,0 +1,65 @@
+<div class="container user_profile">
+  <% if current_user.buyer? %>
+    <%= render 'pay_action' %>
+  <% end %>
+  <% if current_user.seller? %>
+    <%= render 'earnings/earn_action' %>
+  <% end %>
+	<section class="row user_right1">
+		<h3 class="orange">Payment Settings</h3>
+		
+		<div class="row ngray_box">
+			<div class="col-md-12 clrbk5">Default & Account Payment (To use for withdrawal, fund milestone and deposit money)</div>
+		</div>
+		<%= form_for @account_setting  , :url => accounting_save_account_settings_path, method: :post ,:html => {"data-parsley-validate" => true} do |f| %>
+		<div class="row nd_box">
+			<div class="col-md-4 first_ltxt clrbk5">
+				Select Default Payment
+			</div>
+			<div class="col-md-4">
+				<label class="field select">
+					<%= f.collection_select :payment_type_id,  PaymentType.active_payments , :id, :display_name, {:include_blank => 'Select Payment Type'}, class: "form-control",'data-parsley-required'=>'true','data-parsley-required-message'=>'Please select payment mode' %>
+					<i class="arrow"></i>                    
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<%= f.submit "Save Settings", class: "btn btn-warning" %>
+			</div>
+		</div>
+		<% end %>
+		<% if payment_method(current_user) == "PAYPAL" %>
+		<% if is_paypal_active? %>
+			<div class="row ngray_box">
+				<div class="col-md-12 clrbk5">Paypal Email (where you want us to deposit money when you get paid)</div>
+			</div>
+			<% if @account_setting.payment_type_id.present? %>
+			<div class="row">
+				<div class="col-md-10">
+					<div class="awgbox" id="paypal_show_setttings">
+						<div class="pull-right g_lightc alg_bold orange" style="cursor: pointer">
+							<span onclick="hide_show_by_id('payfast_settings','paypal_settings');">Edit</span>
+						</div>
+						<h3 class="orange">PayPal Details</h3>
+						<div id="paypal_settings" style="display:none;">
+							<%= form_for @account_setting  , :url => accounting_bank_details_path, method: :post, :html => {"data-parsley-validate" => true} do |f| %>
+							<div class="form-group">
+								<label>PayPal Email</label>
+								<%= f.text_field :paypal_email, class: "form-control", style: "max-width: 430px;",'data-parsley-required'=>"true", 'data-parsley-type' => "email" %>
+								<span style="color: #000;"><small>Email that is registered with PayPal</small></span>
+							</div>
+							<%= f.submit "Save", class: "btn btn-warning" %>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% else %>
+			<div class="clrbk5">No Accounts Available</div>
+			<div class="clrbk5">Please Select the Payment Type above</div>
+			<%end%>
+			<% end %>
+		<% end %>
+	</section>
+</div>

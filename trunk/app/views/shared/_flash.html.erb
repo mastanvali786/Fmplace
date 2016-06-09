@@ -1,0 +1,6 @@
+<div class="flash">
+  <% flash.to_hash.no_underscore.each do |key, value| %>
+    <%= content_tag(:div, raw(value), :class => "flash #{key}") %>
+    <% flash.delete key %>
+  <% end %>
+</div>

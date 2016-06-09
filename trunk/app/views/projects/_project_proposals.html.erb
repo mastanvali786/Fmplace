@@ -1,0 +1,44 @@
+<%if current_user.id == @project.user.id %>
+  <div class="row pv_btabs">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs gotham_medium" role="tablist">
+      <li class="active" ><a href="#allprop" role="tab" data-toggle="tab">
+        All Proposals (<span id="bid_count"><%= @project.bids.active_bids.count%></span>)</a></li>
+      <li><a href="#declined" role="tab" data-toggle="tab">
+        Declined (<%= @project.bids.declined_bids.count%>)</a></li>
+      <li><a href="#hidden" role="tab" data-toggle="tab">
+        Hidden (<%= @project.bids.hidden_bids.count%>)</a></li>
+    </ul>
+
+    <input type="hidden" value="1" id="refresh_status">
+    <!-- Tab panes -->
+    <div class="tab-content pproposals">
+      <div class="tab-pane active" id="allprop" data-id="<%= @project.id %>">
+        <%= render :partial => "bids/bid_list", :locals => { :bids => @project.bids.active_bids } %>
+      </div>
+      <div class="tab-pane" id="declined">
+        <%= render :partial => "bids/bid_list", :locals => { :bids => @project.bids.declined_bids} %>
+      </div>
+      <div class="tab-pane" id="hidden">
+        <%= render :partial => "bids/bid_list", :locals => { :bids => @project.bids.hidden_bids } %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<!-- small modal -->
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="award_message_modal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    <div class="modal-header gotham_medium">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Award Confirmation</h4>
+      </div>
+      <div class="modal-body alg_reg">
+        <div id="status_message" style="padding:10px;"></div>
+      </div>
+    </div>
+  </div>
+</div>

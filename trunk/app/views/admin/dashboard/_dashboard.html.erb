@@ -1,0 +1,6 @@
+ <%= javascript_include_tag "http://www.google.com/jsapi", "chartkick" %>
+ <h1>Project Status</h1>
+ <%= pie_chart({"Open" => Project.opened.count, "Closed" => Project.closed.count ,"Completed"=>Project.completed.count,"Awarded"=>Project.awarded.count}) %>
+ <%#= geo_chart Project.where(:country_id=> "101").count %>
+  <h1>Bids Status</h1>
+  <%= column_chart ({"Active" => Bid.active_bids.count, "Declined" => Bid.declined_bids.count,"Hidden"=> Bid.hidden_bids.count}) %>

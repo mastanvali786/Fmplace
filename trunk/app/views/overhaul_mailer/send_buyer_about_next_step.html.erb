@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<p>Hi <b><%= @project.buyer.visible_name %>,</b></p>
+
+<p>Now that you’ve awarded <b><%= @project.full_title %></b>.</p>
+
+<p>Here are your next steps:</p>
+
+<ul>
+	<ol>Discuss project milestones (project stages) with <%= @bid.user.visible_name %></ol>
+	<ol><a href="<%=@project.workroom_url%>">Create milestones</a> and submit payment</ol>
+</ul>
+
+<p><a href="<%=@how_it_work_link%>">Here’s</a> a 1 minute video showing you how the milestones work.</p>
+<p>Please call or reply if you have any questions or concerns.</p>
+
+
+<p>Sincerely,</p>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p><%= EMAIL_SIGN_EMAIL %></p>
+<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

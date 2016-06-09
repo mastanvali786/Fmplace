@@ -1,0 +1,98 @@
+<div class="ds main_container">
+  <div class="container user_profile">
+   <%= render(:partial => '/projects/dashboard_header') %> 
+     <aside class="user_left1">
+ <%= render partial: "menu" %>
+    </aside>
+    <section class="row user_right1">
+      <div style="padding-left:40px">
+        <div class="edit_plbl">Education</div>
+        <!-- <div style="color:red;font-size:10px;padding-bottom:0px;padding-top:5px;padding-left:14px;">* Required</div> -->
+        <div style="padding-top:20px;">
+        <%= form_for 'education',  url: user_education_path, :html => {"data-parsley-validate" => true} do |b| %>
+         <div class="col-md-10">
+          <div class="form-group">
+          <label class="control-label">Name</label>
+            <%= b.text_field :college_name, class: "form-control","data-parsley-required" => "true",'data-parsley-required-message' => "Please enter college name",'data-parsley-pattern'=> "^[a-zA-Z' ']+$", value: @education.present? ? @education.college_name : "" %>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+            <label class="alg_reg reg_lbl ftwg100">Degree</label>
+            <label class="field select">
+              <%= b.collection_select :degree_id, UserDegree.all , :id, :name, {:prompt => "Please select degree"}, "data-parsley-required" => "true" ,'data-parsley-required-message' => " Please select your degree name"%>
+                 <i class="arrow"></i>                   
+            </label>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+          <label class="control-label">Field of Study</label>
+            <%= b.text_field :field_of_study, class: "form-control","data-parsley-required" => "true",'data-parsley-required-message' => " Please enter field of study",'data-parsley-pattern'=> "^[a-zA-Z' ']+$", value: @education.present? ? @education.field_of_study : "" %>
+          </div>
+        </div>
+        <div class="col-md-4">
+            <label class="alg_reg reg_lbl">Start Date</label>
+            <div class='input-group date' id='datetimepicker11'>
+                <%= b.datetime_field :start_date, :class => 'form-control education_start_date', 'data-parsley-dateconditionrequired'=>"true",'data-parsley-error-message' => false, value: @education.present? ? @education.start_date : "" %>
+                    <span class="input-group-addon" onclick="$('.education_start_date').focus();">
+                    <span class="fa fa-calendar"></span>
+                </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="alg_reg reg_lbl">End Date</label>
+            <div class='input-group date' id='datetimepicker11'>
+                <%= b.datetime_field :end_date, :class => 'form-control education_end_date','data-parsley-dateconditionrequired'=>"true",'data-parsley-error-message' =>"End date should be greater than Start date", value: @education.present? ? @education.end_date : "" %>
+                    <span class="input-group-addon" onclick="$('.education_end_date').focus();">
+                    <span class="fa fa-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+          <br>
+          <label class="control-label">Other Social activities</label>
+           <%= b.text_area :activities_societies, class: "form-control text_area activities","data-parsley-required" => "true",'data-parsley-required-message' => "Please enter social activities", rows: 10,maxlength: "1000", value: @education.present? ? @education.activities_societies : ""%>
+           <h6 class="pull-right"><span class="characters">1000</span> characters left</h6>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+          <br>
+          <label class="control-label">Description</label>
+           <%= b.text_area :description, class: "form-control text_area description","data-parsley-required" => "true",'data-parsley-required-message' => "Please enter educational  description", rows: 10, maxlength: "1000", value: @education.present? ? @education.description : ""%>
+           <h6 class="pull-right"><span class="char">1000</span> characters left</h6>
+          </div>
+        </div>
+          <div class="col-md-10">
+            <div class="form-group">
+              <%= b.submit "Submit", class: "btn btn-warning" %>
+              <a class="btn btn-default cancel" href="/account/public_profile">Cancel</a>
+            </div>
+          </div>
+        <% end %>
+        </div>
+      </div>
+    </section>
+  </div>
+  </div>
+
+
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+      var maxLength = 1000;
+      $('.description').keyup(function() {
+        var length = $(this).val().length;
+        var length = maxLength-length;
+        $('.char').text(length);
+      });
+
+       $('.activities').keyup(function() {
+        var length = $(this).val().length;
+        var length = maxLength-length;
+        $('.characters').text(length);
+      });
+  });
+  </script>

@@ -1,0 +1,1 @@
+<%= render partial: 'bids/form', locals: {bid:@bid || bid} %>

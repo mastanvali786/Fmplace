@@ -1,0 +1,20 @@
+.flash {
+  &.error {
+    border: solid 2px #900;
+    background-color: #FF6565;
+  }
+  &.notice {
+    border: solid 2px #26722D;
+    background-color: #A4E7A0;
+  }
+  color: black;
+  font-weight: bold;
+  width:760px;
+  margin-left: 0px;
+  padding-left:10px;
+  padding-right:2px;
+  p {
+    font-size: 110%;
+    margin: 15px 0;
+  }
+}

@@ -1,0 +1,136 @@
+<%= stylesheet_link_tag "alert" %>
+<style type="text/css">
+  #invoice a {
+    color: blue
+  }
+  #invoice .status span {
+    padding-left:15px
+  }
+</style>
+<div class="main_container">
+  <div class="container mpro_container" style="min-height: 400px;">
+    <%= render partial: "shared/header_back" %>
+    <div id="milestone-messages" style="padding:15px 0px 10px  0px;max-width:760px">
+    <%= render partial: "shared/alert" %>
+    </div>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 10px 0px;">
+    <span class="gotham_medium">
+      Milestone Invoices
+    </span>
+    </div>
+    <div class="table-responsive alg_reg">
+      <table class="table table-bordered table-hover" border="0" cellpadding="3" cellspacing="6" id="invoice">
+      <thead class="md_hide">
+        <tr>
+          <th style="width:200px">Invoice</th>
+          <th>Amount</th>
+          <th>Milestone</th>
+          <th>Created At</th>
+          <th>Action/Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invoices.each do |invoice| %>
+          <tr class="account_p_lbl">
+            <td data-label="Invoice" class="account_p_lbl">
+             <% if invoice.type == "PayPalInvoice" %>
+              <%= link_to invoice.invoiceId, milestone_invoice_path(invoice) %>
+            <% else %>
+              <%= link_to invoice.id, milestone_invoice_path(invoice) %>
+            <% end %>
+            </td>
+             <td data-label="Amount" class="account_p_lbl">
+              <%= to_currency invoice.amount %>
+            </td>
+            <td data-label="Milestone" class="account_p_lbl">
+              <% milestone = invoice.milestone %>
+              <%= link_to milestone.description, milestone_path(milestone) %>
+            </td>
+             <td data-label="Created At" class="account_p_lbl">
+              <%= user_time_zone invoice.created_at %>
+            </td>
+			 <td data-label="Action/Status" class="status account_p_lbl"> 
+              <% if invoice.funded? %>
+                &nbsp;&nbsp;&nbsp;&nbsp;Paid On<br>
+                <%= user_time_zone invoice.paidOn %>
+              <% else %>
+                <% if invoice.type == "PayFastInvoice" %>
+                <%= form_tag(PaymentType.payfast_mode_url) do %>
+                  <%= hidden_field_tag('amount', invoice.milestone.payfast_amount)%>
+                  <%= hidden_field_tag('item_name', 'Milestone Payment')%>
+                  <%= hidden_field_tag('return_url', invoice.milestone.current_url)%>
+                  <%= hidden_field_tag('cancel_url', invoice.milestone.current_url)%>
+                  <%= hidden_field_tag('notify_url', invoice.milestone.paypal_ipn_url)%>
+                  <%= hidden_field_tag('custom_int1',invoice.id)%>
+                  <%= hidden_field_tag('custom_int2', invoice.receiver_id)%>
+                  <%= hidden_field_tag('merchant_id',PaymentType.payfast_merchant_id) %>
+                  <%= hidden_field_tag('merchant_key', PaymentType.payfast_merchant_key) %>
+                  <%= submit_tag "Click to Pay", class: 'btn btn-warning', style: 'padding-bottom: 3px;' %>
+                <% end %>
+                <%#= payment_service_for 1000, PaymentType.payfast_mode_url, amount: invoice.milestone.payfast_amount, service: :pay_fast do |service| %>
+                  <%# service.item_name 'Milestone Payment' %>
+                  <%# service.currency 'USD' %>
+                  <%# service.return_url invoice.milestone.current_url %>
+                  <%# service.cancel_url invoice.milestone.current_url %>
+                  <%# service.notify_url invoice.milestone.paypal_ipn_url %>
+                  <%# service.custom_int1 invoice.id %>
+                  <%# service.custom_int2 invoice.receiver_id %>
+                  <%# service.merchant_id PaymentType.payfast_merchant_id %>
+                  <%# service.merchant_key PaymentType.payfast_merchant_key %>
+                  <%#= submit_tag "Click to Pay", class: 'btn btn-warning', style: 'padding-bottom: 3px;' %>
+                <%# end %>
+                <% elsif invoice.type == "AuthorizeCreditInvoice" %>
+                  <% @sim_transaction = AuthorizeNet::SIM::Transaction.new(PaymentType.authorize_api_login_id, PaymentType.authorize_api_transaction_key, invoice.amount, :hosted_payment_form => true) %>
+                  <% @sim_transaction.set_hosted_payment_receipt(AuthorizeNet::SIM::HostedReceiptPage.new(:link_method => AuthorizeNet::SIM::HostedReceiptPage::LinkMethod::POST, :link_text => 'Continue', :link_url => ipn_authorize_credit_url(:only_path => false))) %>
+                    <%= form_for :sim_transaction, :url => PaymentType.authorize_mode_url do |f| %>
+                      <%= sim_fields(@sim_transaction) %>
+                      <%= hidden_field_tag("x_invoice_num", invoice.id, {:id => invoice.id}) %>
+                      <%= hidden_field_tag("x_cust_id", invoice.receiver_id, {:id => invoice.receiver_id}) %>
+                      <%= f.submit 'Click to Pay', class: 'btn btn-warning', style: 'padding-bottom: 3px;'%>
+                    <% end %>
+                  <% elsif invoice.type == "BrainTreeInvoice" %>
+                    <button type="button" data-amount="<%= invoice.amount%>" data-id="<%= invoice.id%>" class="btn btn-warning braintree_open_pay_modal" data-toggle="modal" data-target=".bs-example-modal-lg">
+                    Click to Pay
+                  </button>
+                <% else %>
+                  <% link = invoice.payerViewUrl if invoice.payerViewUrl %>
+                  <%= link_to "Fund Invoice", link, class:'blank' %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+          <tr></tr>
+        <% end %>
+      </tbody>
+      </table>
+    </div>
+    <div class="clearfix pagination_box">
+      <div class="pull-left">Page <%= @invoices.current_page%> of <%= @invoices.total_pages%></div>
+      <div class="pull-right">
+        <%= paginate @invoices %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+   class="brain_tree_modal">
+  <div class="modal-dialog modal-lg payment_pay">
+    <div class="modal-content">
+     <div class="pull-right" style="padding-right: 5px;padding-top: 5px;">
+       <a class="hide-popup btn btn-warning img-circle" class="close" data-dismiss="modal" data-target="#myModal"> X </a>
+       </div>
+     <div class="form-container radius-box glassy-bg small-10 small-centered medium-8 large-6 columns">
+      <%= form_tag transactions_path do%>
+        <%= render 'transactions/customer_form' unless current_user.has_payment_info? %>
+        <p class="alg_reg reg_lbl ftwg100" style="padding-bottom: 15px;">Please enter your payment details:</p>
+        <div id="dropin"></div>
+        <%=hidden_field_tag 'invoice_id', '' %>
+        <%=hidden_field_tag 'payment_type', 'INVOICE_FUND' %>
+        <%=submit_tag "Pay", class: "btn btn-warning fund_pay_braintree", style: 'width: 120px;' %>
+      <%end%>
+    </div>
+  </div>
+</div>
+</div>

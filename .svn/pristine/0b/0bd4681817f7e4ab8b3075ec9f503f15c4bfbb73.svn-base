@@ -1,0 +1,28 @@
+<div class="main_container toppd50">
+	<div class="container user_profile">
+		<%=render :partial=>'homes/sidebar'%>
+		<section class="row user_right">
+			<div class="ft25 gotham_medium">How It Works</div>
+			<div class="terms_head alg_reg">
+				<p >
+					Reverse auction is an online software market place where buyer can post their service needs and
+					request quotes from the service providers. He selects the best service provider as per
+					his budget and preferred talents through received quotes.
+				</p>
+				<p>
+					<br>
+					Reverse auction is for anyone who wants to startup their own online
+					business and it caters to any industry.It depends fully on individual idea and nature of online business
+					he wants to do.<br>
+					<br>Different clients where using our software product
+					for different industries.
+					<br>
+					Some of the clients include Jetonair, OutSource.com, Wrapdealer.com.
+					<br><br>
+					To know more about clients
+					<a href="http://www.auctionsoftware.com/portfolio/">click here</a>
+				</p>
+			</div>
+		</section>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p>Hi <b><%= @project.buyer.visible_name %>,</b></p>
+
+<p><b><%= @bid.user.visible_name %></b> has updated the following bid:</p>
+
+<p><b>Details:<b><%= @bid.details %></p>
+<p><b>Delivery Timeline:</b> <%= estimated_days_display @bid.estimated_days %></p>
+<p><b>Bid Amount:</b>US $<%= @bid.proposed_amount%> </p>
+
+<p><b>Attachments:</b></p>
+<ul style="line-height: 21px;">
+  <% if @bid.attachments.present? %>
+    <% @bid.attachments.each do |attachment| %>
+      <li>
+        <a href="<%=SITE_URL%><%= attachment.url %>" style="font-size:1em" >
+        <%= attachment.name %>
+        </a>
+      </li>
+   <% end %>
+  <% else %>
+     <li>None</li>
+  <% end %>
+</ul>
+
+<p>Please <a href="<%=@login_link%>">login</a> to see all your bids.</p>
+
+<p>You can choose to award the freelancer now, or you can continue to wait for more bids. Your posting expires on 
+  <%= @end_date %></p>
+
+<p>Contact us if you have any questions so far. We’d love to hear from you (truly).</p>
+
+<p>Sincerely,</p>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p><%= EMAIL_SIGN_EMAIL %></p>
+<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

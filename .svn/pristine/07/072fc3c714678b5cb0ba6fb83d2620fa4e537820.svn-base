@@ -1,0 +1,41 @@
+<%# @request = Withdrawal@request.find params[:id] %>
+<h1 style="padding: 13px;">Payfast Payment</h1>
+  <h3><p style="margin-top: -23px; padding-left: 14px;">Click the button "Pay" to make payment to the professional.</p></h3>
+  <div>
+  <% return_url = "<%= SITE_URL%>/admin/withdrawal_requests" %>
+  <% notify_url = "<%= SITE_URL%>/ipn/payfast_withdraw" %>
+  <% payfast_email = @account_setting.payfast_email %>
+  <% merchant_id = @account_setting.merchant_id %>
+  <% merchant_key = @account_setting.merchant_key %>
+
+  <%= form_tag(PaymentType.payfast_mode_url) do %>
+    <%= hidden_field_tag('amount', milestone.payfast_amount)%>
+    <%= hidden_field_tag('item_name', 'Milestone Payment')%>
+    <%= hidden_field_tag('return_url', return_url)%>
+    <%= hidden_field_tag('cancel_url', return_url)%>
+    <%= hidden_field_tag('notify_url', notify_url)%>
+    <% if milestone.funding_request.invoice.present? %>
+      <%= hidden_field_tag('custom_int1',@request.id)%>
+      <%= hidden_field_tag('custom_int2',@request.invoice.id)%>
+    <% end %>
+    <%= hidden_field_tag('custom_str1', 'Withdrawal')%>
+    <%= hidden_field_tag('merchant_id',merchant_id) %>
+    <%= hidden_field_tag('merchant_key', merchant_key) %>
+    <%= submit_tag "Pay", class: 'btn btn-warning', style: 'padding-bottom: 3px;' %>
+  <% end %>
+
+  <%#= payment_service_for 1000, payfast_email, amount: @request.amount, service: :pay_fast do |service| %>
+    <%# service.item_name 'Milestone Payment' %>
+    <%# service.currency 'USD' %>
+    <%# service.return_url return_url %>
+    <%# service.cancel_url return_url %>
+    <%# service.notify_url notify_url %>
+    <%# service.custom_str1 'Withdrawal' %>
+    <%# service.custom_int1 @request.id %>
+    <%# service.custom_int2 @request.invoice.id %>
+    <%# service.merchant_id merchant_id %>
+    <%# service.merchant_key merchant_key %>
+    <%#= submit_tag "Pay", class: 'btn btn-warning', style: 'padding-bottom: 3px;' %>
+  <%# end %>
+
+  </div>

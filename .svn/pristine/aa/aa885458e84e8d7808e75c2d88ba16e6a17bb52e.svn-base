@@ -1,0 +1,281 @@
+<script type="text/javascript">
+// Popup for Video Popup
+$(document).ready(function(){
+  $("a.youtube").YouTubePopup({ title: "Video" });
+});
+</script>
+
+<div class="project_proposals">
+  <div class="media">
+   <% if bid.user.profile_photo &&  bid.user.profile_photo.blank? %>
+   <a class="media-left" href="/account/user_public_profile?id=<%= bid.user.id%>">
+    <img src="/assets/nophoto2.gif" alt="..." class="pro_pic">
+  </a>
+  <% else %>
+  <a class="media-left" href="/account/user_public_profile?id=<%= bid.user.id%>">
+    <img src=<%= bid.user.profile_photo%> alt="..." class="pro_pic">
+  </a>
+  <% end %>
+  <div class="media-body">
+    <div class="row">
+      <div class="col-md-8 pp_tname gotham_medium">
+        <a href="/account/user_public_profile?id=<%= bid.user.id%>">
+          <%= bid.user.visible_name %></a>
+        </div>
+        <div class="col-md-4 pp_tname">
+          <% if bid.featured %>
+          <img src="/assets/fp.png">
+          <% end %>
+        </div>
+      </div>
+      <div class="npr_tlbl">
+        <div class="pull-left">
+          <%= render :partial => "shared/user_rating", :locals => { :user => bid.user } %>
+          &nbsp;&nbsp;|&nbsp;&nbsp; </div> 
+          <div class="pull-left alg_reg value_proj">
+            US&nbsp;
+            <%= number_to_currency bid.user.earnings %> 
+            &nbsp;Earnings &nbsp;|&nbsp; </div>
+            <div class="pull-left alg_reg value_proj"><%= bid.user.user_projects_count %> Projects &nbsp;&nbsp;|&nbsp;&nbsp; </div> 
+            <div class="pull-left alg_reg value_proj">
+              <%= bid.user.city%>
+              <% if bid.user.city%>,&nbsp;<% end %>
+              <%= bid.user.state_name %>
+            </div>
+            <div class="pull-left alg_reg value_proj">
+              <% if bid.user.video_url && bid.user.video_url.present? %>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <% @video_url = bid.user.video_url%>
+              <% url = (@video_url["v="]) ? @video_url.split("v=")[1] : @video_url.split("/")[-1] %>
+              <% video = "http://www.youtube.com/watch?v=" + url %>
+              <span class="video-target" style="cursor: pointer;">
+               <a class="youtube" href="<%= video %>"><img border="0" align="ABSMIDDLE" height="23px" width="30px"
+                src="/assets/WatchVideo.png">&nbsp;
+                <span style="cursor: pointer;color:#9f9f9f">Watch Video</span>
+              </a>
+            </span>
+            <% end %>
+          </div>  
+        </div>
+      </div>
+      <div class="seperator"></div>
+      <div class="npr_tlbl clearfix">
+        <div class="pull-left alg_reg value_proj"> 
+          Proposal&nbsp;
+          <%= user_time_zone bid.updated_at %>
+        </div>
+        <div class="pull-right alg_reg value_proj">
+          <div class="pull-left pvalue_proj" style="cursor: pointer;" onclick=" edit_message_fun(<%= bid.id%>)">
+            <i class="fa fa-envelope value_proj"></i> &nbsp;&nbsp;Message
+          </div> 
+          <div class="pull-left pvalue_proj" style="cursor: pointer;" onclick=" edit_note_fun(<%= bid.id%>)">&nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-edit"></i>&nbsp;&nbsp;My Notes
+          </div>
+        </div>
+      </div>
+
+      <!-- Message start -->
+      <div class="check_message_open msg_rhtbox" style="display:none;" id="msg_send<%= bid.id%>">
+        <div style="color: green;"></div>
+        <%s=bid.id%>
+        <%= form_for Message.new,url: {:controller=>"messages", action: "send_praposal_message"},:html => {"data-parsley-validate" => true,:id=> "new_message_#{s}"} do |f| %>
+        <input type="hidden" name="message[to]" id="to_email" value="<%=bid.user.email%>">
+        <input type="hidden" name="message[subject]" id="message_subject"
+        value="Message from your Buyer on your bid">
+        <input type="hidden" name="message[type]" id="message_subject" value="Normal">
+        <div class="my_message_response_"></div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="4">
+          <tbody><tr>
+            <td colspan="2">
+              <%= f.text_area :body,:rows => "4",'data-parsley-required'=>"true", :style=>"color:#666666;font-size:12px;width:100%;height:90px;border: 1px solid #999999;resize:none;margin-bottom: 5px;",:value=> ''%>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <style>div.orangebutton3{overflow:hidden;height:29px;}div.orangebutton3 a img:hover{margin-top:-29px;}</style>
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 1px;">
+                <tbody><tr>
+                  <td width="70px">
+                    <%= f.submit 'Send',name: 'BidMessage', class: 'btn btn-warning save alg_reg'%>
+                  </td>
+                  <td>
+                    <a href="javascript:void(0);" onclick="hide_show('msg_send<%= bid.id%>')">
+                      <span class="cancel_button alg_reg">Cancel</span></a>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </td>
+            </tr>
+          </tbody></table>
+          <% end %>
+        </div>
+        <!-- Message End -->
+
+        <!-- My notes start -->
+        <div class="check_note_open msg_rhtbox" style="display:none;" id="edit_note_<%= bid.id%>">
+          <div style="color: green;"></div>
+          <%= form_for 'bid', url: {:controller=>"bids", action: "update_my_notes"},:html => {"data-parsley-validate" => true, :id=>"update_note_#{s}",:class=>"update_note"} do |f| %>
+          <input type="hidden" name="bid_id" id="bid_id" value="<%=bid.id%>">
+          <div class="my_note_response_<%=bid.id%>"></div>
+          <table width="100%" border="0" cellspacing="0" cellpadding="4">
+            <tbody><tr>
+              <td colspan="2">
+                <%= f.text_area :buyer_note,:rows => "4",'data-parsley-required'=>"true", :style=>"color:#666666;font-size:12px;width:100%;height:90px;border: 1px solid #999999;resize:none;margin-bottom: 5px;",:value=> bid.buyer_note%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <style>div.orangebutton3{overflow:hidden;height:29px;}div.orangebutton3 a img:hover{margin-top:-29px;}</style>
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 1px;">
+                  <tbody><tr>
+                    <td width="70px">
+                      <%= f.submit 'Save', class: 'btn btn-warning save alg_reg',
+                      id: 'save_my_note' %>
+                    </td>
+                    <td>
+                      <a href="javascript:void(0);" onclick="hide_show('edit_note_<%= bid.id%>')">
+                        <span class="cancel_button alg_reg">Cancel</span></a>
+                      </td>
+                    </tr>
+                  </tbody></table>
+                </td>
+              </tr>
+            </tbody></table>
+            <% end %>
+          </div>
+          <!-- My notes End -->
+          <div class="desc_pb">
+            <div class="pull-left"> 
+              <h4 class="pref_lbl gotham_medium">Bid Details:</h4>
+              <div class="pv_lbl project_details alg_reg value_proj" style="max-width: 590px;">
+                <span><%= bid.details[0...300] %></span>
+                <span class="full_state2_<%=bid.id%>" style="display:none;">
+                  <%= bid.details[300..-1]%>
+                </span>
+                <% if bid.details.length >= 300%>
+                <br><a href="javascript:void(0);" class="flip2_<%=bid.id%>" style="color:#001FE2;"
+                onclick="show_read_more(<%=bid.id%>)">
+                <i class="fa fa-sort-desc fa-2x "></i> More</a>
+                <% end %>
+              </div>
+            </div>
+            <div class="pull-right">
+              <% if bid.project.project_seller.try(:bid_id) == bid.id %>
+              <%= image_tag('awarded.png', height: '50px') %>
+              <% end %>
+            </div>
+          </div>
+          <div class="npr_tlbl clearfix alg_reg">
+            <div class="pull-left value_proj">
+              Attachments:
+              <% if bid.attachments.present? %>
+              <% bid.attachments.each do |attach| %>
+              <%= image_tag('paperclip.gif')%>
+              <a href=<%= attach.url%> target="_blank" style="color:#666666;">
+               <%= attach.name %></a>
+               <% end %>
+               <% else %>
+               None
+               <% end %>
+             </div>
+             <div class="pull-right alg_reg">
+              <div class="pull-left value_proj" style="padding-right:30px;">Bid ID:<%= bid.id %></div> 
+              <div class="pull-left">
+                <%= link_to "Print", bid_path(bid.id, :format => 'pdf'), target: "_blank", style: "color:#000;" %>
+              </div>
+            </div>
+          </div>
+          <div class="npr_tlbl clearfix pp_bbox alg_reg">
+            <div class="pull-left"> 
+              <div class="sealed pull-left gotham_medium">US$<%=bid.proposed_amount%> &nbsp;&nbsp;|&nbsp;&nbsp;</div>
+              <div class="pull-left gotham_medium"> Delivery&nbsp;<%= estimated_days_display bid.estimated_days %></div>
+            </div>
+            <% unless bid.declined? %>
+            <div class="pull-right project_view">
+              <% if bid.project.current_state.eql?('opened') %>
+              <% unless bid.hidden? %>
+              <%= link_to 'Hide',{:controller => "bids", :action => "hide_unhide_bid",
+               id: bid.id,hidden: true},method: :post,data: { confirm: "Are you sure?" },
+               :class=>"btn btn-default pull-left alg_reg",id:"hide-proposal" %>
+               <% else %>
+               <%= link_to 'Unhide',{:controller => "bids", :action => "hide_unhide_bid",
+                 id: bid.id,hidden: false},method: :post, data: { confirm: "Are you sure?" },
+                 :class=>"btn btn-default pull-left alg_reg",id:"unhide-proposal" %>
+                 <% end %>
+                 <% unless bid.declined? %>
+                 <%= link_to 'Decline',{:controller => "bids", :action => "decline_bid",
+                  id: bid.id},method: :post, data: {confirm: "Are you sure?"},
+                  class:"btn btn-default pull-left alg_reg",id:"decline-proposal" %>
+                  <% end %>
+                  <% end %>
+                  <% if bid.report_violations.present? %>
+                  <% if @project.report_violations.map(&:bid_id).include?(bid.id)  %>
+                  <%= link_to 'Reported', '#', class: "btn btn-default pull-left confirm", disabled: true %>
+                  <% end %>
+                  <% else %>
+                  <%= link_to 'Report Violation', '#', onclick: "report_violation(#{bid.id});", class: "btn btn-default pull-left confirm" %>
+                  <% end %>
+                  <% if @project.current_state.eql?('opened') %>
+                  <button class="btn pull-left btn-warning" 
+                  onclick="award_confirmation_bid(<%= @project.id%>,<%= bid.id%>)">
+                  Select</button>
+                  <% elsif bid.project.can_manage_now? && bid.project.project_seller.try(:bid_id) == bid.id%>
+                  <%= link_to 'Manage Project',projects_action_milestone_path(id:bid.project.id),
+                  class:'btn pull-left btn-warning alg_reg' %>
+                  <% elsif bid.project.project_seller.try(:bid_id) == bid.id %>
+                  <button class="btn pull-left btn-warning alg_reg">Awaiting Acceptance</button>
+                  <% end %>
+                </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Report Violation</h4>
+                </div>
+                <%= form_tag(bids_send_report_violation_path, :method=>'post', :html => {"data-parsley-validate" => true}, :remote => true,id: 'report_violation_form') do %>
+                <div class="modal-body">
+                  <%= hidden_field_tag("bid_id", bid.id, :id => "bid_id_report") %>
+                  <%= hidden_field_tag 'project_id', @project.id %>
+                  <%= hidden_field_tag 'user_id', bid.user.id %>
+                  <div class="row">
+                    <div class="col-md-11">
+                      <label>Report Subject*</label>
+                      <%= text_field_tag "subject", nil, :class=>'form-control' , 'data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter subject name' %>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-11">
+                      <label>Detailed Description*</label>
+                      <%= text_area_tag "body", nil, :class=>'form-control', rows: 5 , 'data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter report description' %>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <%= submit_tag "Report", class: "btn btn-warning", id: "report_violation" %>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            $('#myModal').on('hidden.bs.modal', function () {
+              location.reload();
+            })
+            $('#report_violation').click(function() {
+              if( false == $('#report_violation_form').parsley().validate()){
+                return false;
+              }
+              $('#myModal').modal('hide');
+              $('#refresh_status').val('1');
+              location.reload();
+            });
+          </script>

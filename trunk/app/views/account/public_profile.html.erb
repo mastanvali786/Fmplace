@@ -1,0 +1,95 @@
+<div class="main_container">
+	<div class="container user_profile">
+		<%= render(:partial => '/projects/dashboard_header') %>
+		<aside class="user_left1">
+			<%= render partial: "menu" %>
+		</aside>
+		<section class="row user_right1">
+			<h3 class="orange" style="padding-left: 10px;">My Public Profile</h3>
+			<div class="row">
+				<div class="col-md-8 pprof">
+					<div class="media">
+						<div class="media-left">
+							<% unless current_user.profile_photo.blank? %>
+							<%=image_tag current_user.profile_photo,:class=>"pro_pic" %>
+							<%else%>
+							<img src="/assets/nophoto2.gif" alt="..." class="pro_pic">
+							<% end %>
+							<div class="edit_link"><%=link_to'Edit',user_image_edit_path,:class=>"edit_link1" %></div>
+						</div>
+						<div class="media-body">
+							<div class="pp_tname"><%=current_user.full_name%></div>
+							<% if current_user.seller?%>
+							<div><%= DISPLAY_LABEL%>  - <%=current_user.try(:display_name)%></div>
+							<div><%= SITE_NAME_SHORT%> Bidding <%= DISPLAY_LABEL_SHORT %> <%if current_user.approved%>
+								<img src="/assets/check_box1.png" alt />
+								<% else%>
+								<img src="/assets/check_box2.png" alt />
+								<%end %></div>
+								<%end %>
+								<%unless @country.blank?%>
+								<div><%=@country.try(:name)%>&nbsp;|&nbsp;<%=@state%></div>
+								<%end %>
+								<div>Member Since:&nbsp;<%=current_user.created_at.strftime("%b, %Y")%><br>Last Seen:&nbsp;<%=current_user.updated_at.strftime("%b, %Y")%> </div>
+
+							</div>
+							<h3 class="orange"><%= link_to'View Public Profile',user_public_profile_path(:id => current_user.id)%></h3>
+							<div class="seperator"></div>
+							<% unless current_user.buyer? %>
+								<%= render 'seller_profile', user: current_user %>
+							<% end %>
+						</div>
+					</div>
+					<div class="col-md-4">
+					    <%= render :partial => "seller_summary", :locals => { :user => current_user } %>
+						<div class="write_review">
+							<% if current_user.seller? %>
+							<button type="button" class="btn btn-warning review_button" data-toggle="modal" data-target=".bs-example-modal-lg">Request Reviews</button>
+							<% end %>
+						</div>
+					</div>
+				</div>		
+
+			</section>
+		</div>
+
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+						<a class="btn btn-warning img-circle pull-right" data-dismiss="modal">×</a>
+						<div class="alg_reg reg_lbl">Request Reviews from Previous Buyers</div>
+					</div>
+					<%= form_for(GuestUser.new, url: '/guest_user',:html => {"data-parsley-validate" => true,:method=>:post}) do |f| %>
+					<%= f.hidden_field :user_id, value: current_user.id %>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-10">
+								<label class="alg_reg reg_lbl">Buyer Name*</label>
+								<%= f.text_field :name, class: 'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please Enter buyer name'%>
+							</div>
+						</div>
+						<div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+							<div class="col-md-10">
+								<label class="alg_reg reg_lbl">Buyer Email*</label>
+								<%=f.text_field :email, :class=>'form-control',
+								'data-parsley-required'=>"true",'data-parsley-type'=>"email",'data-parsley-required-message'=>'Please enter buyer email address','data-parsley-type-message'=>'Please enter valid email address' %>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<label class="alg_reg reg_lbl">Your Message</label>
+								<%=f.text_area :message, :class=>'form-control',:rows => "6",
+								value: "I recently joined #{SITE_URL} and would appreciate if you could submit a review for the services that I provided you." %>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<%= f.submit 'Send', class: 'btn btn-warning' %>
+						<a href="#" class="btn btn-default cancel" data-dismiss="modal">Cancel</a>
+					</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+</div>

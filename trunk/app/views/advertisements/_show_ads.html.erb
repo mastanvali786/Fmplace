@@ -1,0 +1,30 @@
+<% @advertisements = Advertisement.get_ads_to_show(page_no) %>
+<% if  @advertisements.present? %>
+    <% @advertisements =Kaminari.paginate_array(@advertisements).page(params[:page]).per(10) %>
+    <div class="panel panel-default animated fadeInDown animation-delay-4">
+        <div class="panel-heading"><i class="fa fa-align-left"></i> Ads</div>
+        <div class="panel-body">
+            <ul class="media-list">
+                <% @advertisements.each do |advertisement| %>
+                <li class="media">
+                    <%= link_to image_tag(advertisement.banner_photo, :class => "media-object", :alt => "Advertisement", :width => "60",  :height => "60"), advertisements_click_on_ads_path(:advertisement_id => advertisement.id), remote: true, class: 'pull-left call_controller'%>
+                    <div class="media-body">
+                        <p class="media-heading ad_heading">
+                            <a href="#"><%=  %></a>
+                            <%= link_to advertisement.ad_title, advertisements_click_on_ads_path(:advertisement_id => advertisement.id), remote: true , class: 'call_controller'%>
+                        </p>
+                        <!-- <p><small><%#= advertisement.ad_content %></small></p> -->
+                        <small><%= advertisement.updated_at.strftime("%b, %-d %Y") %></small>
+                    </div>
+                </li>
+                <br>
+                <% end %>
+                <% if @advertisements.count >= 5 %>
+                    <div class="pull-right">
+                        <div><%= link_to "More >>",  advertisements_all_advertisements_advertisements_path %></div>
+                    </div>
+                <% end %>
+            </ul>
+        </div>
+    </div>
+<% end %>

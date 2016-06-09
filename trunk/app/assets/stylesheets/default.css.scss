@@ -1,0 +1,32 @@
+$main-color: #eee;
+$text-black: #000;
+
+header {
+    background: none repeat scroll 0 0 $main-color;
+    color: #fff;
+}
+
+footer {
+	background: none repeat scroll 0 0 $main-color;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+	background-color: $main-color;
+	border-color: $main-color;
+}
+.tmidtxtaddl52 {
+    color: #1a374d;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 auto 20px;
+    max-width: 1170px;
+    padding: 0 15px;
+    text-align: justify;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+	color: $text-black;
+}
+
+.light_blck {
+    color: $text-black;
+}

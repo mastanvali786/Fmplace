@@ -1,0 +1,2 @@
+class PayPalDepositRequest < DepositRequest
+end

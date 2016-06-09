@@ -1,0 +1,166 @@
+<style type="text/css">
+	.pull-right {
+		float: right !important;
+	}
+	.pull-left {
+		float: left !important;
+	}
+
+	.page-header {
+		padding-bottom: 5px;
+		margin: 40px 60px 20px;
+		border-bottom: 1px solid #cccccc;
+		line-height: 25px;
+	}
+
+	.container {
+		padding-right: 15px;
+		padding-left: 15px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+	.row {
+		margin-right: -15px;
+		margin-left: -15px;
+	}
+
+	.col-xs-6 {
+		width: 50%;
+		position: relative;
+		min-height: 1px;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.col-xs-4 {
+		width: 33.33333333%;
+		position: relative;
+		min-height: 1px;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.col-xs-10 {
+		min-height: 1px;
+		padding-left: 50px;
+		padding-right: 15px;
+		position: relative;
+		width: 83.3333%;
+	}
+
+	.badge {
+		display: inline-block;
+		min-width: 10px;
+		padding: 3px 7px;
+		font-size: 12px;
+		font-weight: bold;
+		line-height: 1;
+		color: #fff;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: baseline;
+		background-color: green;
+		border-radius: 10px;
+	}
+	hr {
+		border-color:  #eee;
+	}
+
+	.table {
+		width: 100%;
+		max-width: 100%;
+		margin-bottom: 20px;
+		margin-left: 11px;
+	}
+
+	.jumbotron {
+		padding: 30px 15px;
+		margin-bottom: 30px;
+		color: inherit;
+		background-color: #fff;
+	}
+</style>
+<div class="container">
+	<div class="row">
+		<div class="page-header ">
+			<h2><%= @project.full_title.upcase %></h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-10">
+			<div class="pull-right"><h4><b>Status: <span class="badge"><%= @project.current_state.capitalize %></span></b></h4></div>
+			<div class="col-xs-6">
+				<h4><b>Project Id:</b>&nbsp;<%= @project.id %></h4>
+			</div>
+			<div class="col-xs-6">
+				<h4><b>Awarded Amount:</b>&nbsp;US$<%= number_with_precision(@project.amount, precision:2)%></h4>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="page-header ">
+		</div>
+		<div class="col-xs-10">
+			<table class="table">
+				<tr>
+					<div class="row">
+						<div class="col-md-4">
+						<th><h4><b>Client</b></h4></th>
+						</div>
+						<div class="col-md-4">
+							<th><h4><b>Freelancer Name</b></h4></th>
+						</div>
+						<div class="col-md-4">
+							<th><h4><b>Amount</b></h4></th>
+						</div>
+					</tr>
+					<tr>
+						<div class="row">
+							<div class="col-md-4">
+								<td><h4><%= @project.buyer.first_name if @project.buyer.present?%></h4></td>
+							</div>
+							<div class="col-md-4">
+								<td><h4> <%= @project.seller.display_name if @project.seller.present? %></h4></td>
+							</div>
+							<div class="col-md-4">
+								<td>
+									<h4>
+										<b>Total Amount for the milestone:</b>&nbsp;$ <%= number_with_precision(@project.total_amount, precision: 2) %></h4>
+										<% if @project.paid_amount.to_f > 0 %>
+										<h4><b>Paid Amount:</b>&nbsp;$ <%= number_with_precision(@project.paid_amount, precision: 2)%></h4>
+										<%else%>
+										<h4><b>Paid Amount:</b>&nbsp;$ 0.00 </h4>
+										<%end%>
+										<h4><b>Pending Amount:</b>&nbsp;$ <%= number_with_precision(@project.pending_amount, precision: 2)%></h4>
+									</td>
+								</div>
+							</div>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="page-header ">
+					<h4><b>Messages</b></h4>
+				</div>
+				<div class="col-xs-10">
+					<% if @project.messages.present? %>
+					<% @project.messages.each do |msg| %>
+					<div class="jumbotron">
+						<div class="col-xs-10">
+							<b><%= msg.from %></b>
+							<span class="pull-right">
+								<b><%= msg.sent_at.strftime("Sent At %B %d %Y") %></b>
+							</span>
+							<br><br>
+							<b><%= msg.body %></b>
+						</div>
+					</div>
+					<% end %>
+					<% else %>
+					<div class="jumbotron">
+						<h3>No Messages</h3>
+					</div>
+					<% end %>
+				</div>
+			</div>
+		</div>

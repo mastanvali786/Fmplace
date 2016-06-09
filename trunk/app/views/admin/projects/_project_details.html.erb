@@ -1,0 +1,45 @@
+<div>
+<h3><%= @project.full_title %></h3>
+<div>
+	<h4>Total Hours Worked</h4>
+	<h3>3 hours</h3>
+</div>
+<div>
+	<h4>Amount Earned</h4>
+	<h3>$100</h3>
+</div>
+<div>
+	<h4>Status</h4>
+	<h3>Active</h3>
+</div>
+<hr>
+<div>
+	<h4>Buyer</h4>
+	<h3><%= @project.buyer.first_name if @project.buyer.present?%></h3>
+</div>
+<div>
+	<h4>Shop Name</h4>
+	<h3><%= @project.seller.display_name if @project.seller.present? %></h3>
+</div>
+<div>
+	<p><h4>Amount</h4>
+	<h4>Proposed Amount</h4>:<h3>$100</h3>
+	<h4>Paid Amount</h4>:<h3>$50</h3>
+	<h4>Pending Amount</h4>:<h3>$50</h3> </p>
+</div>
+<hr>
+<div>
+	<h2>Messages</h2>
+
+		<% if @project.messages.present? %>
+			<% @project.messages.each do |msg| %>
+				From: <%= msg.from %>
+				Sent At: <%= msg.sent_at.strftime("Sent At %B %d %Y") %>
+				Subject : <%= msg.subject %>
+			<% end %>
+		<% else %>
+			<h3>No Messages</h3>
+		<% end %>
+
+</div>
+</div>

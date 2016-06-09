@@ -1,0 +1,153 @@
+<style>
+  .multiselect:before{
+    background: none!important;
+    border-left: none!important;
+  }
+  .parsely_custom_msg .parsley-custom-error-message {
+    margin-left: 14px;
+    margin-top: 65px;
+  }
+</style>
+<div class="row">
+  <div class="col-md-12">
+    <label class="alg_reg reg_lbl ftwg100">Project Title*</label>
+    <%=f.text_field :title, :class=>'form-control','data-parsley-required'=>"true", maxlength: "200",'data-parsley-error-message'=>"Please enter project title" %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <label class="alg_reg reg_lbl ftwg100">Project Description (optional)</label>
+    <%=f.text_area :description, :class=>'form-control',:rows => "6", maxlength: "1000" %>
+  </div>
+</div>
+<!-- <div class="row">
+  <div class="col-md-5">
+    <label class="alg_reg reg_lbl ftwg100">Insert Project Image</label>
+      <%#= f.file_field :project_photo%>
+  </div>
+</div> -->
+<div class="row">
+  <div class="col-md-8">
+    <label class="alg_reg reg_lbl ftwg100">Attach files (Upload Floorplan)</label>
+    <%= f.file_field :file_name,:multiple => true%>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <label class="alg_reg reg_lbl ftwg100">Service Required <%= link_to 'Tell me more',homes_faq_path,  target: "_blank" %> *</label>
+    <label class="field select">
+      <% @category = Category.all %>
+      <% unless @category.blank?%>
+      <%=f.select :category_id, options_for_select(@category.collect{ |u| [u.name, u.id] }),{prompt: 'Select service'},'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select service", class: "form-control project_categories_options"%>
+      <%end%>
+      <i class="arrow"></i>                    
+    </label>
+  </div>
+  <div class="col-md-6" style="display:none" id="subcategory_div">
+    <label class="alg_reg reg_lbl ftwg100">Positions(size of business)*</label>
+    <label class="field select">
+      <%= f.select :subcategory_id, '',{:prompt => "Select No. of Positions"},
+      'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select No. of Positions", class: "form-control project_subcategories_options" %>
+      <i class="arrow"></i>
+    </label>
+  </div>
+</div>
+
+<div class="row parsely_custom_msg">
+  <div class="col-md-10">
+    <label class="alg_reg reg_lbl ftwg100">Business Type*</label>
+    <br>
+    <%= f.collection_select :project_tag_ids, ProjectTag.all, :id, :name, {}, {multiple: true, class: "form-control apply-chosen" ,'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select project tags"} %>
+  </div>
+</div>
+
+
+<div class="row parsely_custom_msg">
+  <div class="col-md-10">
+    <label class="alg_reg reg_lbl ftwg100">Additional Services <%= link_to 'Tell me more',homes_faq_path,  target: "_blank" %>*</label>
+    <br>
+    <%= f.collection_select :skill_tags_ids, SkillTag.all, :id, :name, {}, {multiple: true, class: "form-control apply-chosen" ,'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select Additional Services"} %>
+  </div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-md-10">
+    <label class="alg_reg reg_lbl ">What's your budget?</label>
+    <br>
+    <%# ProjectBudget.all.each do |budget|%>
+      <input type="radio" name="project_budget" class="radio-input" value="<%#= budget.try(:id) %>">
+       <%#= budget.try(:name)%>&nbsp;&nbsp;&nbsp;
+    <%# end %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <label class="field select">
+      <%#= f.select :budget_option_id, {},{prompt: 'Select Budget'}, {class: "form-control project_budget_options",'data-parsley-required'=>"false",'data-parsley-error-message'=>"Please select budget"} %>
+      <i class="arrow"></i>
+    </label>
+  </div>
+</div> -->
+
+<div class="row">
+  <div class="col-md-6">
+    <label class="alg_reg reg_lbl">Photography Date*</label>
+    <br>
+    <label class="field select">
+      <%= f.collection_select :project_time_frame_id, ProjectTimeFrame.all, :id, :name, {prompt: 'Select Photography Date'}, {'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select photography date"} %>
+      <i class="arrow"></i>
+    </label>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-6">
+    <label class="alg_reg reg_lbl ftwg100">Country*</label>
+    <label class="field select">
+      <%= f.collection_select :country_id, Country.all.order('name ASC'), :id, :name, {prompt: 'Please select country'} ,class:'country_class', 'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select country "%>
+      <i class="arrow"></i>               
+    </label>
+  </div>
+  <div class="col-md-6 state_div" style="display:none">
+    <label class="alg_reg reg_lbl ftwg100">City*</label>
+    <label class="field select">
+      <%= f.select :state_id,options_for_select(State.all.collect{ |u| [u.state_name, u.id] }, :selected => current_user.try(:state_id)),{:include_blank => false,prompt: 'Please select country'},class: 'state_class','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select city"%>
+        <i class="arrow"></i>
+    </label>
+  </div>
+</div> 
+ <div class="row"> 
+  <!-- <div class="col-md-6">
+    <label class="alg_reg reg_lbl ftwg100">City*</label>
+    <%#= f.text_field :city, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter city name "%>           
+  </div> -->
+   <div class="col-md-6">
+  <label class="alg_reg reg_lbl ftwg100">Zip Code</label> 
+
+  <%= f.text_field :zip_code, :class=>'form-control'%>
+  <%#= f.text_field :zip_code, :class=>'form-control number-only', 'data-parsley-type'=>"number",'data-parsley-required'=>"true",'data-parsley-maxlength'=>"6",'maxlength'=>'6','data-parsley-error-message'=>"Please enter zip code "%>
+  </div>
+</div> 
+
+<!--   <div class="col-md-6">
+    <label class="alg_reg reg_lbl">Project Start*</label>
+    <div class='input-group date'>
+      <%#=f.datetime_field :start_date, :class=>'form-control project_start_date','data-parsley-required'=>"true", readonly: true%>
+      <span class="input-group-addon" onclick="$('.project_start_date').focus();">
+        <span class="fa fa-calendar"></span>
+      </span>
+      </div>
+    </div> -->
+    <div class="col-md-6" style="margin-left:-13px">
+      <label class="alg_reg reg_lbl">Bidding Ends*</label>
+      <div class='input-group date' id='datetimepicker11'>
+        <%=f.datetime_field :end_date, :class=>'form-control project_end_date','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select date", readonly: true%>
+        <span class="input-group-addon" onclick="$('.project_end_date').focus();">
+          <span class="fa fa-calendar"></span>
+        </span>
+      </div>
+    </div>
+    <br><br><br><br>

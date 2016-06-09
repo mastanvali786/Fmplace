@@ -1,0 +1,30 @@
+ <div class="row amount">
+  <div class="col-md-3 g_lightc alg_bold">Deposit Amount<span class="puul-right">:</span></div>
+  <div class="col-md-3">
+    <div class="input-group">
+      <span class="input-group-addon">$</span>
+      <%= text_field_tag 'amount', nil, class:'form-control', id:'deposit_amount', placeholder:'Amount',
+      'data-parsley-required'=>"true" %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 g_lightc alg_bold">New Balance:</div>
+  <div class="col-md-3 gotham_medium">
+    <span>
+      <span id="new_balance_deposit"><%= number_to_currency @available_balance, precision: 3 %></span>
+    </span>
+  </div>
+</div>
+<div class="row aw_btns">
+  <div class="col-md-3">
+    <% if payment_method(current_user) == "BRAINTREE" %>
+    <button type="button" class="btn btn-warning braintree_open_pay_modal" data-toggle="modal" data-target=".bs-example-modal-lg"
+       disabled="true" id='deposit_amount_button'>
+      Deposit
+    </button>
+    <% else %>
+    <%=submit_tag 'Deposit', class:'btn btn-warning', disabled: true, id: 'deposit_amount_button'%>
+    <% end %>
+  </div>
+</div>

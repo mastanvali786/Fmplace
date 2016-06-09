@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <p>Hi <%= @user.visible_name %>,</p>
+  <p>We’re letting you know a project that you bid on was awarded to another Freelancer.</p>
+  <p>Project:</p>
+  <p><b>Project Title:</b> <%= @project.full_title %></p>
+  <p><b>Category:</b> <%= @project.category_name %> </p>
+  <p><b>Subcategory:</b> <%= @project.subcategory_name %> </p>
+  <p><b>Project Tags:</b> <%= @project.tags %></p>
+  <p><b>Skills Required:</b> <%= @project.skills %></p>
+  <p><b>Budget:</b> <%= @project.budget %></p>
+  <p><b>Estimated Time Frame:</b> <%= @project.estimated_time %></p>
+  <p><b>Location:</b> <%= @project.location %></p>
+  <p><b>Description:</b> <%= @project.description %> </p>
+
+  <p><b>Your Proposal:</b></p>
+  <p>Details</p>
+  <p><b>Description:<b><%= @bid.details %></p>
+  <p><b>Delivery Timeline:</b> <%= estimated_days_display @bid.estimated_days %></p>
+  <p><b>Bid Amount:</b>US $<%= @bid.proposed_amount%> </p>
+
+  <p>Please let us know if you have any questions.</p>
+
+<p>Sincerely,</p>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p><%= EMAIL_SIGN_EMAIL %></p>
+<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<%= csrf_meta_tag %>
+<%= javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery? %>
+<div class="main_container">
+	<div class="container mpro_container">
+		<%= render(:partial => 'dashboard_header') %>
+		<div class="container search_container">
+			<div class="row">
+				<div class="col-md-3">
+					<button class="narrow search_nav gotham_medium navbar-toggle " data-toggle="collapse" data-target="#tmy-nav">Narrow Results <span class="pull-right"><i class="fa fa-chevron-down"></i></span></button>
+					<div id="tmy-nav" class="navbar-collapse collapse transc" role="navigation">
+						<h2 class="narrow gotham_medium">Narrow Results</h2>
+						<h3 class="search_lh gotham_medium" onclick="exapnd_collapse('all_cat_shops','category_shops');">
+							<span id="category_shops">
+								<img src="/assets/expand.gif" alt />
+							</span>Services
+						</h3>
+						<div id="all_cat_shops">
+							<div class="search_slc cursorselect alg_reg"
+							onclick="categorysearch('');" id="category_search_all">All
+						</div>
+						<% @categories.each do |cat|%>
+						<div class="search_slc cursorselect alg_reg" onclick="categorysearch(<%=cat.id%>);" id="category_search_<%= cat.id%>">
+							<%=cat.name%>
+						</div>
+						<% end %>
+					</div>
+					<!-- <h3 class="search_lh gotham_medium" onclick="exapnd_collapse('all_engine_shops','engine_shops');">
+						<span id="engine_shops">
+							<img src="/assets/expand.gif" alt />
+						</span>&nbsp;Skills
+					</h3>
+					<div id="all_engine_shops">
+						<div class="search_slc cursorselect alg_reg" onclick="subcategorysearch('');" id="subcategory_search_all">
+							All
+						</div>
+						<%# @skills.each do |sub|%>
+						<div class="search_slc cursorselect alg_reg" onclick="subcategorysearch(<%#=sub.id%>);" id="subcategory_search_<%#= sub.id%>">
+							<%#=sub.name%>
+						</div>
+						<%# end %>
+					</div> -->
+					<h3 class="search_lh gotham_medium" onclick="exapnd_collapse('all_location_shops','location_shops');">
+						<span id="location_shops">
+							<img src="/assets/expand.gif" alt />
+						</span>&nbsp;By Location
+					</h3>
+					<div id="all_location_shops">
+						<div class="custom-check">
+							<div class="check_row ">
+								<label class="radio-label alg_reg">
+									<input type="radio" name="location" class="radio-input" checked onClick="search_shop_no_pref('location_show');" >
+									<span class="info qwbox5pxtop"></span>No Preferences
+								</label>
+							</div>
+							<div class="check_row ">
+								<label class="radio-label alg_reg">
+									<input type="radio" name="location" class="radio-input" value="ploc" onclick="show_popup('location_show');">
+									<span class="info qwbox5pxtop"></span>Preferred Location 
+								</label>
+
+								<div id="location_show" class="check_row" style="display:none;">
+									<%= form_tag '/projects/find_freelancers', :name=>'location_sea' do %>
+									<table cellpadding="0" cellspacing="3" border="0" width="200px"><tr>
+										<td style="padding-top:2px;">
+											<b>Country</b><br/>
+											<%= select("post", "country",Country.all.order('name ASC').collect {|p| [ p.name, p.id ] }, {include_blank: 'All',selected: @country_id},{class:'country_class1'}) %>
+										</select><br/><br/></td></tr><tr>
+										<td style="padding-top:2px;"><b>City</b><br/><div id="stateid" style="height:20px;width:40px;">
+											<%= select("post", "state",@states_list.collect {|p| [ p.state_name, p.id ] }, {include_blank: 'All',selected: @state_id},{class:'state_class1'}) %></div></td></tr>
+											<tr>
+												<td colspan="2" align="right" style="padding-right:25px;">
+													<div class="orangebutton3a">
+														<span>
+															<a href="javascript:void(0);" onclick="location_preference()">
+																<img src="/assets/go-btn.png" style="width: 50px; height: 33px; position: relative; display: inline-block;padding-top: 10px;">
+															</a>
+														</span>
+													</td></tr>
+												</table>
+												<%end %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- <h3 class="search_lh gotham_medium"
+								onclick="exapnd_collapse('all_status_shops','status_shops');">
+								<span id="status_shops">
+									<img src="/assets/expand.gif" alt />
+								</span>&nbsp;By Status
+							</h3>
+							<div class="custom-check" id="all_status_shops">
+								<div class="check_row ">
+									<label class="check-label alg_reg">
+										<input type="checkbox" class="custom-checkl" id="checkbox1" >
+										<span class="info qwbox5pxtop bidd_only"></span>Show only Bidding Freelancers by <%#= SITE_NAME_SHORT %>
+									</label>
+								</div>
+							</div> -->
+							<h3 class="search_lh gotham_medium"
+							onclick="exapnd_collapse('all_feedback_shops','feedback_shops');">
+							<span id="feedback_shops">
+								<img src="/assets/expand.gif" alt />
+							</span>&nbsp;By Feedback&nbsp;(12 months)
+						</h3>
+						<div id="all_feedback_shops">
+							<div class="custom-check">
+								<div class="check_row ">
+									<label class="radio-label alg_reg">
+										<input type="radio" name="ratings" class="radio-input" value="all" >
+										<span class="all_class info dtvlcge all_custom"></span>All
+									</label>
+								</div>
+								<div class="check_row">
+									<label class="radio-label">
+										<input type="radio" name="ratings" class="radio-input" value="5" >
+										<span class="info dtvlcge"></span>
+										<div class="alg_reg">
+											At Least 5
+											<span class="rating">
+												<img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt />
+											</span>
+										</div>
+									</label>
+								</div>
+								<div class="check_row">
+									<label class="radio-label">
+										<input type="radio" name="ratings" class="radio-input" value="4" >
+										<span class="info dtvlcge"></span>
+										<div class="alg_reg">
+											At Least 4
+											<span class="rating">
+												<img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_off.gif" alt />
+											</span>
+										</div>
+									</label>
+								</div>
+								<div class="check_row">
+									<label class="radio-label">
+										<input type="radio" name="ratings" class="radio-input" value="3" >
+										<span class="info dtvlcge"></span>
+										<div class="alg_reg">
+											At Least 3
+											<span class="rating">
+												<img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_on.gif" alt /><img src="/assets/star_off.gif" alt /><img src="/assets/star_off.gif" alt />
+											</span>
+										</div>
+									</label>
+								</div>
+							</div>
+						</div>
+						<br><br>
+						<%= render :partial=>'advertisements/show_ads', locals: { page_no: "3"} %>
+						<% unless current_user %>
+						<br>
+						<!-- <div class="lokin ">Looking for Projects?</div> -->
+						<%= link_to 'Join Our Network<br/>(Freelancer Registration)'.html_safe,
+						users_signup_seller_path, :class=>"gotham_medium btn btn-warning preg_btn"%>
+						<% end %>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<h3 class="narrow gotham_medium">Find Photographers</h3>
+					<form class="search-box" action="/projects/find_freelancers" method="get">
+						<div class="input-group search_bs find_pdcts">
+							<input type="search" id="shop_search" placeholder="Search All <%=DISPLAY_LABELS%>" class="search form-control pull-left" name="fq">
+							<button type="submit" class="btn input-group-addon" value=""><i class="fa fa-search"></i></button>
+						</div>
+					</form>
+					<div class="row my_pro" id="map">
+						<div id="map-canvas" style="height:368px;width:100%;"></div>
+					</div>
+					<div class="row srch_result">
+						<div class="col-md-8 alg_reg" id="mapclick">
+							All the <%= DISPLAY_LABELS %>&nbsp;(&nbsp;<%= @shop_count %>&nbsp;results&nbsp;)&nbsp;&nbsp;
+							<span>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="show_map();">Map All Results <%=image_tag 'map.jpg',height:'25px'%></a></span>
+						</div>
+
+						<div class="col-md-4 alg_reg">
+							<label class="pull-left">Sort by</label>
+							<label class="field select">
+								<select id="search_posted_project">
+									<option value="all">All Posted</option>
+									<option value="asc">Posted Date ASC</option>
+									<option value="desc">Posted Date DESC</option>
+                  </select>
+                  <i class="arrow"></i> 
+								                    
+							</label>
+						</div>
+					</div>	
+					<%if @shop_count == 0 %>
+					<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Results Found</div>
+					<%end%>
+
+					<% if @findallshops %>
+					<% @findallshops.each do |shop| %>
+
+					<div class="ds row my_pro">
+						<div class="col-md-2">
+							<% unless shop.profile_photo.blank? %>
+							<%=image_tag shop.profile_photo,:class=>"pro_pic" %>
+							<%else%>
+							<img src="/assets/nophoto2.gif" alt="..." class="pro_pic">
+							<% end %>
+						</div>
+						<div class="custom-check col-md-10 alg_reg ffrelanc">
+							<div>
+								<div class="row">
+									<div class="col-md-6 pro_title project_details gotham_medium">
+										<%=link_to shop.visible_name, user_public_profile_path(:id => shop.id), style:"color:black;"%>
+									</div>
+									<div class="col-md-6 pull-left light_blue actions_con alg_reg">	
+										<div class="check_row">
+											<%if shop.approved%>
+											<img src="/assets/check_box1.png" alt />
+											<% else%>
+											<img src="/assets/check_box2.png" alt />
+											<%end %>
+											<span class="info"></span><%=SITE_NAME_SHORT %> Bidding <%= DISPLAY_LABEL_SHORT%>
+										</div>
+									</div>
+								</div>
+								<button class="ds_narrow pdtls search_nav gotham_medium navbar-toggle " data-toggle="collapse" data-target="#<%= shop.id %>">
+									Project Details <span class="pull-right"><i class="fa fa-chevron-down"></i></span></span>
+								</button>
+
+								<div id="<%= shop.id %>" class="navbar-collapse collapse" >
+									<div class="npr_tlbl alg_reg">
+										<div class="pull-left">
+											<%= render :partial => "shared/user_rating", :locals => { :user => shop } %> 
+											&nbsp;</div> 
+											<div class="pull-left ">
+												|&nbsp;
+												<% if shop.try(:currency) %>
+												<%= shop.try(:currency) %>
+												<% else %>
+												USD
+												<% end %>
+												<%= number_to_currency shop.earnings %> Earnings &nbsp;|&nbsp; </div>
+												<div class="pull-left"><%=shop.project_sellers.count %>&nbsp; Projects &nbsp;|&nbsp; </div>
+												<div class="pull-left">
+													<%=shop.full_location%></div>
+												</div>
+												<%if shop %>
+												<div class="npr_tlbl project_details"> 
+													<%= shop.user_biography.try(:summary)%>
+												</div>
+												<div class="npr_tlbl">
+													<div class="pull-left project_details">
+														Services:&nbsp;
+														<% if shop.user_skill.present? %>
+														<% shop.user_skill.known_skills.reject(&:empty?).each do |skill| %>
+														<% @skill_category = SkillTag.find_by_id(skill) %>
+														<div class="label label-default "><%= @skill_category.name if @skill_category.present? %></div>
+														<% end %>
+														<% end %>
+														<span style="color:black;">
+														</span>&nbsp; </div>
+													</div>
+													<%end %>
+												</div>
+											</div>
+										</div>
+									</div>
+									<% end %>
+									<% end %>
+
+									<div class="clearfix pagination_box">
+										<div class="pull-left">Page <%= @findallshops.current_page%> of <%= @findallshops.total_pages%></div>
+										<div class="pull-right">
+											<%= paginate @findallshops %>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+					<script>
+
+						$(document).ready(function(){
+
+							$('select#search_posted_project').change( function() {
+								window.location = '/projects/find_freelancers?find_posted='+$(this).val();
+							});
+							var search = getUrlVars()["fq"];
+                                                        if(search)
+                                                        {
+                                                          var url_search = search.replace("+"," ");
+                                                        }
+							$("#shop_search").val(url_search);
+                                               
+							$('#checkbox1').click(function() {
+								if($("#checkbox1").is(':checked'))
+								{
+									sessionStorage.setItem("find_check", true);
+									search_shops_on_filter();
+								}else{
+									sessionStorage.setItem("find_check", false);
+									search_shops_on_filter();
+								}
+							});
+
+							$("input[name=ratings]:radio").change(function () {
+								var feed = $("input[name=ratings]:checked").val();
+								sessionStorage.setItem("feed", feed);
+								search_shops_on_filter();
+							});
+
+							if(sessionStorage.category){
+								$('#category_search_'+sessionStorage.category).addClass("active_result");
+							}else{
+								$('#category_search_all').addClass("active_result");
+							}
+							if(sessionStorage.subcategory){
+								$('#subcategory_search_'+sessionStorage.subcategory).addClass("active_result");
+							}else{
+								$('#subcategory_search_all').addClass("active_result");
+							}
+							if(sessionStorage.find_check == "true"){
+								$('#checkbox1').attr('checked', true);
+							}else{
+								$('#checkbox1').attr('checked', false);
+							}
+							if(sessionStorage.feed){
+								$('[name=ratings][value='+sessionStorage.feed+']').prop('checked',true);
+							}else{
+								$('[name=ratings][value="all"]').prop('checked',true);
+							}
+							if(sessionStorage.location_pref == "true"){
+								$('input:radio[name=location][value=ploc]').attr('checked', true);
+								$('#location_show').show('slow');
+								$('#post_country').val(sessionStorage.country);
+								$('#post_state').val(sessionStorage.state);
+							}else{
+								$('#location_show').hide('slow');
+							}
+
+						});
+</script>
+

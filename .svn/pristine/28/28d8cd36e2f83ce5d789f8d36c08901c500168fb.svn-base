@@ -1,0 +1,68 @@
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render(:partial => '/projects/dashboard_header') %>
+        <aside class="user_left">
+            <%= render partial: "account/menu" %>
+        </aside>
+        <section class="row user_right">
+            <h3 class="orange gotham_medium">Advertisements</h3>
+            <div class="clearfix">
+                <div class="pull-left">
+                    Available Funds: US$<%= number_to_currency(current_user.balance.available, :unit => " ")%>&nbsp;&nbsp;[<a href="/accounting/deposits">Deposit Funds</a>]
+                </div>
+                <div class="pull-right">
+                    <%= link_to 'New Campaign', new_advertisement_path, class: 'btn btn-warning' %>
+                </div>
+            </div>
+
+            <div class="row ngray_box mtxt_lftm md_hide clrbk5">
+                <div class="col-md-3 first_ltxt">Campaign Name</div>
+                <div class="col-md-1" style="text-align: center;">Status</div>
+                <div class="col-md-2" style="text-align: center;">Updated</div>
+                <div class="col-md-2" style="text-align: center;">Budget/day</div>
+                <div class="col-md-2" style="text-align: center;">Clicks/day</div>
+                <div class="col-md-2" style="text-align: center;">Impressions</div>
+                <!-- <div class="col-md-4" style="text-align: left;">Actions</div> -->
+            </div>
+
+            <% @advertisements.each do |advertisement| %>
+                <div class="row nd_box txt_lftm">
+                    <div class="col-md-3 first_ltxt">
+                        <div data-label="Project Start" class="account_p_lbl">
+                            <%= link_to advertisement.campaign_name, edit_advertisement_path(advertisement) %><br>
+                            <%= link_to make_active_label(advertisement), {:controller => "advertisements", :action => "make_active_inactive", :advertisement_id => advertisement.id } %>&nbsp;|&nbsp;
+                            <%= link_to 'Remove', advertisement, method: :delete, data: { confirm: 'Are you sure?' } %>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-1 clrbk5" style="text-align: center;">
+                        <div data-label="Project Amount" class="account_p_lbl"><%= advertisement.ad_status %></div>
+                    </div>
+
+                    <div class="col-md-2 clrbk5" style="text-align: center;">
+                        <div data-label="Status" class="account_p_lbl"><%= user_date_zone advertisement.updated_at%></div>
+                    </div>
+
+                    <div class="col-md-2 clrbk5" style="text-align: center;">
+                        <div data-label="Shop" class="account_p_lbl">$<%= advertisement.budget_per_day %></div>
+                    </div>
+
+                    <div class="col-md-2 clrbk5" style="text-align: center;">
+                        <div data-label="Project End Date" class="account_p_lbl"><%= advertisement.no_of_clicks %> / <%= advertisement.paid_click_per_day %></div>
+                    </div>
+
+                    <div class="col-md-2 clrbk5" style="text-align: center;">
+                        <div data-label="Project End Date" class="account_p_lbl"><%= advertisement.no_of_views %></div>
+                    </div>
+                </div>
+
+                <div class="seperator"></div>
+            <% end %>
+
+            <div class="clearfix pagination_box">
+                <div class="pull-left">Page <%= @advertisements.current_page%> of <%= @advertisements.total_pages%></div>
+                <div class="pull-right"><%= paginate @advertisements %></div>
+            </div>
+        </section>
+    </div>
+</div>

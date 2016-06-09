@@ -1,0 +1,13 @@
+ <aside class="user_left">
+  <div class="usr_lbl alg_reg">
+<a class="<%= request.fullpath.include?("about_us") == true ? 'active' : '' %>" href="<%=  homes_about_us_path%>">
+    About Us</a></div>
+  <div class="usr_lbl alg_reg">
+<a class="<%= request.fullpath.include?("how_it_works") == true ? 'active' : '' %>" href="<%= homes_how_it_works_path%>">
+    How <%= SITE_NAME_SHORT %> Works</a></div>
+  <div class="usr_lbl alg_reg">
+<a class="<%= request.fullpath.include?("faq") == true ? 'active' : '' %>" href="<%= homes_faq_path%>">
+    FAQs</a></div>
+  <div class="usr_lbl alg_reg"><a class="<%= request.fullpath.include?("contact") == true ? 'active' : '' %>" href="<%= contact_path%>">
+    Contact Us</a></div>
+</aside>

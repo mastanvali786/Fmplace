@@ -1,0 +1,89 @@
+<div class="main_container">
+  <div class="container user_profile">
+    <%= render(:partial => '/projects/dashboard_header') %>
+    <aside class="user_left alg_reg pad145w">
+      <%= render partial: "menu" %>
+    </aside>
+    <section class="row user_right alg_reg pad145w">
+
+      <div class="user_ppedit">
+
+       <style>div.orangebutton3{overflow:hidden;height:32px;}div.orangebutton3 a img:hover{margin-top:-27px;}.youcal{font-size:10px!important;color:#666666;}</style>
+       <div>
+        <div style="color:#fe5a01;font-size:16px;font-weight:bold;padding-bottom:2px;ont-family: 'GothamMedium' !important;">Edit Your Profile Photo</div>
+        <div style="color:black;font-size:12px;">
+          Upload a photo/logo that will show on your <%= SITE_NAME_SHORT%> profile </div><br/>
+          <div style="color:red;font-size:10px;padding-bottom:5px;"></div>
+          <%= form_for :user,:url=>user_image_edit_path, :html => {"data-parsley-validate" => true,multipart: true,:id=>'image_submit_id' } do |f| %>
+
+          <table cellpadding="12" cellspacing="0" border="0" width="98%">
+            <tr valign="top">
+              <td>
+                <table cellpadding="0" cellspacing="0" border="0" width="75%">
+                  <tr>
+                    <td valign="top" style="padding-right: 30px;">
+
+                      <% unless current_user.profile_photo.blank? %>
+                      <%=image_tag current_user.profile_photo,:style=>'border=0;width: 150px; height: 150px;' %>
+                      <input type="hidden" class="imagecheck" value="true">
+                      <%else%>
+                      <input type="hidden" class="imagecheck" value="false">
+                      <img src="/assets/nophoto2.gif" alt="..." class="pro_pic">
+                      <% end %>
+                    </td>
+                    <td valign="top" align="left">
+
+                      <%= f.file_field :profile_photo %>
+
+                      <span style="color:black;">Browse and upload files directly from your computer<br/>Maximum file size: 400x400px</span><br><br><br>
+                      <div>
+                        <span style="color:black;">Enter the URL link to your published YouTube video and we'll display it right on your public profile page</span><br/>
+                        <%=f.text_field :video_url, :value => current_user.try(:video_url),'data-parsley-type'=>"url" %>
+                        <div class="youcal" style="color:black;">Format: http://www.youtube.com<span style="font-size:10x;color:#F00;">/v/</span><span style="font-size:10x;color:#00F;">xxxxx</span></div>
+                      </div><br><br><br>
+                      <div style="width:100%;">
+
+                      </div>
+                      <div style="float:left;">
+                        <span>
+                         <%= f.submit 'Save', class:'btn btn-warning save upload_profile_pic', style:'width: 80px;' %>
+                       </span>
+                     </div>
+                     <div>
+                      <span>
+                        <a href="/account/public_profile" class="btn btn-default cancel" style='width: 80px;'>
+                         Cancel
+                       </a>
+                     </span>
+                   </div>
+                 </div>
+                 <% end %>
+               </td>
+             </tr>
+           </table>
+         </td>
+       </tr>
+     </table>
+   </form>
+   <div style="padding-bottom:20px;"></div>
+ </div>
+</div>
+</section>
+</div>
+<script type="text/javascript">
+ $(document).ready(function() {
+    $(".upload_profile_pic").on("click", function(event){
+      event.preventDefault();
+      var result= $('.imagecheck').val();
+      var result2 = $('#user_profile_photo').val();
+      if (result == "true" || result2 !=""){
+        $('#image_submit_id').submit();
+      }
+      else {
+        alert("Please choose profile picture to upload.");
+        return false;
+      }
+    }); 
+  });
+
+</script>

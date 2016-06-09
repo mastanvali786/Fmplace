@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+	<% if @milestone.creator.role_name == "Buyer" %>
+
+		<p>Hi <b><%= @project.seller.visible_name %>,</b></p>
+
+		<% if @milestone.status == 'accepted' %>
+			<p>Your customer has accepted the following milestones for <%= @project.full_title %></p>
+			<p>The next step is for them to add payments to the milestones</p>
+		<% else %>
+			<p>Your customer has rejected the following milestones for <%= @project.full_title %></p>
+		<% end %>
+
+	<% else %>
+
+		<p>Hi <b><%= @project.buyer.visible_name %>,</b></p>
+		<% if @milestone.status == 'accepted' %>
+			<p><%= @project.seller.visible_name %> has accepted the following milestones for <%= @project.full_title %></p>
+		<% else %>
+			<p><%= @project.seller.visible_name %> has rejected the following milestones for <%= @project.full_title %></p>
+		<% end %>
+		
+	<% end %>
+
+	<p>We are always here to help if you have any questions or concerns.</p>
+
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

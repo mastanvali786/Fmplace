@@ -1,0 +1,67 @@
+<section class="row user_right1 alg_reg">
+  <h3 class="orange">Mark As Complete</h3>
+  <div class="row ngray_box md_hide clrbk5">
+    <div class="col-md-3">MileStone</div>
+    <div class="col-md-1">Amount</div>
+    <div class="col-md-3">Delivery Date</div>
+    <div class="col-md-2">Payment Status</div>
+    <div class="col-md-3">MileStone Status</div>
+  </div>
+  <% @mark_milestones.each do |milestone| %>
+  <div class="row mile_message clrbk5">
+    <div data-label="MileStone" class="account_p_lbl col-md-3">
+      <%= milestone.description %>
+    </div>
+    <div data-label="Amount" class="account_p_lbl col-md-1">
+      USD&nbsp;<%= number_to_currency milestone.price %>
+    </div>
+    <div data-label="Delivery Date" class="account_p_lbl col-md-3">
+      <%= user_time_zone milestone.delivery_date%>
+    </div>
+    <div data-label="Payment Status" class="account_p_lbl col-md-2">
+      <% if milestone.paid? %>
+        Paid
+      <% else %>
+        Not Paid
+      <% end %>
+    </div>
+    <div data-label="MileStone Status" class="account_p_lbl col-md-3">
+      <%= milestone.status.titleize %>
+    </div>
+ </div>
+ <% end %>
+ <% if current_user.buyer? %>
+ <div class="row mile_message">
+   <div class="col-md-7"></div>
+   <div class="col-md-3 pull-right">
+    <% unless @project.completed? %>
+       <%= link_to 'Mark As Complete',{:controller => "projects/action", :action => "complete_project",
+          id: @project.id},method: :post,data: { confirm: "Are you sure?" },:class=>"btn btn-warning",
+          id: 'mark_as_complete', remote:true %>
+    <% else %>
+      <button class="btn btn-warning">Completed</button>
+    <% end %>
+   </div>
+ </div>
+ <% end %>
+ <div class="clearfix pagination_box">
+  <div class="pull-left">Page <%= @mark_milestones.current_page%> of <%= @mark_milestones.total_pages%></div>
+  <div class="pull-right">
+    <%= paginate @mark_milestones %>
+  </div>
+</div>
+</section>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="complete_project_modal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Project Complete</h4>
+      </div>
+      <div class="modal-body">
+        <div id="status_message_complete" style="padding:10px;"></div>
+      </div>
+    </div>
+  </div>
+</div>

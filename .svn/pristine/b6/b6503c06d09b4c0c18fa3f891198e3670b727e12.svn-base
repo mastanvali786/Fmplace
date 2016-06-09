@@ -1,0 +1,19 @@
+<style type="text/css">
+  form fieldset ol > li label {
+    width: 9%;
+}
+</style>
+<%= semantic_form_for [:admin, @dispute]  do |f| %>
+<fieldset class="inputs">
+  <ol>
+      <li><%= f.input :subject,  :input_html => { :class => "form-control" }%></li>
+      <li><%= f.input :project_id , :as => :select,:collection => Hash[Project.all.map{|b| [b.title,b.id]}], :input_html => { :class => "form-control" } %></li>
+      <li><%= f.input :user_id, :as => :select,:collection => Hash[User.all.map{|b| [b.first_name,b.id]}], :input_html => { :class => "form-control" } %></li>
+      <li><%= f.input :body,  :input_html => { :class => "form-control", :rows => 10 } %></li>
+      <%= f.actions do %>
+          <%= f.action :submit, :as => :button %>
+          <%= f.action :cancel, :as => :link %>
+        <% end %>
+    </ol>
+<%end%>
+

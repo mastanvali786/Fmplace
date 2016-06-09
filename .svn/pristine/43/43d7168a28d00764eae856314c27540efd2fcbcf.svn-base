@@ -1,0 +1,149 @@
+		<header>
+			<style type="text/css">
+.select .arrow {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 27px;
+  height: 29px;
+  background: #ddd;
+  color: #fff !important;
+  pointer-events: none;
+  z-index: 16;
+}
+			</style>
+			<% logo = get_logo %>
+			<!-- Navigation Bar -->
+			<div class="navbar">
+				<div class="container">
+					<!-- mobile menu -->
+					<!-- mobile menu -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<i class="fa fa-bars"></i>
+						</button>
+						<% if logo.present? %>
+							<% if current_user %>
+								<%= link_to image_tag(logo.thumb,:class=>'logo img-responsive'),projects_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% else %>
+								<%= link_to image_tag(logo.thumb,:class=>'logo img-responsive'),root_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% end %>
+						<% else %>
+							<% if current_user %>
+								<%= link_to image_tag("logo.png",:class=>'logo img-responsive'),projects_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% else %>
+								<%= link_to image_tag("logo.png",:class=>'logo img-responsive'),root_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% end %>
+
+						<% end %>
+					</div>
+					<!-- desktop menu -->
+					<!-- desktop menu -->
+					<nav id="my-nav" class="navbar-collapse collapse" role="navigation">
+					<% if current_user && current_user.seller? %>
+						<form class="navbar-form navbar-left hnbar" action="/projects/find_projects" method="get"
+						   style="margin-top: 24px;">
+									<input type="search" placeholder="Find Projects" class="alg_reg form-control fshops"
+									    name="fq">
+									<span class="entypo-search btn"><button type="submit" class="btn" value=""><i class="fa fa-search"></i></button></span>
+								</form>
+					<% else %>
+						<form class="navbar-form navbar-left hnbar" action="/projects/find_freelancers" method="get" role="search">
+							<div class="form-group">
+								<input type="search" class="alg_reg form-control fshops" placeholder="Find <%= DISPLAY_LABELS %>" name="fq">
+								<span class="entypo-search btn"><button type="submit" class="btn" value=""><i class="fa fa-search"></i></button></span>
+							</div>
+						</form>
+						<% end %>
+						<div class="navbar-header" style="padding-top: 25px;padding-left: 11px;">
+							 <label class="alg_reg reg_lbl ftwg100"
+							   style="padding-top: 4px;color: black;">Login As</label>
+							 <label class="field select" style="width: 125px;">
+							 								 <select id="loagin_as_role" class="select">
+								 <option value="0">Please select</option>
+								 <option value="1">Buyer</option>
+								 <option value="2">Seller</option>
+								 <option value="3">Admin</option>
+							 </select>
+							 <i class="arrow"></i>
+							 </label>
+						 </div>
+						 <ul class="nav navbar-nav  navbar-right">
+<!-- 							<li class="alg_reg active">
+								<%#=link_to 'How it Works',homes_how_it_works_path,:class=>'light_blck'%>
+							</li>
+							<li class="alg_reg">
+								<%#= link_to 'Contact',contact_path,:class=>"light_blck"%>
+							</li> -->
+							<% unless current_user %>
+								<li class="alg_reg"><%#= link_to "Login as Admin", homes_login_admin_user_path, :class=>"light_blck" %></li>
+							<% end %>
+							<li class="dropdown alg_reg light_blck" >
+          						<a href="#" class="dropdown-toggle light_blck" data-toggle="dropdown" role="button" aria-expanded="false">Theme<span class="caret"></span></a>
+					          	<ul class="dropdown-menu" role="menu">
+					          		<% Theme.all.each do |theme| %>
+						            	<li class="alg_reg" id="theme<%= theme.id %>"><a href="#"><%= theme.name %></a></li>
+						            <% end %>
+					          	</ul>
+							</li>
+							<% unless session[:admin_login] == true %>
+								<li class="" style="width:128px;">
+									<% if current_user %>
+									  <%= link_to 'Sign Out',destroy_user_session_path,:class=>"alg_reg  btn btn-default", :method => :delete %>
+									<% else %>
+									  <%= link_to 'Sign up',hire_work_path,:class=>"alg_reg btn btn-default"%>
+									<% end %>
+									</li>
+							<% else %>
+								<li class=""><%= link_to 'Switch Admin', registrations_login_as_admin_path , :class=>"alg_reg btn btn-default safari_switch_fix"%>
+								</li>
+						  <% end %>
+						</ul>
+					</nav>
+				</div>
+			</div>
+			<!-- End of Navigation Bar -->
+		</header>
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$("#theme1").click(function () {
+        		$.ajax({
+		        url: "/themes/set_theme",
+		        type: "POST",
+		        data: {value: "default"},
+		        success : handleData
+		      });
+    		});
+    		$("#theme2").click(function () {
+        		$.ajax({
+		        url: "/themes/set_theme",
+		        type: "POST",
+		        data: {value: "green"},
+		        success : handleData
+		      });
+    		});
+    		$("#theme3").click(function () {
+        		$.ajax({
+		        url: "/themes/set_theme",
+		        type: "POST",
+		        data: {value: "blue"},
+		        success : handleData
+		      });
+    		});
+		});
+
+		function handleData(){
+			window.location.reload()
+		}
+
+		 $(document).ready(function(){
+			  var pre_val= '<%=session[:auto_value]%>';
+			  if(pre_val){
+			    $('#loagin_as_role').val(pre_val);
+			  }else{
+			    $('#loagin_as_role').val(0);
+			  }
+			});
+
+		</script>

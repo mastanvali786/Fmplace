@@ -1,0 +1,157 @@
+<div class="container user_profile">
+	<% if current_user.buyer? %>
+	<%= render 'pay_action' %>
+	<section class="row user_right1 alg_reg">
+		<div class="row">
+			<div class="col-md-8">
+				<h3 class="orange">Transaction History
+					<% if @transactions.present? %>
+					<%= link_to "Print & Download (PDF)",accounting_transaction_pdf_path(:pdf,transactions: @transactions), target: "_blank", class: "pull-right" %>
+					<% end %>
+				</h3>
+			</div>  
+		</div>	
+		<div class="row ngray_box payment usr_inf md_hide clrbk5">
+			<div class="col-md-2">Date</div>
+			<div class="col-md-6">Description</div>
+			<div class="col-md-1">Type</div>
+			<div class="col-md-1">Amount</div>
+			<div class="col-md-2">Status</div>
+		</div>
+		<% unless @transactions.empty? %>
+		<% @transactions.each do |transaction| %>
+		<div class="row nd_box usr_inf plist">
+			<div class="col-md-2">
+				<div data-label="Date" class="account_p_lbl clrbk5"><%= user_date_zone transaction.approvedOn %></div>
+			</div>
+			<div class="col-md-6">
+				<div data-label="Description" class="account_p_lbl clrbk5">
+					<div class="colr295">
+						<%= link_to transaction.klass.titleize, payment_path(transaction.id) %>
+					</div>
+					<div>
+						<% if transaction.transactional? %>
+						Transaction Id:&nbsp;<%= transaction.transaction_id %>
+						<% end %>
+						<% unless transaction.klass.titleize == 'Deposit' || transaction.klass.titleize == 'Withdrawal'%>
+						<% if transaction.project? && transaction.credit? %>
+						<div>Project:&nbsp;
+							<span class="colr295"><a href="<%= transaction.project.try(:url)%>">
+								<%= transaction.project.full_title%></a></span></div>
+								<div>Milestone:&nbsp;
+									<span class="colr295"><a href="<%= transaction.milestone.try(:url)%>">
+										<%= transaction.milestone.description%></a></span></div>
+										<% end %>
+										<% end %>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1"><div data-label="Type" class="account_p_lbl clrbk5"><%= transaction.type.titleize %></div></div>
+							<div class="col-md-1"><div data-label="Amount" class="account_p_lbl clrbk5"><%= number_to_currency(transaction.amount) %></div></div>
+							<div class="col-md-2"><div data-label="Status" class="account_p_lbl clrbk5"><%= transaction.status %></div></div>
+						</div>
+						<div class="seperator"></div>
+						<% end %>
+						<%else%>
+						<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Results Found</div>
+						<%end%>
+						<div class="clearfix pagination_box">
+							<div class="pull-left">
+								Page <%= @transactions.current_page%> of <%= @transactions.total_pages %>
+							</div>
+							<div class="pull-right">
+								<%= paginate @transactions %>
+							</div>
+						</div>
+					</section>
+					<% end %>
+					<% if current_user.seller? %>
+					<%= render 'earnings/earn_action' %>
+					<section class="row user_right1 alg_reg">
+						<div class="row">
+							<div class="col-md-8">
+								<h3 class="orange">Transaction History
+									<% if @transactions.present? %>
+									<%= link_to "Print & Download (PDF)",accounting_transaction_pdf_path(:pdf,transactions: @transactions), target: "_blank", class: "pull-right" %>
+									<% end %>
+								</h3>
+							</div>  
+							
+						</div>	
+						<div>Your most recent financial transactions are listed below.This is a record of all the credits and debits to your Account that have been processed till date</div>
+			<!-- <div class="row">
+				<div class="col-md-4">Account Number:</div>
+				<div class="col-md-4">IL2915743874587</div>
+			</div> -->
+			<div class="row">
+				<div class="col-md-4">Available Balance:</div>
+				<div class="col-md-4">
+					<%= to_currency current_user.balance.available %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">Total Balance:</div>
+				<div class="col-md-4">
+					<% if payment_method(current_user) == "PAYPAL" %>
+					<%= to_currency current_user.balance.total %>
+					<% else %>
+					<%= to_currency current_user.balance.payfast_total %>
+					<% end %>
+				</div>
+			</div>
+			<div class="row ngray_box payment usr_inf md_hide clrbk5">
+				<div class="col-md-2">Date</div>
+				<div class="col-md-4">Description</div>
+				<div class="col-md-1">Type</div>
+				<div class="col-md-1">Amount</div>
+				<div class="col-md-2">Status</div>
+				<div class="col-md-2">Balance</div>
+			</div>
+			<% unless @transactions.empty? %>
+			<% @transactions.each do |transaction| %>
+			<div class="row nd_box usr_inf plist">
+				<div data-label="Date" class="account_p_lbl col-md-2 clrbk5">
+					<div><%= user_date_zone transaction.approvedOn %></div>
+				</div>
+				<div data-label="description"  class="account_p_lbl col-md-4">
+					<div class="colr295">
+						<%= link_to transaction.klass.titleize, payment_path(transaction.id) %>
+					</div>
+					<div>
+						<% if transaction.transactional? %>
+						Transaction Id:&nbsp;<%= transaction.transaction_id %>
+						<% end %>
+						<% unless transaction.klass.titleize == 'Deposit' || transaction.klass.titleize == 'Withdrawal'%>
+						<% if transaction.project? && transaction.credit? %>
+						<div>Project:&nbsp;
+							<span class="colr295"><a href="<%= transaction.project.try(:url)%>">
+								<%= transaction.project.full_title%></a></span></div>
+								<div>Milestone:&nbsp;
+									<span class="colr295"><a href="<%= transaction.milestone.try(:url)%>">
+										<%= transaction.milestone.description%></a></span></div>
+										<% end %>
+										<% end %>
+									</div>
+								</div>
+								<div data-label="Type" class="account_p_lbl col-md-1 clrbk5"><%= transaction.type.titleize %></div>
+								<div data-label="Amount" class="account_p_lbl col-md-1 clrbk5"><%= to_currency transaction.amount %></div>
+								<div data-label="Status" class="account_p_lbl col-md-2 clrbk5"><%= transaction.status %></div>
+								<div data-label="Balance"class="account_p_lbl col-md-2 clrbk5"><%= to_currency transaction.balance %>
+								</div>
+							</div>
+							<div class="seperator"></div>
+							<% end %>
+							<%else%>
+							<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Results Found</div>
+							<%end%>
+							<div class="clearfix pagination_box">
+								<div class="pull-left">
+									Page <%= @transactions.current_page%> of <%= @transactions.total_pages %>
+								</div>
+								<div class="pull-right">
+									<%= paginate @transactions %>
+								</div>
+							</div>
+						</section>
+						<% end %>
+					</div>

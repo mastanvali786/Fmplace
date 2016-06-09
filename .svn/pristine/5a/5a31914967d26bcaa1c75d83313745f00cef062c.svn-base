@@ -1,0 +1,254 @@
+<%= javascript_include_tag "jquery.alphanum" %>
+<%= javascript_include_tag "jquery.tmpl" %>
+<%= javascript_include_tag "jquery.plugin" %>
+<%= javascript_include_tag "jquery.multifile" %>
+<%= javascript_include_tag "jquery.datepick" %>
+<%= javascript_include_tag "jquery.form" %>
+<%= stylesheet_link_tag "jquery.datepick" %>
+
+<% if current_user.approved %>
+  <div class="proposals_txt">
+    <div style=" font-family: 'GothamMedium' !important;"><strong class="my_plbl">Proposals</strong></div>
+    <% proposals = @proposals %>
+    <% amounts = proposals.map {|bid| bid.proposed_amount || 0} %>
+    <% total = proposals.count %>
+    <% (low, high) = amounts.minmax %>
+    <% average = amounts.sum/(total == 0 ? 1.0 : total.to_f)  %>
+    
+    <div class="">
+      <div class="col-md-7">
+        <div style="padding-bottom:0px;font-family: 'AlegreyaSans-Regular' !important;">
+          <div style="background-color:#CCC;height:30px;margin:0px 0px 0px 0px;width:100%;">
+            <div style="float:right;padding:5px 10px 0px 0px;"><span style="color:#000;"><strong>Total Proposals&nbsp;(<%= total %>)</strong></span></div>
+          </div>
+          <% if total == 0 %>
+          <div style="border-style:solid;border-color:#F2F2F2;border-width:medium;padding:10px;">
+            <div style="color:#000;padding:40px 0px 40px 0px;" align="center">No results found</div>
+          </div>
+        </div>
+        <% else  %>
+        <div style="padding-bottom:10px;">
+          <% proposals.each do |proposal| %>
+          <table width="100%" border="0" align="center" cellpadding="0" style="">
+            <tr>
+              <td valign="top" colspan="2">
+                <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                  <tr>
+                    <td class="nppro_img">
+                      <a href="/account/user_public_profile?id=<%= proposal.user.id%>">
+                        <% if proposal.user.profile_photo &&  proposal.user.profile_photo.blank? %>
+                        <img src="/assets/nophoto2.gif" border="0" alt="" class="profile_photo"/>
+                        <% else %>
+                        <img src=<%= proposal.user.profile_photo%> border="0" alt="" class="profile_photo"/>
+                        <% end %>
+                      </a>
+                    </td>
+                    <td class="pull-left pp_usr_name" valign="top" style="padding-left: 10px;font-family: 'AlegreyaSans-Regular' !important;">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                          <td style="padding-left: 3px;">
+                            <span style="color:#06C;font-size:18px;font-family:'GothamMedium'!important;"><a href=";font-size:18px;">
+                              <a style="color:#001FE2;"
+                              href="/account/user_public_profile?id=<%= proposal.user.id%>" style="color:#001FE2;"><%= proposal.user.visible_name %></a>&nbsp;</span>
+                            </td>
+                            <td>
+                              <% if proposal.featured %>
+                              <img src="/assets/fp.png">
+                              <% end %>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="value_proj">
+                              <div class="pull-left" style="padding-left:0px;">
+                               <%= render :partial => "shared/user_rating", :locals => { :user => proposal.user } %>
+                             </div>
+                             &nbsp;|<span>USD&nbsp;
+                             <%= number_to_currency proposal.user.earnings %>
+                           </span>&nbsp;Earnings&nbsp;|&nbsp;
+                           <span>
+                            <%= proposal.user.user_projects_count %>
+                            &nbsp;</span>Projects&nbsp; |&nbsp;
+                            <% if proposal.user.city %>
+                            <%= proposal.user.city%>,&nbsp;
+                            <% end %>
+                            <%= proposal.user.state_name%>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <br>
+            <tr>
+              <td width="100%" valign="top" 
+              style="padding-top:0px;padding-bottom:5px;color:#666666;">
+              <div class="row" style="margin-bottom: 15px;">
+                <div class="col-md-4 value_proj">
+                  Bid Details:
+                </div>
+                <% if proposal.declined == true %>
+                <div class="badge">Declined</div>
+                <% end %>
+                <div class="col-md-4 pull-right">
+                 <% if bid_accepted?(proposal.project.id) && proposal.project.project_seller.try(:bid_id) == proposal.id %>
+                 <%= link_to 'Manage Project', projects_action_milestone_path(id:proposal.project.id),
+                 :class=>"btn btn-warning pull-right"%>
+                 <% end %>
+               </div>
+             </div>
+             <div class="row">
+               <% if my_bid?(proposal) %>
+               <% if proposal.project.project_seller.try(:bid_id) == proposal.id %>
+               <div class="pv_lbl col-md-9">
+               <%else%>
+               <div class="pv_lbl col-md-12">
+               <%end%>
+                <span><%= proposal.details[0...300] %></span>
+                <span class="full_state2_<%=proposal.id%>" style="display:none;">
+                  <%= proposal.details[300..-1]%>
+                </span>
+                <% if proposal.details.length >= 300%>
+                <br><a href="javascript:void(0);" class="flip2_<%=proposal.id%>" style="color:#001FE2;"
+                onclick="show_read_more(<%= proposal.id %>)">
+                <i class="fa fa-sort-desc fa-2x "></i> More</a>
+                <% end %>
+              </div>  
+              <% else %>
+              <div class="pull-left col-md-3">Hidden</div>
+              <% end %>
+              <div class="pull-right col-md-3">
+                <% if proposal.project.project_seller.try(:bid_id) == proposal.id %>
+                <%= image_tag('awarded.png', height: '50px') %>
+                <% end %>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr> 
+         <td colspan="2">
+          <div>
+            <div style="padding-top:7px;color:#666666;">
+              <div style="float:right;width:180px;padding-right:10px;" align="right">
+                <% if proposal.user.video_url && proposal.user.video_url.present? %>
+                <% @video_url = proposal.user.video_url%>
+                <%url = (@video_url["v="]) ? @video_url.split("v=")[1] : @video_url.split("/")[-1] %>
+                <% video = "http://www.youtube.com/watch?v=" + url %>
+                <span class="video-target" style="cursor: pointer;">
+                 <a title="Profile video" class="youtube" href="<%= video %>"><img border="0" align="ABSMIDDLE" height="23px" width="30px"
+                  src="/assets/WatchVideo.png">&nbsp;
+                  <span style="cursor: pointer;color:#000">Watch Video</span>
+                </a>
+              </span>
+              <% end %>
+            </div>
+            <div>
+              <span class="value_proj">Attachments:&nbsp;
+                <% if my_bid?(proposal) %>
+                <% if proposal.attachments.present? %>
+                <ul style="list-style-type:none;">
+                  <% proposal.attachments.each do |attachment| %>
+                  <li>
+                    <%= image_tag('paperclip.gif')%>
+                    <a href=<%= attachment.url%> target="_blank" style="color:#666666;">
+                     <%= attachment.name %></a>
+                   </li>
+                   <% end %>
+                 </ul>
+                 <% else %>
+                 None
+                 <% end %>
+                 <% else %>
+                 Hidden
+                 <% end %>           
+               </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             </div>
+           </div>
+         </div>
+       </td>
+     </tr>
+     <!-- <tr><div style="margin-bottom:15px;"></div></tr> -->
+     <tr>
+      <% if current_user.id == proposal.user.id && proposal.awarded && !proposal.accepted %>
+      
+      <td align="left" colspan="2">
+        <span style="color:#666666;font-size:12px;font-family:Arial, Helvetica, sans-serif;float:left;margin-bottom:20px;">
+          Your proposal has been selected for this project&nbsp;&nbsp;
+          <%= link_to "Accept", {:controller => "bids", :action => "change_bid_status",
+           id: @project.id, accepted: true },method: :post, data: { confirm: "Are you sure?" },
+           :style=>"color:green;" %>
+           &nbsp;<span style="color:#666666;">|</span>&nbsp;
+           <%= link_to "Decline", {:controller => "bids", :action => "change_bid_status",
+             id: @project.id, declined: true },method: :post, data: { confirm: "Are you sure?" },
+             :style=>"color:red;" %>
+           </span>
+         </td>
+         <% end %>
+       </tr>
+       <tr>
+        <td colspan="2">
+          <div style="background-color:#F2F2F2;">
+            <div style="padding-left:10px;padding-top:7px;color:#666666;">
+              <div style="float:right;width:180px;padding-right:10px;" align="right">
+                <span style="color:#666666;">Proposal:</span>&nbsp;
+                <strong style="color:#666666;">
+                  <% if my_bid?(proposal) || my_membership?(current_user) %>
+                  USD&nbsp;<%= number_to_currency proposal.proposed_amount %>  
+                  <% else %>
+                  Hidden <i class="fa fa-question-circle " data-toggle="tooltip" data-placement="bottom" title="Upgrade Your Membership to View Competitor's Pricing"></i>
+                  <% end %>
+                </strong>
+              </div>
+              <div>
+                <span style="color:#666666;">Bid Id:&nbsp;<%= proposal.id %></span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="color:#666666;">Submitted:&nbsp;
+                  <%= user_time_zone(proposal.updated_at) %></span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <hr>
+      <% end %>
+    </div>
+    <% end %>
+    <div class="clearfix pagination_box">
+      <% if @proposals.total_pages == 0%>
+      <div class="pull-left" style="padding-left:25px;">
+        Page <%= @proposals.current_page%> of <%= @proposals.total_pages%></div>
+        <% else %>
+        <div class="pull-left">Page <%= @proposals.current_page%> of <%= @proposals.total_pages%></div>
+        <% end %>
+        <div class="pull-right">
+          <%= paginate @proposals %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div id="bid">
+      <div class="messages bid_erros"></div>
+      <div class="content">
+        <% bid = current_user.project_bid(@project.id) %>
+        <% unless bid.present? %>
+        <%= render file: "bids/new", locals: {bid: @project.bids.create(user_id:current_user.id)}  %>
+        <% else %>
+        <%= render file: "bids/show", locals: {bid:bid}  %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<% else %>
+<div style="padding-top: 50px;padding-bottom: 100px;">
+  <div class="gotham_medium need_help light_black">
+   For Bidding on Projects you have not approved yet from <%= admin_name %>.
+ </div>
+ <div class="gotham_medium need_help light_black">Need help? Call us <%=PHONE_NUMBER %>
+  or email <a href="mailto:<%= SUPORT_EMAIL%>"><%= SUPORT_EMAIL%></a>
+</div>
+</div>
+<% end %>

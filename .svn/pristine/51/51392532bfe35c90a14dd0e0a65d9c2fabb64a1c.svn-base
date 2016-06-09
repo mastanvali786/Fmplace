@@ -1,0 +1,71 @@
+<div class="container user_profile">
+	<%= render 'earn_action' %>
+	<section class="row user_right1">
+		<h3 class="orange gotham_medium">Select a Project to Invoice</h3>
+		<div class="row ngray_box payment clrbk5 md_hide">
+			<div class="col-md-6 txtlef alg_reg">Project</div>
+			<div class="col-md-3 alg_reg">Client</div>
+			<div class="col-md-3 alg_reg">Status</div>
+		</div>
+		<% @projects.each do |project| %>
+		<div class="row nd_box custom-radio">
+		<div class="col-md-6 ptxtbl">
+		<div data-label="Project" class="account_p_lbl check_row">
+				<div class="check_row">
+					<label class="radio-label">
+						<input type="radio" class="radio-input" name="select_project"
+						value="<%= project.id %>">
+						<span class="info alg_reg clrbk5"><%= project.full_title%></span>
+					</label>
+				</div>
+			</div>
+		</div>
+			<div class="col-md-3 ptxtbl colr295 alg_reg">
+			<div data-label="Client" class="account_p_lbl check_row">
+				<a href="/account/user_public_profile?id=<%= project.seller.try(:id)%>" target='_blank'>
+					<%= project.seller_shop %>
+				</a>
+			</div>
+			</div>
+			<div class="col-md-3 ptxtbl alg_reg">
+				<div data-label="Status" class="account_p_lbl check_row clrbk5">
+			  <%= project.project_state %>
+			 </div>
+			</div>
+		</div>
+		<% end %>
+		<div class="row pm_bnext">
+			<div class="col-md-2">
+				<button class="btn btn-warning save redirect_payment alg_reg">Next</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-default cancel alg_reg">Cancel</button>
+			</div>
+		</div>
+		<br><br>
+		<div class="clearfix pagination_box">
+			<div class="pull-left">
+				Page <%= @projects.current_page%> of <%= @projects.total_pages %>
+			</div>
+			<div class="pull-right">
+				<%= paginate @projects %>
+			</div>
+		</div>
+	</section>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('input:radio[name=select_project]:first').attr('checked', true);
+
+		$('.redirect_payment').click(function(){
+			var pid=$('input:radio[name=select_project]').filter(":checked").val();
+			if(pid){
+				window.location.assign("/projects/action/payment?id="+pid);
+			}else{
+				alert('Please select project.');
+			}
+		});
+	});
+</script>

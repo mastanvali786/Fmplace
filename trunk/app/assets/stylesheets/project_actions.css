@@ -1,0 +1,117 @@
+.job_act a.ex1:hover {
+    color: #30a0be;
+    font-size: 14px;
+    font-weight: bold;
+    height: 100px;
+    text-decoration: none;
+}
+.job_act a.ex1:active {
+    color: #999;
+    font-weight: bold;
+}
+.action_width {
+    font-size: 14px;
+    height: 25px;
+    padding-left: 10px;
+}
+.job_act .action_width a:hover {
+}
+.job_tab {
+    background: url("images/job_tabs.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 39px;
+    margin-top: 10px;
+    width: 707px;
+}
+.sendC_ol {
+    color: #666666;
+    font-size: 12px;
+    margin-top: 50px;
+}
+.sendC_o2 {
+    color: #666666;
+    font-size: 12px;
+}
+div.orangebutton {
+    height: 29px;
+    overflow: hidden;
+}
+div.orangebutton a img:hover {
+    margin-top: -29px;
+}
+textarea {
+    border: medium none;
+}
+.fileInput {
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.delete_css {
+    color: #001fe2;
+    height: 11px;
+    padding-left: 10px;
+    width: 35px;
+}
+.aling_css {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+a.ex1 {
+    color: #666666;
+    font-size: 14px;
+    text-decoration: none;
+}
+a.file_list_setep {
+    color: #001fe2;
+    padding-left: 5px;
+}
+textarea.message {
+    color: #666666;
+    font-size: 12px;
+    overflow: auto;
+    resize: none;
+}
+div.searchbutton {
+    height: 26px;
+    margin-top: 2px;
+    overflow: hidden;
+}
+div.searchbutton a img:hover {
+    margin-top: -29px;
+}
+.filter_data {
+    padding-bottom: 10px;
+}
+ul.action {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+}
+ul.action li {
+    float: left;
+    padding: 0 5px;
+}
+ul.action li a {
+    font-size: 12px;
+}
+.DynarchCalendar {
+    position: fixed;
+}
+
+.glassy-bg {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+.customer_form{
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.customer_field{
+    padding-bottom: 10px;
+}

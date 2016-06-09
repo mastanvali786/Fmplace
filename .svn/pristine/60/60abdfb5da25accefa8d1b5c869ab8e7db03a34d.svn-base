@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h3>Dear <%= @admin_name%>,</h3>
+    <p>
+      Dispute From:
+      <a href="/account/user_public_profile?id=<%= @dispute.user.id%>">
+        <%= @dispute.user.full_name%></a>
+    </p>
+    <p>
+      Dispute for Project:
+      <a href="<%="#{SITE_URL}/projects/#{@dispute.project.id}"%>">
+        <%= @dispute.project.full_title%></a>
+    </p>
+    <p>
+      Explain Dispute: <%= @dispute.body %>
+    </p>
+    </br></br></br>
+    <p>
+      Sincerely,
+    </p>
+    <p>
+      <img src="<%= SITE_LOGO %>" height="35px" />
+    </p>
+    <p>
+      <%= EMAIL_SIGN_EMAIL %>
+    </p>
+    <p>
+      <%= EMAIL_SIGN_NUMBER %>
+    </p>
+  </body>
+</html>

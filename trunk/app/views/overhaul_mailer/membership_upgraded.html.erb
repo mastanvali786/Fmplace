@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <%=@user.short_name%>,</p>
+	<p>Thank you for upgrading your membership.</p>
+	<p>You are now under the plan <%= @plan.name %>.</p>
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

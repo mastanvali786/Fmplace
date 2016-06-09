@@ -1,0 +1,65 @@
+<div class="main_container">
+	<div class="container user_profile">
+		<!-- Dashboard Link -->
+		<%= render(:partial => '/projects/dashboard_header') %>
+
+		<!-- Side Menu -->
+		<aside class="user_left">
+ 			<%= render(:partial => '/account/menu') %>
+		</aside>
+
+		<section class="row user_right">
+			<br>
+			<h1 class="big_text">Membership Status</h1>
+			<h2 class="sub_text">Review your current membership plan and Connects status, and make changes as needed.</h2>
+			<div class="col-md-12">
+				<div class="pull-left">
+					<h1>Membership Summary</h1>
+				</div>
+				<div class="pull-right">
+					<%= link_to "Edit Plan", memberships_path %>
+				</div>
+				<hr>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<h3>Current Membership Plan</h3>
+						<h2><%= @membership.name %></h2>
+						<h3>Connects Included in Plan</h3>
+						<h2><%= @membership.connects %></h2>
+					</div>
+					<div class="col-md-6">
+						<h3>Monthly Membership Fee</h3>
+						<h2><%= to_currency @membership.amount %></h2>
+						<h3>Current Billing Cycle</h3>
+						<h2><%= user_date_zone(@plan_details.start_date) %> - <%= user_date_zone(@plan_details.expire_date) %></h2>
+					</div>
+				</div>
+			</div>
+			<br><br><br>
+			<div class="col-md-12">
+				<div class="pull-left">
+					<h1>Connects Summary</h1>
+				</div>
+				<hr>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<h3>Current Connects Balance</h3>
+						<h2><%= current_user.total_connects %></h2>
+						<h3>Used Connects</h3>
+						<h2><%= current_user.used_connects %></h2>
+					</div>
+					<div class="col-md-6">
+						<h3>Remaining Connects</h3>
+						<h2><%= current_user.remaining_connects %></h2>
+						<h3>Remaining Bonus Connects<small> <%= link_to "My Referral Account", referral_account_path %></small></h3>
+						<h2><%= current_user.bonus_connects %></h2>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

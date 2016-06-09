@@ -1,0 +1,93 @@
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render(:partial => '/projects/dashboard_header') %>
+        <aside class="user_left1">
+            <%= render partial: "/account/menu" %>
+        </aside>
+
+        <% if get_membership_plan(current_user) %>
+            <div class="gotham_medium need_help light_black">
+                <br><br><br>
+                You are currently in <%= current_user.membership_plan_name %> membership plan.
+                Please upgrade your membership plan to get improve your team.<a href="/memberships">Upgrade</a>
+            </div>
+        <% else %>
+            <section class="row user_right1">
+                <h3 class="orange gotham_medium">My Team</h3>
+                <div class="row sd_gbox">
+                    <div class="col-xs-12 col-sm-6 col-md-2 st_lbl alg_reg">Filter By</div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <label class="field select monst1" style="z-index: 26">
+                            <select id="search_status_project" class="select">
+                                <option value="all">All</option>
+                            </select>
+                            <i class="arrow"></i>       
+                        </label>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-6 sboxs">
+                        <form class="search-box" action="/teams" method="get">
+                            <div class="input-group search_bs find_pdcts">
+                                <input type="search" placeholder="Search Find Members" class="search form-control pull-left" name="fq"
+                                value="<%= @find_p %>">
+                                <button type="submit" class="btn input-group-addon" value=""><i class="fa fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                    <!--     <button type="button" class="btn btn-warning alg_reg" data-toggle="modal" data-target="#myModal" data-title="Add New Member">Add New Member</button> -->
+                    <%= link_to "Add New Member", new_team_path, class: "btn btn-warning alg_reg" %>
+                    </div>
+                </div>
+       
+                <div class="row ngray_box mtxt_lftm md_hide">
+                    <div class="col-md-3 first_ltxt">Name</div>
+                    <div class="col-md-3" style="text-align: left;">Role</div>
+                    <div class="col-md-3" style="text-align: left;">Assigned Jobs</div>
+                    <div class="col-md-3" style="text-align: left;">Actions</div>
+                </div>
+
+                <% if @team_members.present? %>
+                    <% @team_members.each do |member| %>
+                        <div class="row nd_box txt_lftm">
+                            <div class="col-md-3 first_ltxt"><div data-label="Name" class="account_p_lbl"><%= member.full_name %> </div></div>
+                            <div class="col-md-3" style="text-align: left;"><div data-label="Role" class="account_p_lbl"><%= member.role_name %></div></div>
+                            <div class="col-md-3" style="text-align: left;"><div data-label="Assigned Jobs" class="account_p_lbl">12 jobs</div></div>
+                            <div class="col-md-3" style="text-align: left;"><div data-label="Actions" class="account_p_lbl">
+                                <div class="dropdown">
+                                    <a class=" dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Action
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><%= link_to "Edit", edit_team_path(member.id) %></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+
+                <div class="seperator"></div>
+                    <% unless current_user.membership_plan_name == "Large" %>
+                      To expand your freelancer team, upgrade from <%= current_user.membership_plan_name %> to  Large Company
+                      <div class="pull-right"><%= link_to "Upgrade >>", memberships_path, class: "btn btn-warning " %></div>
+                    <% end %>
+                </div>
+            </section>
+        <% end %>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      $("#myModal").on('show.bs.modal', function(event){
+            var button = $(event.relatedTarget);  // Button that triggered the modal
+            var titleData = button.data('title'); // Extract value from data-* attributes
+
+        });
+    });
+</script>

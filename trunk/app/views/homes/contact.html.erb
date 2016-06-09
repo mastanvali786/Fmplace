@@ -1,0 +1,63 @@
+<div class="main_container toppd50">
+	<div class="container user_profile">
+		<%=render :partial=>'homes/sidebar'%>
+		<section class="row user_right">
+			<section class="left_con">
+				<h3 class="orange">Contact Us</h3>
+				<div>We'd love to hear from you. What's on your mind?</div>
+				<%= form_for(:contact_email, url: contact_path,:html => {"data-parsley-validate" => true}) do |f| %>
+				<div class="row">
+					<div class="col-md-6">
+						<label class="alg_reg reg_lbl">Name</label>
+						<%=f.text_field :name, :class=>'form-control',
+						'data-parsley-required'=>"true"%>
+
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label class="alg_reg reg_lbl">Email Address</label>
+						<%=f.text_field :email, :class=>'form-control',
+						'data-parsley-required'=>"true",'data-parsley-type'=>"email"%>
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label class="alg_reg reg_lbl">Subject</label>
+						<%=f.text_field :subject, :class=>'form-control',
+						'data-parsley-required'=>"true"%>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<label class="alg_reg reg_lbl">Message</label>
+						<%=f.text_area :message,:cols => "33", :rows => "5", :class=>'form-control',
+						'data-parsley-required'=>"true"%>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="alg_reg" style="padding-bottom:25px;">
+							<%=f.check_box :email_copy, :as => :boolean%>
+							E-mail a copy of this message to your own address</div>
+							<%= f.submit 'Submit',class: 'btn btn-warning bget_started'
+							%>		
+						</div>
+					</div>
+					<%end %>
+				</section>
+				<aside class="right_con">
+
+					<div class="gray_box">
+
+						<h5 class="gotham_medium light_blck  clrorg">Email</h5><br>
+						<a class="email_sarafi" href="mailto:<%= SUPORT_EMAIL%>"><%= SUPORT_EMAIL%></a>
+						<h5 class="gotham_medium light_blck">Phone</h5>
+						<div><%= EMAIL_SIGN_NUMBER%></div>
+					</div>
+				</aside>	
+			</section>
+		</div>

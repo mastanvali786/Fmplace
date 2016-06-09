@@ -1,0 +1,276 @@
+.admin_lbox{
+  width:500px;
+  margin:0px auto;
+}
+.panel-info > .panel-heading{
+  margin:0px;
+  text-align:center;
+  background: #333132;
+  color:#fff;
+}
+.User_label{
+  font-size:12px;
+  margin-bottom:20px;
+}
+
+.lh3_lbl.np_label {
+  font-size: 37px;
+  font-weight: normal;
+  margin: 40px 0 0;
+  text-align: center;
+}
+.admin_lbox .col-md-4.pull-right a {
+  text-align:right;
+  line-height:30px;
+  display:block;
+}
+.panel-info {
+  border-color: #333132;
+}
+.continue{
+  border-radius: 7px;
+
+
+}
+label[for=admin_user_password],label[for=admin_user_email]
+{
+   width: 10% !important;
+}
+.remm_ber{
+  float:left;
+  margin-top:15px;
+}
+.admin_lbox .row{
+  margin:10px 0;
+
+}
+#content_wrapper #active_admin_content
+{
+	
+  margin: 0 auto !important;
+  width: 440px !important;
+  height: auto !important;
+  border-color: #333132 !important;
+  background-color: #fff !important;
+  border: 1px solid #333132 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
+}
+.logged_out h2
+{
+  border-top-left-radius: 3px !important;
+  border-top-right-radius: 3px !important;
+  padding: 10px 15px !important;
+  font-size: 24px !important;
+  background: none repeat scroll 0 0 #333132 !important;
+  color: #fff !important;
+
+  text-align: center !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  line-height: 1.1 !important;
+}
+input[type=submit],.btn, .cancel a,.download_links a:nth-child(2),.clear_filters_btn, #login a
+{
+  background-color: #fe5a01 !important;
+  border-color: #fe5a01 !important;
+  color: #fff !important;
+  background-image: none !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  font-size: 14px !important;
+  font-weight: normal !important;
+  line-height: 1.42857 !important;
+  margin-bottom: 0 !important;
+  padding: 6px 12px !important;
+  text-align: center !important;
+  vertical-align: middle !important ;
+  white-space: nowrap !important;
+  text-decoration: none!important;
+}
+form .buttons, form .actions {
+  margin-top: 24px !important;
+  padding-left: 32px !important;
+}
+form input[type="password"], form input[type="email"], form input[type="text"]
+{ 
+
+	background-color: #fff !important;
+  background-image: none !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset !important;
+  color: #333132 !important;
+  display: block !important;
+  font-size: 13px !important;
+  line-height: 1.42857 !important;
+  padding: 6px 12px !important;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s !important;
+
+}
+form fieldset ol > li label
+{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.42857 !important;
+  display: inline-block !important;
+  color: #333132 !important;
+  font-weight: bold !important;
+  margin-bottom: 5px !important;
+  width: 15% !important;
+}
+/*#login a {
+	color: #fe5a01 !important;
+    text-decoration: none !important;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+    font-size: 14px !important;
+    }*/
+    .panel_contents
+    {
+      background-color: #fff !important;
+
+      border-radius: 4px !important;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
+    }
+    .section, .panel {
+      background: none repeat scroll 0 0 #ffffff !important;
+      border: 1px solid #ddd !important;
+    }
+
+    .column .panel > h3
+    {
+      background: #707070 !important;
+      border-color: #ddd !important;
+      color: #ffffff !important;
+      margin-bottom: 10px !important;
+      text-align: center !important;
+      font-family: inherit !important;
+      font-weight: 500 !important;
+      line-height: 1.1 !important;
+      text-shadow:none !important;
+      padding: 15px 15px !important;
+    }
+    select
+    {
+      background-color: #fff !important;
+      background-image: none !important;
+      border: 1px solid #ccc !important;
+      border-radius: 4px !important;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset !important;
+      color: #555 !important;
+      display: block !important;
+      font-size: 12px !important;
+      height: 34px !important;
+      line-height: 1.42857 !important;
+      padding: 6px 12px !important;
+      transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s !important;
+      float:left;
+      margin-right:10px;
+    }
+    .logged_out #wrapper{
+      background-image: url("/assets/logo.png") !important;
+      background-repeat: no-repeat !important;
+      margin-left: 34px !important;
+      margin-top: 30px !important;
+      position: absolute !important;
+    }
+    body.logged_out
+    {
+     background: none repeat !important;
+   }
+
+   #footer
+   {
+    display:none !important;
+  }
+
+  #error_explanation h2{
+    display:none !important;
+  }
+
+  #new_admin_user .inline-errors{
+    display:none !important;
+  }
+
+  body.logged_out #login a{
+    margin-top: -42px!important;
+  }
+  form.filter_form .filter_form_field.filter_date_range .seperator {
+    float: left;
+    margin-right: 10px;
+  }
+  form.filter_form .filter_form_field.filter_date_range input[type="text"] {
+    float: left;
+    margin-right: 10px;
+  }
+  form.filter_form .filter_form_field {
+    margin-bottom: 10px;
+    clear: both;
+    height: 50px;
+  }
+  form.filter_form .filter_form_field.select_and_search select {
+   margin-right:16px;
+ }
+ .btn a {
+  text-decoration: none !important;
+  color: #000000;
+}
+.panel_contents
+{
+  text-align: center;
+}
+#subcategory_name_input
+{
+  padding-top: 48px;
+}
+#subcategory_name label
+{  
+   width:300px;
+  margin-left: 102px;
+}
+#budget_option_name
+{
+  width:400px;
+}
+#subcategory_name, #category_name, #project_time_frame_name, #skill_tag_name,#project_tag_name, #payment_type_display_name,
+#admin_setting_first_name,#admin_setting_last_name,#admin_setting_email,#admin_setting_bid_fee
+{
+   width:400px;
+}
+form fieldset>ol>li p.inline-hints
+{
+  font-size: 0.95em;
+  font-style: italic;
+  color: #666;
+  margin: 0!important;
+}
+
+#email_management_api_user, #email_management_api_key
+{
+  width: 500px!important;
+}
+#payment_type_active
+{
+  margin-left: -115px;
+}
+#admin_setting_loading
+{
+  margin-left: -104px;
+}
+ #header
+ {
+  position: fixed;
+ }
+ #title_bar
+ {
+  padding-top: 106px;
+ }
+ /*form fieldset ol > li label {
+   width: 10% !important;
+}*/
+#admin_user_first_name, #admin_user_last_name, #admin_user_email, #admin_user_password, #admin_user_password_confirmation {
+
+width:400px!important;
+clear:inherit!important;
+}

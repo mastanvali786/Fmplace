@@ -1,0 +1,126 @@
+<div class="pop_box_wrap clearfix" style="color:black;font-size:15px">
+<% header = "Edit Milestones" %>
+<% header = "New Milestone:" if milestone.new_record? %></span>
+<div class="col-md-12 popup_header_text" >
+ <div class="pull-left"><span class="main_label"> <%= header%></span></div>
+<div class="pull-right"><a class="hide-popup btn btn-warning img-circle" href="javascript:void(0);" id="cancel"> X </a></div>
+</div>
+<div class="col-md-12">
+<%= form_for milestone, html: {id: 'popup-form'}, remote:true, enctype: "multipart/form-data" do |f| %>
+  <%= render partial: "shared/form_messages", locals: {message:message} %>
+  <%= render partial: "shared/form_errors", locals: {model:milestone} %>
+  <%= f.hidden_field :project_id %>
+  <%= f.hidden_field :buyer_id,  :value=> @buyer_id%>
+  <%= f.hidden_field :seller_id, :value=> @seller_id%>
+  <table class="milestone_pop" border="0" cellpadding="3" cellspacing="6" style="" width="100%">
+    <tbody>
+      <tr>
+        <td>
+          <strong>Milestone*</strong>
+          <br>
+            <%= f.text_field :description, :style => "color:#666666;max-width: 300px;" %>
+          </br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="middle">
+          <table border="0" cellpadding="2" cellspacing="2" width="100%">
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Delivery Date*</strong>
+                  <br>
+                     <div class='input-group date' style="max-width: 300px;">
+                      <%=f.datetime_field :delivery_date, :size=>20, :class=>'milestone_date','data-parsley-required'=>"true",:readonly => true, :value=>"#{user_time_zone(f.object.delivery_date) unless f.object.new_record?}"%>
+                      <span class="milestone_date_icon" onclick="$('.milestone_date').focus();">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                      </div>
+                  
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Amount*</strong>
+          <br>
+            <%= f.text_field :price, class: 'numeric', :size => "20",
+               :style => "color:#666666;max-width: 300px;", :type => "text" %>
+          </br>
+        </td>
+      </tr>
+      <tr>
+        <td class="pdbty5">
+          <strong>Notes</strong>
+          (optional)
+          <br>
+            <%= f.text_area :note,  :cols => "33", :rows => "5",
+               :style => "color:#666666;font-size:13px;max-width: 300px;",
+               class: 'form-control' %>
+          </br>
+        </td>
+      </tr>
+      <tr>
+        <td class="pop_btns">
+          <table border="0" cellpadding="0" cellspacing="6"  class="msg_reply_wrap">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="orangebutton5">
+                    <span>
+                      <a class="submit-popup btn btn-warning show-new-popup" href="javascript:void(0);">
+                        Submit
+                      </a>
+                    </span>
+                  </div>
+                </td>
+                <td style="padding-left: 20px;">
+                  <div class="orangebutton5">
+                    <span>
+                      <a class="hide-popup  btn btn-default show-new-popup cancel"
+                         href="javascript:void(0);" id="cancel">Cancel
+                      </a>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>
+</div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var logic = function( currentDateTime ){
+  // 'this' is jquery object datetimepicker
+    var d = new Date();
+    var h = d.getHours();
+    var n = d.getDate();
+    current_date = currentDateTime.getDate();
+    if( current_date == n ){
+      this.setOptions({
+        minTime:'h:00'
+      });
+    }
+    else
+      this.setOptions({
+      minTime:'0:00'
+    });
+  };
+  jQuery('#milestone_delivery_date').datetimepicker({
+    formatDate:'Y/m/d',
+    onChangeDateTime:logic,
+    onShow:logic,
+    minDate: 0
+  });
+});
+</script>

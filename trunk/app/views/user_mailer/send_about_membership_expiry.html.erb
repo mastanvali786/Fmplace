@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h3>Dear <%= @user.first_name %>,</h3>
+    <div>
+      <p>You membership plan is nearing to expiry date. Please upgrade to get coutinue with our service</p>
+    </div>
+  <p>Sincerely,</p>
+  <img src="<%= SITE_LOGO %>" height="35px" />
+  <p><%= EMAIL_SIGN_EMAIL %></p>
+  <p><%= EMAIL_SIGN_NUMBER%></p>
+  </body>
+</html>

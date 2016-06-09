@@ -1,0 +1,57 @@
+<%=javascript_include_tag 'bootstrap-datepicker.js'%>
+<%=javascript_include_tag 'bootstrap-datetimepicker.min.js' %>
+<%= form_for :user,:url=>'',:html => {:"data-validate" => 'parsley'}  do |f| %>
+
+
+<div class="row">
+  <div class="col-md-12">
+    Milestone
+    <label class="field prepend-icon">
+      <%= f.text_field :email, 'required' => '', 'type' => 'email','data-parsley-type' =>'email',class: "form-control gui-input email", id: "InputEmail1", placeholder: "Enter Description" %> 
+
+    </label>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <%=f.datetime_field :date_added, "data-toggle"=>"tooltip", 
+    "data-original-title"=>"Eastimated Start Date",
+    :class=>"form-control medium-custom-input",:size=>"35",
+    :placeholder=>"Eastimated Delivery Date"%>
+    <img src="/assets/calendar.png" class="calender_date" onclick="$('#milestone_date_added').focus();"></img>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <label class="field prepend-icon">
+      <%= f.text_field :amount, 'required' => '',class: "gui-input",placeholder: "Amount" ,id: 'amount'%>
+
+    </label>
+  </div>
+</div>
+<div class="col-md-12">
+  <label class="field prepend-icon">
+    <%= f.text_area :description, 'required' => '', 'type' => 'text-area','data-parsley-type' =>'email', id: "description", :style=>"resize: none;",placeholder: "Description",:onkeyup=>"limiter();" %> 
+
+  </label>
+  <div style="float:right;font:Arial, Helvetica, sans-serif;font-size:10px"> <span id="char_count">1000</span>&nbsp;characters remaining.</div>
+</div> 
+<div class="row">
+  <div class="col-md-6">
+    <label class="login-btn"><%= f.submit "Save", :id=>"save_value"%></label>
+  </div>
+  <div class="col-md-6">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  </div>
+</div>
+<%end%>
+
+<script>
+ $(function() {
+  alert('hi');
+  $("#milestone_date_added").datepicker();
+});
+ function limiter(){
+  $("#char_count").text("Characters left: " + (1000 - $("#description").val().length));
+}
+</script>

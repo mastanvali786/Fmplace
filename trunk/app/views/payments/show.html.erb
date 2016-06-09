@@ -1,0 +1,48 @@
+<div class="main_container">
+  <div class="container mpro_container">
+    <%= render partial: "shared/header_back" %>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+      <span>
+        Payment
+      </span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover" border="0" cellpadding="3" cellspacing="6" id="payment" style="padding-left:20px;">
+        <tbody>
+          <tr>
+            <td class="md_hide">
+              <strong>Id</strong>
+            </td>
+            <td data-label="Id" class="account_p_lbl">
+              <%= @payment.id %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Class</strong>
+            </td>
+            <td data-label="Class" class="account_p_lbl">
+              <%= @payment.klass.titleize %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Type</strong>
+            </td>
+            <td data-label="Type" class="account_p_lbl">
+              <%= @payment.type.titleize %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Amount</strong>
+            </td>
+            <td data-label="Amount" class="account_p_lbl">
+              <%= number_to_currency @payment.amount %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

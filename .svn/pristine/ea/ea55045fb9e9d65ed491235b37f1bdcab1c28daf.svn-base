@@ -1,0 +1,225 @@
+<style type="text/css">
+	.monst1w{
+		z-index: 26 !important;
+	}
+	.clock_comman
+	{
+		font-size: 14px!important;
+		font-family: arial !important;
+	}
+	.timersize
+	{
+		font-size: 16px!important;
+	}
+	.margin_categary
+	{
+		margin-bottom: 7px;
+		margin-left: 12px
+	}
+	.margin_subcategary
+	{
+		margin-top: -25px;
+		margin-left: 228px;
+	}
+
+</style>
+
+<div class="main_container">
+	<div class="container mpro_container">
+		<%= render(:partial => 'dashboard_header') %>
+		<div class="row">
+			<div class="col-md-8 sd_content">
+				<div class="row sd_gbox">
+					<div class="col-xs-12 col-sm-6 col-md-1 st_lbl alg_reg">Status</div>
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<label class="field select monst1" style="z-index: 26">
+							<select id="search_status_project" >
+								<option value="all">All</option>
+								<option value="opened" selected="selected">Hiring Open</option>
+								<option value="awarded">Working</option>
+								<option value="completed">Completed</option>
+								<option value="closed">Hiring Closed</option>
+							</select>
+							<i class="arrow"></i>           
+						</label>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-md-8 sboxs">
+						<form class="search-box" action="/projects/find_projects" method="get">
+							<div class="input-group search_bs find_pdcts">
+								<input type="search" placeholder="Search Find Projects" class="search form-control pull-left" name="fq"
+								value="<%= @find_p%>">
+								<button type="submit" class="btn input-group-addon" value=""><i class="fa fa-search"></i></button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="row srch_result fprojec">
+					<!-- <div class='margin_categary main_label'>Category:</div>
+					<div class="scwdth col-xs-12 col-sm-4 col-md-4 main_fc">
+						<label class="field select">
+							<%#=select("person", "category", @categories.collect{ |u| [u.name, u.id] },{:prompt => "All" })%>
+							<i class="arrow"></i>                  
+						</label>
+					</div>
+					<%# if @subcat_show %>
+					<div class='margin_subcategary main_label'>Subcategory:</div>
+					<div class="scwdth col-xs-12 col-sm-4 col-md-4 main_fc" id="subcategory_div">
+						<label class="field select">
+							<%#=select("subperson", "subcategory", @subcategories.collect{ |u| [u.name, u.id] },{:prompt => "All" })%>
+							<i class="arrow"></i>                   
+						</label>
+					</div>
+					<%# end %> -->
+					<div class="col-xs-12 col-sm-4 col-md-4 pull-right"  style="padding: 0px 0 0 15px">
+						<label class="pull-left alg_reg">Sort by</label>
+						<label class="field select">
+							<select id="search_posted_project">
+								<option value="all">All Posted</option>
+								<option value="asc">Posted Date ASC</option>
+								<option value="desc">Posted Date DESC</option>
+							</select>
+							<i class="arrow"></i> 
+						</label>
+					</div>
+				</div>
+				<% if @findallprojects.count >= 1 %>
+				<% @findallprojects.each do |project| %>
+				<div class="ds row my_pro alg_reg">
+					<div>
+						<div class="row" style="padding-left:15px;">
+							<div class="col-xs-12 col-sm-6 col-md-9 pro_title pull-left gotham_medium">
+								<%= link_to project.full_title, project_path(project.id),:class=>"pro_title title_anchor"%>
+								<div class='clock_comman' id="clock_<%=project.id%>" data-id='<%=project.id%>' style="color:#FE5A01" data-until="<%=project.end_date%>"></div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 pull-right alg_reg">
+								<% if current_user && current_user.approved? %>
+								<% if current_user &&  current_user.has_project(project) %>
+								<%= link_to 'Manage Project', projects_action_milestone_path(id:project.id), :class=>"btn btn-warning mproj"%>
+								<% elsif current_user && current_user.has_bid(project) %>
+								<%= link_to 'Update Bid', project_path(project.id),:class=>"btn btn-warning mproj"%>					
+								<% elsif current_user && current_user.canbid?(project) %>
+								<%= link_to 'Submit Bid', project_path(project.id),:class=>"btn btn-warning mproj"%>
+								<% end %>
+								<% end %>
+							</div>
+						</div>
+						<button class="ds_narrow  search_nav gotham_medium navbar-toggle " data-toggle="collapse" data-target="#<%= project.id %>">
+							Project Details <span class="pull-right"><i class="fa fa-chevron-down"></i></span></span>
+						</button>
+
+						<div id="<%= project.id %>" class="navbar-collapse collapse" >
+							<div class="pr_tlbl">
+								<div class="pull-left"><span class="main_label">Project Status:</span>&nbsp;
+									<span class="value_proj"><%=project.try(:current_state).capitalize%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+								</div> 
+								<div class="pull-left "><span class="main_label">Ends:</span>&nbsp;<span class="blue_txt1"> </span>
+									<%= user_time_zone project.end_date %>&nbsp;|&nbsp;&nbsp;</div>
+									<div class="pull-left"><%= project.bids.count %>&nbsp;<span class="main_label">Proposals</span> </div>
+								</div>
+								<div class="pr_tlbl">
+									<div class="pull-left">
+										<% if project.project_awarded? %> <span class="main_label">Awarded On:</span> &nbsp;<%= user_time_zone(project.project_awarded_date) %>
+										<% else %>
+										<span class="main_label">Posted On:</span> &nbsp;<%= user_time_zone(project.created_at) %>
+										<% end %>&nbsp;&nbsp;
+									</div>
+								</div>
+								<div class="pv_lbl project_details"><span class="main_label"> Project Description:</span> &nbsp;&nbsp;
+									<span><%= project.description[0...300] %></span>
+									<span class="full_state2_<%=project.id%>" style="display:none;">
+										<%= project.description[300..-1]%>
+									</span>
+									<% if project.description.length >= 300%>
+									<br>
+									<a href="javascript:void(0);" class="flip2_<%=project.id%>" style="color:#001FE2;"onclick="show_read_more(<%= project.id %>)"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+									<% end %>
+								</div>
+								<div class="pr_tlbl">
+									<div class="pull-left"><span class="main_label">Services Required:</span>&nbsp;
+										<span class="value_proj"><%= project.try(:category_name)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+									</div>
+									<div class="pull-left"><span class="main_label">Positions:</span>&nbsp;
+										<span class="value_proj"><%= project.try(:subcategory_name)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+									</div>
+									<div class="pull-left"><span class="main_label">Business Type:</span>&nbsp;
+										<span class="value_proj"><%= project.tags %></span>
+									</div>
+								</div>
+								<div class="pr_tlbl">
+									<div class="pull-left"><span class="main_label">Additional Services:</span> &nbsp;
+										<span class="value_proj"><%= project.skills%></span>&nbsp;&nbsp;|&nbsp;&nbsp; </div>  
+										<!-- <div class="pull-left"><span class="main_label">Budget:</span> &nbsp;
+											<span class="value_proj"><%#= project.try(:budget)%></span>
+										</div> -->
+										<div class="pull-left"><span class="main_label">Photography Date:</span>&nbsp;
+											<span class="value_proj"><%= project.estimated_time%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+										</div>
+									</div>
+									<div class="pr_tlbl">
+										
+										<div class="pull-left"><span class="main_label">Location:</span>&nbsp;
+											<span class="value_proj"><%= project.location%></span>&nbsp;&nbsp;
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<%end%>
+						<%else %>
+						<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Projects Found</div>
+						<% end %>
+						<div class="clearfix pagination_box">
+							<div class="pull-left">
+								Page <%= @findallprojects.current_page%> of <%= @findallprojects.total_pages%>
+							</div>
+							<div class="pull-right">
+								<%= paginate @findallprojects %>
+							</div>
+						</div>
+					</div>
+					<%=render(:partial=>'profile_complete') %>
+					<div class=" pull-right col-md-4">
+						<%= render :partial=>'advertisements/show_ads', locals: { page_no: "7"} %>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			$(document).ready(function() {
+				$('#search_status_project').bind('change',function () {
+					window.location = '/projects/find_projects?find_status='+$(this).val();
+				});
+				$('select#search_posted_project').change( function() {
+					window.location = '/projects/find_projects?find_posted='+$(this).val();
+				});
+
+				var url= window.location.href;
+				if(/=/i.test(url)){
+					var result = url.split('=').pop();
+					var status = getParameterByName("find_status");
+					var find_posted = getParameterByName("find_posted");
+					if (status == ''){
+						$("#search_status_project").val('all');  
+					}else{
+						$("#search_status_project").val(status);
+					}
+					if (find_posted == ''){
+						$("#search_posted_project").val('all');  
+					}else{
+						$("#search_posted_project").val(find_posted);
+					}
+				}
+			});
+		</script>
+		<script type="text/javascript">
+
+			$('#person_category').change(function(){
+				window.location = '/projects/find_projects?find_category='+$(this).val();
+			});
+
+			$('#subperson_subcategory').change(function(){
+				var category_id = $('#person_category').val();
+				window.location = '/projects/find_projects?find_category='+category_id+'&find_subcategory='+$(this).val();
+			});
+		</script>

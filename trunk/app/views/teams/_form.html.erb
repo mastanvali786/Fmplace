@@ -1,0 +1,116 @@
+<% if @team_member.first_name.present? %>
+    <%= form_for(@team_member, url: {:controller => 'teams', :action => 'update'},:html => {"data-parsley-validate" => true, method: :put}) do |f| %>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h4><big>Add Team Member</big></h4>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-7">
+                        <label class="alg_reg reg_lbl">First Name</label>
+                        <%=f.text_field :first_name, :class=>'form-control','data-parsley-required'=>"true" %>
+                        <br>
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <div class="col-md-7">
+                        <label class="alg_reg reg_lbl">Last Name</label>
+                        <%=f.text_field :last_name, :class=>'form-control','data-parsley-required'=>"true" %>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <label class="alg_reg reg_lbl">Email</label>
+                    <%=f.text_field :email, :class=>'form-control','data-parsley-required'=>"true" %>
+                    <br>
+                </div>
+                
+                <div class="col-md-12">
+                    <label class="alg_reg reg_lbl">Select Role</label>
+                    <ul>
+                        <% @roles.each do |role|%>
+                           <li>
+                               <div class="col-md-3">
+                                    <%= f.radio_button :role_id, role.try(:id) %><%= role.try(:name)%>&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="col-md-9">
+                                    <%= role.description %>
+                                </div>
+                           </li>
+                           <br><br>
+                        <% end %>
+                    </ul>
+                    <br>
+                </div>
+
+
+                <div style="padding: 15px;" class="col-md-6">
+                    <%= f.submit "Update Team Member", class: "btn btn-primary" %>
+                    <a href="/teams" class="btn btn-default">Cancel</a>
+                </div>
+            </div>
+        </div>
+    <% end %>
+<% else %>
+    <%= form_for @team_member, url: teams_path, method: :post do |f| %>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h4><big>Add Team Member</big></h4>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-7">
+                        <label class="alg_reg reg_lbl">First Name</label>
+                        <%=f.text_field :first_name, :class=>'form-control','data-parsley-required'=>"true" %>
+                        <br>
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <div class="col-md-7">
+                        <label class="alg_reg reg_lbl">Last Name</label>
+                        <%=f.text_field :last_name, :class=>'form-control','data-parsley-required'=>"true" %>
+                        <br>
+                    </div>
+                </div>
+                
+                <% password = Devise.friendly_token.first(8) %>
+                <%= f.hidden_field :password, value: password %>
+                <%= f.hidden_field :password_confirmation, value: password %>
+                <%= f.hidden_field :user_id, value: current_user.id %>
+
+                <div class="col-md-7">
+                    <label class="alg_reg reg_lbl">Email</label>
+                    <%=f.text_field :email, :class=>'form-control','data-parsley-required'=>"true" %>
+                    <br>
+                </div>
+                
+                <div class="col-md-12">
+                    <label class="alg_reg reg_lbl">Select Role</label>
+                    <ul>
+                        <% @roles.each do |role|%>
+                            <li>
+                                <div class="col-md-3">
+                                    <%= f.radio_button :role_id, role.try(:id) %><%= role.try(:name)%>&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="col-md-9">
+                                    <%= role.description %>
+                                </div>
+                            </li>
+                            <br><br>
+                        <% end %>
+                    </ul>
+                    <br>
+                </div>
+
+
+                <div style="padding: 15px;" class="col-md-6">
+                    <%= f.submit "Save Team Member", class: "btn btn-primary" %>
+                    <a href="/teams" class="btn btn-default">Cancel</a>
+                </div>
+            </div>
+        </div>
+    <% end %>
+<% end %>

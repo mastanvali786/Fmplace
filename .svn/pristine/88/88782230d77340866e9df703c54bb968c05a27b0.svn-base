@@ -1,0 +1,68 @@
+<%= stylesheet_link_tag "alert" %>
+<style type="text/css">
+  #invoice a {
+    color: blue
+  }
+  #invoice .status span {
+    padding-left:15px
+  }
+</style>
+<div class="main_container">
+  <div class="container mpro_container">
+    <%= render partial: "shared/header_back" %>
+    <div id="deposit-messages" style="padding:15px 0px 5px 20px;width:760px">
+    <%= render partial: "shared/alert" %>
+    </div>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+    <span class="gotham_medium">
+      Deposit Invoices
+    </span>
+    </div>
+    <div class="table-responsive alg_reg">
+      <table class="table table-bordered table-hover" border="0" cellpadding="3" cellspacing="6" id="invoice" style="padding-left:20px;">
+      <thead>
+        <tr>
+          <th style="width:200px">Invoice</th>
+          <th>Amount</th>
+          <th>Deposit Request</th>
+          <th>Created At</th>
+          <th>Action/Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invoices.each do |invoice| %>
+          <tr>
+            <td>
+              <%= link_to invoice.id, deposit_invoice_path(invoice) %>
+            </td>
+            <td>
+              <%= to_currency invoice.amount %>
+            </td>
+            <td>
+              <% request = invoice.request %>
+              <%= link_to 'Deposit Request', deposit_request_path(request) %>
+            </td>
+            <td>
+              <%= user_time_zone invoice.created_at %>
+            </td>
+            <td class="status">
+              <% if invoice.paid? %>
+                &nbsp;&nbsp;&nbsp;&nbsp;Paid On<br>
+                <%= user_time_zone invoice.paidOn %>
+              <% else %>
+                <%= link_to "Deposit Invoice", invoice.payerViewUrl, class: 'blank' %>
+              <% end %>
+            </td>
+          </tr>
+          <tr></tr>
+        <% end %>
+      </tbody>
+      </table>
+      <div class="clearfix pagination_box">
+      <div class="pull-left">Page <%= @invoices.current_page%> of <%= @invoices.total_pages%></div>
+      <div class="pull-right">
+        <%= paginate @invoices %>
+      </div>
+    </div>
+  </div>
+</div>

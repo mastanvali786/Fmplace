@@ -1,0 +1,120 @@
+<style type="text/css">
+	.label_text{
+		color: #000;
+	}
+	.label_heading{
+		color: #333;	
+	}
+</style>
+<div class="quick_stats">
+	<div>Quick stats</div>
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active"><a href="#past12" role="tab" data-toggle="tab">
+			12 months</a></li>
+			<li><a href="#Lifetime" role="tab" data-toggle="tab">
+				Lifetime</a></li>
+			</ul>
+			<div class="tab-content pproposals">
+				<div class="tab-pane active" id="past12">
+					<div class="row">
+						<div class="col-md-4 label_heading">Project </div>
+						<div class="col-md-8">
+							<div>
+							  <span class="qick_lbl">
+							    <%=user.total_bids_m ? user.total_bids_m : '0'%>
+							  </span>
+							  <% if user.seller? %>
+							    <span class="label_text clrbk5">Total Bids</span>
+							  <% else %>
+							    <span class="label_text clrbk5">Total Posted</span>
+							  <% end %>
+							</div>
+							<div>
+							  <span class="qick_lbl"><%=user.total_awards_m ? user.total_awards_m : '0'%></span>
+							  <span class="label_text clrbk5">Projects Awarded</span>
+							</div>
+							<div>
+							  <span class="qick_lbl"><%=user.total_awards_ratio_m ? user.total_awards_ratio_m : '0'%>%</span>
+							  <span class="label_text clrbk5">Award Ratio</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 label_heading">Reviews </div>
+						<div class="col-md-8">
+							<div>
+								<span class="qick_lbl"><%= user.review if user.review >0 %></span>
+								<%= render :partial => "shared/user_rating", :locals => { :user => user } %>
+							</div>
+							<div>
+								<span class="qick_lbl">
+									<%= number_to_percentage(user.recommended,precision: 0) %>
+								</span>
+								<span class="label_text clrbk5">Recommended</span>
+							</div>
+						</div>
+					</div>
+					<% if user.seller? %>
+						<div class="row">
+							<div class="col-md-4 label_heading">Earnings </div>
+							<div class="col-md-8">
+								<div><span class="qick_lbl">$<%=user.earnings%></span><span class="label_text clrbk5">Total</span></div>
+								<div><span class="qick_lbl">$<%=user.earnings_per_client_m %></span>
+								<span class="label_text clrbk5">Per Client</span></div>
+							</div>
+						</div>
+					<% end %>
+				</div>
+				<div class="tab-pane" id="Lifetime">
+					<div class="row">
+						<div class="col-md-4 label_heading">Project </div>
+						<div class="col-md-8">
+							<div>
+							  <span class="qick_lbl">
+							    <%=user.total_bids ? user.total_bids : '0'%>
+							  </span>
+							 <% if user.seller? %>
+							    <span class="label_text">Total Bids</span>
+							  <% else %>
+							     <span class="label_text">Total Posted</span>
+							  <% end %>
+						</div>
+							<div>
+							  <span class="qick_lbl"><%=user.total_awards ? user.total_awards : '0'%></span>
+							  <span class="label_text">Projects Awarded</span>
+							</div>
+							<div><span class="qick_lbl"><%=user.total_awards_ratio ? user.total_awards_ratio : '0'%>%</span>
+							 <span class="label_text">Award Ratio</span></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 label_heading">Reviews </div>
+						<div class="col-md-8">
+							<div>
+								<span class="qick_lbl"><%= user.review %></span>
+								<%= render :partial => "shared/user_rating", :locals => { :user => user } %>
+							</div>
+							<div>
+								<span class="qick_lbl">
+									<%= number_to_percentage(user.recommended,precision: 0) %>
+								</span>
+								<span class="label_text">Recommended</span>
+							</div>
+						</div>
+					</div>
+					<% if user.seller? %>
+						<div class="row">
+							<div class="col-md-4 label_heading">Earnings</div>
+							<div class="col-md-8">
+								<div>
+								  <span class="qick_lbl">$<%=user.earnings%></span>
+								  <span class="label_text">Total</span>
+								</div>
+								<div>
+								  <span class="qick_lbl">$<%=user.earnings_per_client%></span>
+								  <span class="label_text">Per Client</span>
+								</div>
+							</div>
+						</div>
+					<% end %>
+				</div>

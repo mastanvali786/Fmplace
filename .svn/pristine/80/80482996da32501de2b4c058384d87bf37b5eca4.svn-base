@@ -1,0 +1,402 @@
+class ProjectsController < ApplicationController
+  before_filter   :authenticate_user!, except: [:update_subcategoires,:update_thirdcategories,
+    :update_enginemodels,:find_shops,:shops_searching,:shop_manufactures,:update_states,:listzip,
+    :update_project_budget]
+
+    include BidsHelper
+
+    def index
+      @subcat_show = false
+      @categories = Category.all
+      @subcategories = Subcategory.all
+      if current_user.buyer?
+        @projects = current_user.projects
+      else
+        pids = current_user.bids.active.map(&:project_id)
+            # @projects =  Project.where(id: pids) if pids
+            @projects =  Project.where(["projects.id in (?) OR rehired_freelancer = ?", pids, current_user.id]) if pids
+          end
+
+          if params[:status] && params[:status] != 'all'
+            @projects = @projects.in_state(params[:status].to_sym)
+          elsif params[:q]&& params[:q].length >=1
+            @projects = project_search(params[:q], @projects)
+          elsif params[:sq]&& params[:sq].length >=1
+            @projects = project_search(params[:sq], @projects)
+          elsif params[:find_status] && params[:find_status] != 'all'
+            @projects = @projects.in_state(params[:find_status].to_sym)
+          elsif params[:find_category] && params[:find_category] != ''
+            @projects = search_projects_on_categories(@projects)
+          end
+
+          if params[:find_posted] == 'asc'
+            @projects = @projects.order('updated_at ASC')
+          else
+            @projects = @projects.order('updated_at DESC')
+          end
+          respond_with_index
+        #@projects =  @projects.page(params[:page]).per(PER_PAGE_COUNT)
+      end
+
+      def respond_with_index
+        respond_to do |format|
+          format.html { @projects =  @projects.page(params[:page]).per(PER_PAGE_COUNT) }
+          format.json { render :json =>  { result: true, project_list: JSON.parse(@projects.to_json(:only => [:id, :title, :description, ],
+            :methods => [:category_name, :subcategory_name,:current_state, :bid_count, :tags, :skills, :budget, :estimated_time,
+             :location, :buyer_name, :project_start_date, :project_end_date, :buyer_rating,]))} }
+          format.js { render :json =>  { result: true, project_list: JSON.parse(@projects.to_json(:only => [:id, :title, :description, ],:methods => [:category_name, :subcategory_name,:current_state, :bid_count, :tags, :skills, :budget, :estimated_time, :location]))} }
+        end
+      end
+
+      def find_projects
+        @subcat_show = false
+        @categories = Category.all
+        @subcategories = Subcategory.all
+        @findallprojects=Project.opened.unrehired_projects
+
+        if params[:fq]&& params[:fq].length >=1
+          @findallprojects = project_search(params[:fq], @findallprojects)
+        elsif params[:find_status] && params[:find_status] != 'all'
+          @findallprojects = Project.in_state(params[:find_status].to_sym)
+        elsif params[:find_status]== 'all'
+          @findallprojects=Project.all
+        elsif params[:find_category] && params[:find_category] != ''
+          @findallprojects = search_projects_on_categories(@findallprojects)
+        end
+
+        if params[:find_posted] == 'asc'
+          @findallprojects = @findallprojects.order('updated_at ASC')
+        else
+          @findallprojects = @findallprojects.order('updated_at DESC')
+        end
+
+        respond_to do |format|
+          format.html { @findallprojects = @findallprojects.page(params[:page]).per(PER_PAGE_COUNT) }
+          format.js { render json: { result: true, project_list: JSON.parse(@findallprojects.to_json(:only => [:id, :title, :description],:methods => [:category_name, :subcategory_name,:current_state, :bid_count, :tags, :skills, :budget, :estimated_time, :location])) } }
+          format.json { render :json => { result: true, project_list:JSON.parse(@findallprojects.to_json(:only => [:id, :title, :description],:methods => [:category_name, :subcategory_name,:current_state, :bid_count, :tags, :skills, :budget, :estimated_time, :location])) } }
+        end
+        #@findallprojects = @findallprojects.page(params[:page]).per(PER_PAGE_COUNT)
+      end
+
+      def search_projects_on_categories(projects)
+        @cat = Category.find_by_id(params[:find_category])
+        @subcategories = @cat.subcategories if @cat
+        @subcat_show = true
+        projects = projects.where(:category_id=>params[:find_category])
+        if params[:find_subcategory] && params[:find_subcategory] != ''
+          projects = projects.where(:subcategory_id=>params[:find_subcategory] )
+        end
+        return projects
+      end
+
+      def find_shops
+        @open=''
+        @value=''
+        country=Country.find_by_country_code('US')
+        @country_id=country.id
+        @states_list = country.states.order('state_name ASC')
+        @findallshops = User.sellers.order('search_priority DESC, updated_at DESC')
+        @categories = Category.all
+        @skills = SkillTag.all
+        @search_param = params[:fq]
+
+        if params[:fq] && params[:fq].length >=1
+          shops_searching
+        end
+
+        if params[:find_posted] && params[:find_posted] != 'all'
+          if params[:find_posted]=='asc'
+            @findallshops = User.where(:role_id=>1).order('updated_at ASC,approved DESC')
+          else
+            @findallshops = User.where(:role_id=>1).order('updated_at DESC,approved DESC')
+          end
+        end
+
+        #filters for approved shops or not
+        if params[:find_check]== 'true'
+          @findallshops=@findallshops.approved_shops
+        # else
+            #  @findallshops=@findallshops.pending_shops
+          end
+
+        #filters for prefered location
+        if params[:location_pref] == "true"
+          search_shops_on_location(@findallshops)
+        end
+
+        #fielters for find by category or subcategory
+        if params[:find_category] || params[:find_subcategory]
+          shop_manufactures
+        end
+
+        #filters for ratings
+        if params[:feed].present?
+          @findallshops = search_by_feedback(@findallshops, params[:feed])
+        end
+
+        @shop_count = @findallshops.count
+
+        if params[:map].present?
+          shop_full_hash = {}
+          count_shop = 0
+          @findallshops.each do |shop|
+            hash_new = {}
+            hash_new = { visible_name:shop.visible_name, address:shop.address, state: shop.state_name,zipcode: shop.zipcode, lat: shop.lat, lng: shop.lng, country_name: shop.country_name }
+            shop_full_hash[count_shop] = hash_new
+            count_shop = count_shop + 1
+          end
+          render json: shop_full_hash
+        else
+          respond_to do |format|
+            format.html { @findallshops = Kaminari.paginate_array(@findallshops).page(params[:page]).per(SHOPS_PER_COUNT) }
+            format.js { render json: { result: true, freelancer_list: JSON.parse(@findallshops.to_json(:only => [:id, :approved],
+              :methods => [:visible_name, :profile_photo_url, :earnings,:full_location, :biography_summary, :skills, :ratings, :user_projects_count])) } }
+            format.json { render :json => { result: true, freelancer_list:JSON.parse(@findallshops.to_json(:only => [:id, :approved],
+              :methods => [:visible_name, :profile_photo_url, :earnings,:full_location, :biography_summary, :skills, :ratings, :user_projects_count])) } }
+          end
+        end
+      end
+
+      def search_by_feedback(shops, rate)
+        new_shops = []
+        shops.each do |u|
+          if u.ratings >= rate.to_f
+            new_shops << u
+          end
+        end
+        new_shops
+      end
+
+
+      def search_shops_on_location(shops)
+        if params[:location_pref] == "true"
+          @country_id=params[:country]
+          country = Country.find_by_id(@country_id) if @country_id.present?
+          @state_id=params[:state]
+          @states_list = country.states.order('state_name ASC') if country
+          @findallshops = @findallshops.where(:country_id=>params[:country]) if @country_id.present?
+          @findallshops = @findallshops.where(:state_id=>params[:state]) if @state_id.present?
+        end
+      end
+
+      def shop_manufactures
+        all_sellers = @findallshops
+        if params[:find_category].present?
+          a = []
+          all_sellers.each do |u|
+            if u.category_ids.include?(params[:find_category].to_s)
+              a << u
+            end
+          end
+          @findallshops=a
+        elsif params[:find_subcategory].present?
+          a = []
+          all_sellers.each do |u|
+            if u.user_skill && u.user_skill.known_skills.include?(params[:find_subcategory].to_s)
+              a << u
+            end
+          end
+          @findallshops=a
+        end
+      end
+
+      def project_search(query, list_projects)
+        projects = Project.arel_table
+        search_projects = list_projects.where("title LIKE ?","%#{query}%")
+        return search_projects
+      end
+
+      def find_seller_projects_searching
+        projects = Project.arel_table
+        query = params[:fq].gsub('+',' ').strip
+        @findallprojects = Project.find_by_sql("select *, concat(projects.title,' ',categories.name)as title from projects join categories on categories.id=projects.category_id Having title LIKE '%#{query}%'")
+      end
+
+      def shops_searching
+    #projects = User.where(:role_id=>1).arel_table
+    query = "%#{params[:fq].gsub('+',' ').strip}%"
+    @search_param = query
+    #new_query = query.split(" ")
+    @findallshops = @findallshops.where("display_name LIKE ?",query)
+    #@findallshops = @findallshops.where(projects[:display_name].matches(query))
+  end
+
+
+  def project_attachment
+    project = Project.find(params[:attachment][:project_id])
+    count = 0
+    params[:attachments]['file_name'].each do |file|
+      attachment = project.attachments.create(file_name: file,
+        user_id: params[:attachment][:user_id], attach_type: 'Project')
+      count = count + 1
+    end
+    flash[:notice] = "#{count} Attachments added to project successfully."
+    redirect_to :back
+  end
+
+  def destroy_attachment
+    attachment = Attachment.find(params[:id])
+    attachment.destroy if attachment
+    flash[:notice] = 'Attachment deleted successfully.'
+    redirect_to :back
+  end
+
+  def show
+    pid= params[:project_id] || params[:id]
+    @project = Project.find(pid)
+    @proposals = @project.bids.active.order('updated_at DESC').page(params[:page]).per(PER_PAGE_COUNT_PROJECT)
+    @proposals_buyer = @project.bids.active_bids.order('featured DESC').order('updated_at DESC').page(params[:page]).per(PER_PAGE_COUNT)
+    @user = current_user
+    @country= Country.find_by_id(@project.user.try(:country)).try(:name)
+  end
+
+  def new
+    @project = Project.new
+    @category = Category.all
+    #respond_with(@project)
+  end
+
+  def edit
+  end
+
+  def post_public_message
+    message = PostMessage.create(message_posting)
+    flash[:notice] = 'Public message posted successfully.'
+    if params[:platform] == "mobileApp"
+      render :json => {result: true, msg:'Public message posted successfully.'}
+    else
+      redirect_to :back
+    end
+  end
+
+  def change_status
+    @project  = Project.find(params[:id])
+    if @project.transition_to!(:awarded)
+      bid = @project.bids.find(params[:bid_id])
+      bid.update(:awarded => true, :awarded_date => Time.now)
+      if @project.project_seller
+        @project.project_seller.update_attributes(user_id: bid.user.id,bid_id: bid.id)
+      else
+        @project.project_seller = ProjectSeller.create(user_id: bid.user.id,bid_id: bid.id)
+        @project.project_seller.save
+        seller_email = @project.project_seller.user.email
+        buyer_email = @project.buyer.email
+        emailtemplate=EmailTemplate.find_by_template('send_seller_about_reward')
+        @estimates=estimated_days_display bid.estimated_days
+        body=emailtemplate.content % {user_visible_name: @project.seller.visible_name, full_title: @project.full_title, category_name: @project.category_name,subcategory_name: @project.subcategory_name,tags: @project.tags,skills: @project.skills,budget: @project.budget,estimated_time: @project.estimated_time,location: @project.location,description: @project.description,details: bid.details,estimated_days: @estimates,proposed_amount: bid.proposed_amount,how_it_work_link: HOW_IT_WORK,earned_amount: bid.earned_amount,site_logo:SITE_LOGO,workroom_url:@project.workroom_url,site_email:EMAIL_SIGN_EMAIL,site_phone:EMAIL_SIGN_NUMBER}
+        subject=emailtemplate.subject % {full_title: @project.full_title}
+        email_setting(current_user,subject,body,seller_email)#OverhaulMailer.delay.send_seller_about_award(bid,@project,seller_email)
+        emailtemplate=EmailTemplate.find_by_template('next_steps')
+        subject=emailtemplate.subject
+        body=emailtemplate.content % {buyer_visible_name: @project.buyer.visible_name, user_visible_name: bid.user.visible_name,full_title: @project.full_title, workroom_url: @project.workroom_url,how_it_work_link: HOW_IT_WORK,site_logo:SITE_LOGO,site_email:EMAIL_SIGN_EMAIL,site_phone:EMAIL_SIGN_NUMBER}
+        email_setting(current_user,subject,body,buyer_email)
+        #OverhaulMailer.delay.send_buyer_about_next_step(bid,@project,buyer_email)
+        @project.other_shop_notifications
+      end
+    end
+    info = {status: 'success', user_name: bid.user.visible_name}
+    render json: info
+  end
+
+  def create
+    modify_date_params
+    @project = Project.new(project_params)
+    if @project.save
+      post_project_attachment(params) if params[:project]['file_name']
+      send_after_project_create(@project)
+      if params[:platform] == "mobileApp"
+        render json: {result: true, msg: "Project posted successfully."}
+      else
+        redirect_to projects_path, notice: 'Project posted successfully.'
+      end
+    else
+      if params[:platform] == "mobileApp"
+        render json: {result: false, msg: "Failed to post project. Please try after some time."}
+      else
+        render 'new'
+      end
+    end
+  end
+
+  def update
+    @project.update(project_params)
+    respond_with(@project)
+  end
+
+  def destroy
+    @project.destroy
+    respond_with(@project)
+  end
+
+  def update_states
+    country = Country.find(params[:country_id])
+    @states = country.states.order('state_name ASC') if country
+    if params[:platform] == "mobileApp"
+      render json: {state_list: JSON.parse(@states.to_json(:only => [:id],methods: :name)) }
+    else
+      render json: @states.to_json(:only => [:id, :state_name])
+    end
+  end
+
+  def update_subcategoires
+    cat = Category.find(params[:category_id])
+    @subcategories = cat.subcategories if cat
+    if params[:platform] == "mobileApp"
+      render json: {subcat_list: JSON.parse(@subcategories.to_json(:only => [:id, :name])) }
+    else
+      render json: @subcategories.to_json(:only => [:id, :name])
+    end
+  end
+
+  def update_project_budget
+    budget = ProjectBudget.find(params[:id])
+    @budgets = budget.budget_options if budget
+    if params[:platform] == "mobileApp"
+      render json: {budgets_list: JSON.parse(@budgets.to_json(:only => [:id, :name])) }
+    else
+      render json: @budgets.to_json(:only => [:id, :name])
+    end
+  end
+
+  def sign_out_redirect_registration
+    sign_out(current_user)
+    redirect_to users_signup_seller_path
+  end
+
+  def listzip
+    @zip=UsZipcode.where(ZIPCode: params[:zip]).count
+    if @zip>0
+      @zips=UsZipcode.where(ZIPCode: params[:zip]).try(:first)
+      @city=@zips.City
+      @state=@zips.StateCode
+      render :json=>{city:@city,state:@state,present:'true'}
+    else
+      render :json=>{present:'false'}
+    end
+  end
+
+  private
+
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
+  def project_params
+    params.require(:project).permit(:title, :description, :business_type_id,
+      :project_photo, :category_id, :subcategory_id,:budget_option_id,:project_time_frame_id,:start_date, :end_date,
+      :country_id, :state_id, :city,:zip_code,:user_id,:visible,
+      { project_tag_ids: [], skill_tags_ids: []}, :rehired_freelancer, :rehire_project)
+  end
+
+  def message_posting
+    params.require(:post_message).permit(:message,:user_id, :project_id)
+  end
+
+  def modify_date_params
+    unless isint(params[:project][:state_id])
+      params[:project][:state_id] = State.find_by_state_code(params[:project][:state_id]).try(:id)
+    end
+    params[:project][:project_tag_ids].reject!(&:blank?) if params[:project][:project_tag_ids]
+    params[:project][:skill_tags_ids].reject!(&:blank?) if params[:project][:skill_tags_ids]
+  end
+end

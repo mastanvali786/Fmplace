@@ -1,0 +1,134 @@
+<div class="desc_pb">
+	<h4 class="pref_lbl">Biography <%= link_to 'Edit', biography_path ,:class=>"pull-right"%></h4>
+	<p class="pt_lbl notes">
+	  <% if current_user.user_biography.try(:summary) %>
+			<span><%= current_user.user_biography.try(:summary)[0...300] %></span>
+			<span class="full_state2_summary" style="display:none;">
+			  <%= current_user.user_biography.try(:summary)[300..-1]%>
+			</span>
+			<% if  current_user.user_biography.try(:summary).length >= 300%>
+			<br><a href="javascript:void(0);" class="flip2_summary" style="color:#001FE2;" onclick="show_read_more('summary')"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+			<% end %>
+		<% end %>
+	</p>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl">Domain expertise <%= link_to 'Edit', domain_expertise_path ,:class=>"pull-right"%></h4>
+	<p class="pt_lbl notes">
+		<%= current_user.domain_expertise.try(:title) %>
+	</p>
+	<p class="pt_lbl notes">
+		Range of Expertise:
+		<br>
+		<% if current_user.domain_expertise.try(:range) %>
+			<span><%= current_user.domain_expertise.try(:range)[0...300] %></span>
+			<span class="full_state2_domain_expertise_range" style="display:none;">
+			  <%= current_user.domain_expertise.try(:range)[300..-1]%>
+			</span>
+			<% if current_user.domain_expertise.try(:range).length >= 300%>
+			<br><a href="javascript:void(0);" class="flip2_domain_expertise_range" style="color:#001FE2;" onclick="show_read_more('domain_expertise_range')"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+			<% end %>
+		<% end %>
+	</p>
+	<p class="pt_lbl notes">
+	  Description<br>
+	  <% if current_user.domain_expertise.try(:description) %>
+			<span><%= current_user.domain_expertise.try(:description)[0...300] %></span>
+			<span class="full_state2_domain_expertise_desc" style="display:none;">
+			  <%= current_user.domain_expertise.try(:description)[300..-1]%>
+			</span>
+			<% if current_user.domain_expertise.try(:description).length >= 300%>
+			<br><a href="javascript:void(0);" class="flip2_domain_expertise_desc" style="color:#001FE2;" onclick="show_read_more('domain_expertise_desc')"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+			<% end %>
+		<% end %>
+	</p>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl ">Skills <%= link_to 'Edit', user_skills_path ,:class=>"pull-right"%></h4>
+	<% if current_user.user_skill.present? %>
+	<% current_user.user_skill.known_skills.reject(&:empty?).each do |skill| %>
+	<% @skill_category = SkillTag.find_by_id(skill) %>
+	<div class="label label-default "><%= @skill_category.name %></div>
+	<% end %>
+	<% end %>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl">Years of experience <%= link_to '<i class="fa fa-plus"></i>&nbsp;&nbsp; Add Experience'.html_safe, user_experience_path ,:class=>"pull-right btn btn-warning"%></h4>
+	<div class="media">
+		<% current_user.user_experiences.each do |exp| %>
+		<div class="media-heading main-header-field notes"><%= exp.company_name %><div><%= link_to "Edit", user_experience_edit_path(exp_id: exp.id), class: "pull-right" %></div></div>
+		<div class="sub-header-field notes"><%= exp.job_title %></div>
+		<div><%= exp.start_date.strftime("%v") %>  -  <%= exp.end_date.strftime("%v") %></div>
+		<div class="notes">
+                    <span style="font-weight: bold">Description</span><br>
+			<% if exp.description.present? %>
+				<span><%= exp.description[0...300] %></span>
+				<span class="full_state2_exp_desc" style="display:none;">
+				  <%= exp.description[300..-1]%>
+				</span>
+				<% if exp.description.length >= 300%>
+				<br><a href="javascript:void(0);" class="flip2_exp_desc" style="color:#001FE2;" onclick="show_read_more('exp_desc')"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+				<% end %>
+			<% end %>
+		</div>
+		<!-- <div class="dots"></div> -->
+		<br>
+		<% end %>
+	</div>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl">Education <a href="" class="pull-right"></a>
+		<%= link_to '<i class="fa fa-plus"></i>&nbsp;&nbsp; Add Education'.html_safe, user_education_path ,:class=>"pull-right btn btn-warning"%>
+	</h4>
+	<div class="media">
+            <% current_user.user_educations.each do |edu| %>
+            <%  degree_name =  @degree.find {|i| i if i.id == edu.degree_id} if @degree%>
+            <div class="media-heading main-header-field notes" style="font-weight: bold;"><%= degree_name.name if degree_name %></div>
+		<div class="media-heading main-header-field notes"><%= edu.college_name %></div><%= link_to "Edit", user_education_edit_path(exp_id: edu.id), class: "pull-right" %>
+		<div class="sub-header-field notes"><%= edu.user_degree_name %></div>
+		<div class="sub-header-field notes"><%= edu.field_of_study %></div>
+                <%if edu.start_date && edu.end_date%>
+		<div class="notes"><%= edu.start_date.strftime("%B %Y") %>-<%= edu.end_date.strftime("%B %Y") %></div>
+                <%end%>
+		<div class="notes">
+		  Other Social ctivities<br>
+		  <% if edu.activities_societies.present? %>
+				<span><%= edu.activities_societies[0...300] %></span>
+				<span class="full_state2_activity" style="display:none;">
+				  <%= edu.activities_societies[300..-1]%>
+				</span>
+				<% if edu.activities_societies.length >= 300%>
+				<br><a href="javascript:void(0);" class="flip2_activity" style="color:#001FE2;" onclick="show_read_more('activity')"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+				<% end %>
+			<% end %>
+		</div>
+		<div class="notes">
+                    <span style="font-weight: bold">Description</span><br>
+			<% if edu.description.present? %>
+				<span><%= edu.description[0...300] %></span>
+				<span class="full_state2_edu_desc" style="display:none;">
+				  <%= edu.description[300..-1]%>
+				</span>
+				<% if edu.description.length >= 300%>
+				<br><a href="javascript:void(0);" class="flip2_edu_desc" style="color:#001FE2;" onclick="show_read_more('exp_edu')"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+				<% end %>
+			<% end %>
+		</div>
+		<br>
+		<% end %>
+	</div>
+</div>
+
+<%#= render 'reviews' %>

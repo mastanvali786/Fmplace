@@ -1,0 +1,135 @@
+<section class="row user_right1 alg_reg">
+  <%= render partial:"shared/flash" %>
+  <h3 class="orange gotham_medium">Milestones</h3>
+  <div class="clearfix">
+    <div class="pull-left"><%= @project.full_title%></div>
+    <% unless @milestones.empty?  %>
+    <div class="pull-right">
+      <span class="colr295"><%= link_to "Print & Download (PDF)", projects_action_milestone_pdf_path(:pdf,id:@project.id), target: "_blank" %></span>
+    </div>
+    <% end %>
+  </div>
+  <div class="seperator"></div>
+  <div class="row ngray_box mtxt_lftm md_hide clrbk5">
+    <div class="col-md-3 first_ltxt">Project Start Date</div>
+    <div class="col-md-2" style="text-align: left;">Amount</div>
+    <div class="col-md-2" style="text-align: left;">Status</div>
+    <div class="col-md-2" style="text-align: left;"><%=DISPLAY_LABEL_SHORT %></div>
+    <div class="col-md-3" style="text-align: left;">Project End Date</div>
+  </div>
+  <div class="row nd_box txt_lftm clrbk5">
+   <div class="col-md-3 first_ltxt"><div data-label="Project Start" class="account_p_lbl"><%= user_time_zone(@project.created_at)%></div></div>
+   <div class="col-md-2" style="text-align: left;"><div data-label="Project Amount" class="account_p_lbl">US$<%= number_to_currency(@project.amount, :unit => " ")%></div></div>
+   <div class="col-md-2" style="text-align: left;"><div data-label="Status" class="account_p_lbl"><%= @project.current_state.titleize%></div></div>
+   <div class="col-md-2" style="text-align: left;">
+    <div data-label="<%=DISPLAY_LABEL_SHORT %>" class="account_p_lbl"><%= @project.seller_shop%></div>
+  </div>
+  <div class="col-md-3" style="text-align: left;"><div data-label="Project End Date" class="account_p_lbl"><%= user_time_zone @project.end_date %></div></div>
+</div>
+<div class="seperator"></div>
+<h4>Milestones</h4>
+<div>Milestones define the payment schedule for the various project stages. A common example is 25% up front and 75% upon completion.</div>
+<div class="row ngray_box mtxt_lftm md_hide clrbk5">
+  <div class="col-md-4 first_ltxt">Milestone</div>
+  <div class="col-md-2" style="text-align: left;">Status</div>
+  <div class="col-md-2" style="text-align: left;">Delivery Date</div>
+  <div class="col-md-2" style="text-align: left;">Amount </div>
+  <div class="col-md-2" style="text-align: left;">Action</div>
+</div>
+
+<% unless @milestones.empty? %>
+<% @milestones.order("updated_at DESC").each do |milestone| %>
+<div class="row nd_box clrbk5">
+ <div data-label="Milestone" class="account_p_lbl col-md-4 first_ltxt">
+
+  <div><%= milestone.description %></div>
+  <div><%= milestone.note %></div>
+</div>
+<div data-label="Status" class="account_p_lbl col-md-2" style="text-align: left;">
+  <% if milestone.accepted? %>
+  <% if milestone.funded? %>
+  Funded
+  <% elsif milestone.funding_requested? %>
+  Request Sent <%= day_month_year milestone.funding_request.sent_at %>
+  <% elsif @project.seller? current_user %>
+  <a href="<%= projects_action_payment_path(id:@project.id) %>"
+   class="btn btn-warning">Request Fund</a>
+   <% elsif @project.buyer? current_user %>
+   <a href="<%= projects_action_payment_path(id:@project.id) %>"
+     class="btn btn-warning">Fund Milestone</a>
+     <% end %>
+     <% end %>
+   </div>
+   <div data-label="Delivery Date" class="account_p_lbl col-md-2" style="text-align: left;">
+    <% if milestone.owned_by? current_user %>
+    <%= user_time_zone milestone.delivery_date %>
+    <% else %>
+    <%= user_time_zone milestone.delivery_date %>
+    <% end %>
+  </div>
+  <div data-label="Amount" class="account_p_lbl col-md-2" style="text-align: left;">$<%= number_to_currency(milestone.price,:unit => " ")%></div>
+  <div data-label="Action" class="account_p_lbl col-md-2 colr295" style="text-align: left;">
+    <% if milestone.owned_by? current_user %>
+    <% unless milestone.accepted? %>
+    <% unless milestone.rejected? %>
+    <a class="show-popup" data-milestoneid="<%= milestone.id%>"
+     href="javascript:void(0)">
+     <img src="/assets/edit.png" title="Edit"></a>&nbsp; 
+     <% end %>
+
+     <a data-confirm="Delete this mile stone, are you sure?" data-method="delete"
+     href="/milestones/<%= milestone.id%>" rel="nofollow">
+     <img src="/assets/delete.png" title='Delete' ></a>&nbsp; 
+     <% end %>
+     <% if milestone.status.titleize  == 'Pending' %>
+     <img src="/assets/pending.png" title='Pending' >
+     <% else %>
+     <%= milestone.status.titleize %>
+     <% end %>
+     <% else %>
+     <% if milestone.pending? %>
+     <%= link_to 'Accept', accepted_milestone_path(milestone), method: :put,
+     class:'show-popup' %>&nbsp; |
+     <%= link_to 'Reject', rejected_milestone_path(milestone), 
+     method: :put, data: { confirm: 'Are you sure?' } %>
+     <% end %>
+     <% if milestone.status.titleize  == 'Pending' %>
+    <!--  <img src="/assets/pending.png" > -->
+     <% else %>
+     <%= milestone.status.titleize %>
+     <% end %>
+     <% end %>
+   </div>
+ </div>
+ <br>
+ <div class="seperator"></div>
+ <% end %>
+ <% else %>
+    <div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Milestones Found</div>
+<%end%>
+ <div class="row">
+  <div class="col-md-6">
+    <% unless @project.completed? %>
+    <div>
+      <%= link_to 'Create New Milestone', '#',:class=>'btn btn-warning show-new-popup',
+      data:{projectId:@project.id} %>
+    </div>
+    <div>Note: Only the creator of the milestone can edit it</div>
+    <% else %>
+    <div>Note: This project is completed now.</div>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    Total:<%= number_to_currency @milestones.accepted.sum("price") %>
+  </div>
+</div>
+
+<div class="clearfix pagination_box">
+  <div class="pull-left">Page <%= @milestones.current_page%> of <%= @milestones.total_pages%></div>
+  <div class="pull-right">
+    <%= paginate @milestones %>
+  </div>
+</div>
+</div>
+</section>
+<%= render 'shared/popup_container' %>

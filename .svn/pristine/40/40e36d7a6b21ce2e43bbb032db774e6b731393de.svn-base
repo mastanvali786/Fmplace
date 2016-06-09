@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <%=@seller.short_name%>,</p>
+	<p>Thank you for reviewing your shop. That helps us out more than you know.</p>
+
+	<p>Since you were one of the first few users to use <%= SITE_NAME %> from start to finish, I’m really curious to know what you think.</p>
+
+	<p>No online survey here. Just reply back and be brutally honest. Any comments, positive or negative are deeply appreciated.</p>
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

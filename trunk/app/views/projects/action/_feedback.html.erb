@@ -1,0 +1,147 @@
+<%= javascript_include_tag 'jquery.maxlength.min' %>
+<%= javascript_include_tag 'jquery.plugin'%>
+<%= stylesheet_link_tag 'jquery.maxlength'%>
+
+<style type="text/css">
+	
+	.maxlength-feedback
+	{
+		font-size: 14px!important;
+		padding-left: 253px!important;
+	}
+</style>
+<%= form_for(Feedback.new,url: '/feedback',:html => {"data-parsley-validate" => true,:method=>:post}) do |f| %>
+<%= f.hidden_field :project_id, value: @project.id %>
+<%= f.hidden_field :from_id, value: current_user.id %>
+<section class="row user_right1 alg_reg">
+	<h3 class="orange gotham_medium">Leave Feedback</h3>
+	<p class="para_grp">Please&nbsp;Leave&nbsp;Feedback to
+		<% if current_user.id == @project.buyer.id %>
+		<a href="/account/user_public_profile?id=<%= @project.seller.id %>" style="color:#3b448c">
+			<%= user_name = @project.seller_shop %></a>
+			<%= f.hidden_field :to_id, value: @project.seller.id %>
+			<% else %>
+			<%= f.hidden_field :to_id, value: @project.buyer.id %>
+			<a href="/account/user_public_profile?id=<%= @project.buyer.id %>" style="color:#3b448c">
+				<%= user_name =  @project.buyer.try(:full_name)%></a>
+				<% end %>
+				regarding the services delivered during this project.
+			</p>
+			<h3 class="hding_pra">How likely are you to recommend this  <%= user_name%> to others?</h3>
+			<div class="seperator"></div>
+			<div class="row">
+				<p class="praa">The response will not be revealed to contractor and will only be displayed in aggregate</p>
+				<div class="col-md-2 ftcloru66">Not Likely</div>
+				<div class="col-md-8">
+					<div class="slider1"></div>
+					<%= f.hidden_field :aggregate, value: 5, class:"feed_aggregate" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Likely</div>
+			</div>
+			<h3 class="rtew">Rate Your Experience with This <%= user_name%></h3>
+			<div class="seperator"></div>
+			<div class="row">
+				<p class="para_grp">This Feedback will be posted on <%= user_name%>'s profile.Remember that feedback cannot be changed once posted</p>
+				<h3 class="clrr ftcloru66">Quality of work:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider2"></div>
+					<%= f.hidden_field :quality_work, value: 3, class:"feed_quality_work" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66">Responsiveness:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider3"></div>
+					<%= f.hidden_field :responsiveness, value: 3, class:"feed_responsiveness" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66">Professionalism:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider4"></div>
+					<%= f.hidden_field :professionalism, value: 3, class:"feed_professionalism" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66">Subject Matter Expertise:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider5"></div>
+					<%= f.hidden_field :expertise, value: 3, class:"feed_expertise"  %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66">Adherence to cost:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider6"></div>
+					<%= f.hidden_field :cost, value: 3, class:"feed_cost"  %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66">Adherence to Schedule:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider7"></div>
+					<%= f.hidden_field :schedule, value: 3, class:"feed_schedule" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<h3 class="clrrr ftcloru66">Feedback Comments</h3>
+			<div class="seperator"></div>
+			<div class="row">
+				<p class="fedbk">This Feedback will be posted on <%= user_name%>'s profile.Remember that feedback cannot be changed once posted</p>
+				<h3 class="gdline ftcloru66">Guidelinescheck</h3>
+				<ul class="dotfun">
+					<li>For privacy reasons,Only use <%= user_name%>'s Company Name or Username</li>
+					<li>Be fair,accurate and professional</li>
+				</ul>
+				<div class="row">
+					<div class="col-sm-8">
+					<%= f.text_area :comment,:rows => "4" , :id=>"myTextarea1232", :class=> 'form-control','data-parsley-required'=>"true",'data-parsley-error-message'=>'Please enter your feedback'%>
+						<div class="pull-right">
+						<p id="counter"></p>
+							<!-- <h6><span id="char2">2000</span> characters left</h6> -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row bgrow12">
+				<div class="final12">
+					<div class="col-md-1">
+						<%= f.submit 'Submit', class: 'btn btn-warning bget_startd' %>
+					</div>
+					<div class="col-md-1" style="margin-left:15px;">
+						<!-- <button class="btn btn-warning bget_strtd" type="button">cancel</button> -->
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10 pdlbf5">											
+						<p class="bkfdbk">You will not be able to change this feedback once submitted</p>
+						<p class="bkfdbk">Review your rating and comments carefully</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<% end %>
+  <%= javascript_include_tag 'feedback' %>
+  <script type="text/javascript">
+	$(document).ready(function(){
+		$('#myTextarea1232').maxlength({max: 2000});
+	});
+</script>

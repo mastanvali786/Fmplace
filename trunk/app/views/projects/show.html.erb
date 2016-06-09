@@ -1,0 +1,14 @@
+<script type="text/javascript">
+	var service_fee = "<%= get_service_fee(current_user) %>"
+</script>
+<div class="main_container">
+  <div class="container mpro_container project_view">
+    <%= render(:partial => 'dashboard_header') %>
+    <%= render(:partial => 'project_show_header') %>
+    <% if @user.buyer? %>
+      <%= render(:partial => 'project_proposals') %>
+    <% else %>
+      <%= render(:partial => 'project_bids') %>
+    <% end %>
+  </div>
+</div>

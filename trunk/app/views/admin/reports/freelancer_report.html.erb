@@ -1,0 +1,40 @@
+
+<%= form_tag  admin_freelancer_report_excel_path(:format => :xlsx) do %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<label>Active Status</label>
+			<br>
+			<%= select_tag "active_status", "<option>Active</option><option>In-active</option>".html_safe, style: "width: 303px;" %>
+		</div>
+		<br><br><br>
+		<div class="col-md-6">
+			<label>Approved Status</label>
+			<br>
+			<%= select_tag "approved_status", "<option>Approved</option><option>Un-approved</option>".html_safe, style: "width: 303px;" %>
+		</div>
+		<br><br><br>
+		<div class="col-md-6">
+			<label>Location</label>
+			<br>
+			<%= select_tag "country_id", options_from_collection_for_select(@country, "id", "name"), style: "width: 303px;"  %>
+		</div>
+		<br><br><br>
+		<div class="col-md-6">
+			<label>Membership Plan</label>
+			<br>
+			<%= select_tag "plan", options_from_collection_for_select(@plan, "id", "name"), style: "width: 303px;" %>
+		</div>
+<!-- 			<br><br><br>
+			<div class="col-md-6">
+				<label>Referral</label>
+				<br>
+				<%#= select_tag "referral", "<option>Referral</option><option>Non-referral</option>".html_safe, style: "width: 303px;" %>
+			</div> -->
+			<br><br><br>
+			<div class="form-group">
+				<%= submit_tag "Freelancers Report" %>
+			</div>
+		</div>
+	</div>
+	<% end %>

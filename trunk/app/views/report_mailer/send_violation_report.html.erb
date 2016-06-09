@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h3>Dear <%= @admin_name%>,</h3>
+    <p>
+      Report Violation from Buyer:&nbsp;&nbsp;&nbsp;
+      <a href="/account/user_public_profile?id=<%= @report.user.id%>">
+        <%= @report.user.full_name%></a>
+    </p>
+    <p>
+      Report Violation for Seller on his Bid:&nbsp;&nbsp;&nbsp;
+        <a href="/account/user_public_profile?id=<%= @report.bid.user.id%>">
+          <%= @report.bid.user.full_name%></a>
+    </p>
+    <p>
+      Report Violation Details:
+        <p style="padding-left:20px">
+          Project Id:&nbsp;&nbsp;&nbsp;
+            <%= @report.project.id %>
+        </p>
+        <p style="padding-left:20px">
+          Project Title:&nbsp;&nbsp;&nbsp;
+          <a href="<%="#{SITE_URL}/projects/#{@report.project.id}"%>">
+          <%= @report.project.full_title%>
+        </p>
+        <p style="padding-left:20px">
+          Project Description:
+            <p style="padding-left:20px">
+            <%= @report.project.description %>
+            </p>
+        </p>
+    </p>
+    </br></br></br>
+    <p>
+    	Sincerely,
+    </p>
+    <p>
+      <img src="<%= SITE_LOGO %>" height="35px" />
+    </p>
+    <p>
+      <%= EMAIL_SIGN_EMAIL %>
+    </p>
+    <p>
+     <%= EMAIL_SIGN_NUMBER%>
+    </p>
+  </body>
+</html>

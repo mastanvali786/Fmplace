@@ -1,0 +1,59 @@
+<style type="text/css">
+  #withdrawal-requests a {
+    color:blue
+  }  
+</style>
+
+<div style="color:#30a0be;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+  <span>
+    Withdrawal Requests
+  </span>
+</div>
+<table border="0" cellpadding="3" cellspacing="6" id="withdrawal-requests" style="padding-left:20px;">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Type</th>
+      <th>Receiver</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Requested On</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @requests.each do |request| %>
+      <tr>
+        <td>
+          <%= request.id %>
+        </td>
+        <td>
+          <%= request.klass %>
+        </td>
+        <td>
+          <%= request.requester.name %>
+        </td>
+        <td>
+          <%= number_to_currency request.amount %>
+        </td>
+        <td>
+          <%= request.status.titleize %>
+        </td>
+        <td>
+          <%= mos_day_year request.requested_on %>
+        </td>
+        <td>
+          <% if request.pending? %>
+            <% if request.invoiced? %>
+              <% unless request.paid? %>
+                <%= link_to "Make Payment", request.invoice.payer_view_url, class: "blank" %>
+              <% end %>
+            <% else %>
+              Invoice not ready, please check again later
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

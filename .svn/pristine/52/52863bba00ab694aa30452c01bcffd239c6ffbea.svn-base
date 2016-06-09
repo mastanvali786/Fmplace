@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<p>Hi <%=@buyer.visible_name%>,</p>
+
+<p>I just wanted to follow up on your project and see what you’ve decided or where you’re at in the decision making process.</p>
+
+	<p><b>Please reply with a quick note back.</b></p>
+
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

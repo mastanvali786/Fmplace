@@ -1,0 +1,2 @@
+class AuthorizeCreditDepositRequest < DepositRequest
+end

@@ -1,0 +1,150 @@
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render(:partial => '/projects/dashboard_header') %>
+        <aside class="user_left">
+          <%= render partial: "menu" %>
+        </aside>
+        <section class="row user_right">
+            <div class="col-md-7">
+                <h3 class="orange">My Preferences</h3>
+                <%# if current_user.seller? %>
+                <!-- Selected Categories are: --> <%# @category_ids.each do |i|%>
+                <%#= '<br>'.html_safe + i.name %>
+                <%#end%>
+                    <div class="row">
+                       <!--  <div class="col-md-12">
+                            <div class="pref_lbl">Choose category for your work <a href="javascript:void(0);" onClick="toggle_show('cat_sub');">Edit</a></div>
+                            <div class="pt_lbl">Select the category you would like to subscribe to.You will be notified via daily email if any results become available</div> -->
+                            <div style="display:none;padding:0px 0px 20px 0px;margin-top:-15px;" id="cat_sub">
+                                <%= form_for @user,:url=>'my_preferences',:html => {:"data-validate" => 'parsley'}  do |f| %>
+                                    <% if @user.approved == true %>
+                                        <table border="0" cellspacing="0" cellpadding="12" width="100%">
+                                            <tr valign="top">
+                                                <td colspan="2" style="padding:9px; padding-bottom:0px;font-family:Arial, Helvetica, sans-serif">
+                                                    <div class="emp_div"><i class="fa fa-envelope-o"></i>&nbsp;Email last sent: <strong style="color:#666666">Never</strong></div>
+                                                    <div><%=f.select :category_ids,options_for_select(Category.all.collect{ |u| [u.name, u.id] }, :selected => current_user.try(:category_ids)), {},{ :class => "select_box",:multiple => true, :size => 10 ,:id=>"catbox_1_list"} %></div>   
+                                                    <div style="display:none"><span style="float:right; font-family: Arial; font-size: 13px; padding-top:5px">Category number: <input type="text" id="cid" name="cid" style="font-family: Arial" size="6"/></span></div>
+                                                </td>
+                                            </tr>
+                                            <tr valign="top">
+                                                <td colspan="2">
+                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <div style="padding-bottom:3px;margin-top:-15px;font-family:Arial, Helvetica, sans-serif;"></div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div style="padding-top:16px;margin-top:-15px;color:#666666;" class="black"><label for="">
+                                                        <%=f.check_box :notify_category, :as => :boolean, :checked => current_user.try(:notify_category)%>Yes, I would like to opt-in via email based on my selected options</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="40%">
+                                                        <tr class="curn_save">
+                                                            <td width="26%"><%=f.submit 'Save',:type => :image, :src => "/assets/save1.jpg" %></td>
+                                                            <td width="74%"><a href="/account/my_preferences"><img src="/assets/cancel2.jpg" name="Image2" width="109" height="30" border="0"></a></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    <%  else %>
+                                        <table border="0" cellspacing="0" cellpadding="12" width="100%">
+                                            <tr valign="top">
+                                                <td>
+                                                    <div class="pt_lbl">
+                                                        <h3 class="orange"><p>You are not yet approved. Please contact admin.</p></h3>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    <% end  %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                <%# end %>
+
+                <div class="row">
+                    <div class="col-md-12">
+                	   <div class="pref_lbl">Currency <!-- <a href="javascript:void(0);" onClick="toggle_show('currency_div');">Edit</a> --></div>
+                        <div class="pt_lbl">USD</div>
+                	<!-- <div class="pt_lbl">Select your desired currency when viewing project and proposal listings.</div> -->
+                        <div style="display:none;padding:0px 0px 20px 0px;margin-top:-20px;" id="currency_div">
+                            <%= form_for @user,:url=>'my_preferences',:html => {:"data-validate" => 'parsley'}  do |f| %>
+                                <div style="padding:20px 0">
+                                    <table cellpadding="12" cellspacing="0" border="0" width="100%" align="center">
+                                      <tr>
+                                        <td>
+                                          <div>
+                                            <div style="padding-bottom:12px;color:#666666;"><%= SITE_NAME %> Currency: <strong style="font-family:Arial, Helvetica, sans-serif; font-size:12px;color:#666666;"><%=@currency unless @currency.blank?%></strong></div>
+                                            <div style="padding-bottom:3px"><strong style="color:#666666;">Currency Selection</strong></div>
+                                            
+                                            <div>
+                                             <%=f.select :currency ,options_for_select(Currency.all.collect{|u| [u.currency_name,u.currency_abbrev]},:selected=>current_user.try(:currency))%></div>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                </div>
+                              
+                                <table cellpadding="0" cellspacing="0" border="0" width="40%">
+                                    <tr class="curn_save">
+                                        <td width="26%"><%=f.submit 'Save',:type => :image, :src => "/assets/save1.jpg" %></td>
+                                        <td width="74%"><a href="/account/my_preferences"><img src="/assets/cancel2.jpg" name="Image2" width="109" height="30" border="0"></a></td>
+                                    </tr>
+                                </table>
+                           <% end %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pref_lbl">Time Zone Management <a href="javascript:void(0);" onClick="toggle_show('timezone_div');">Edit</a></div>
+                        <div class="pt_lbl">Select the time zone you want to be displayed.</div>
+                        <div style="display:none;padding:0px 0px 20px 0px;margin-top:-20px;" id="timezone_div">
+                            <%= form_for @user,:url=>"my_preferences",:html => {:"data-validate" => 'parsley'}  do |f| %>
+                                <div style="padding-top:22px;">
+                                    <table cellpadding="2" cellspacing="2" border="0" width="100%" align="center" class="time_zone">
+                                        <tr class="curn_save1">
+                                            <td valign="top" colspan="2"><div><strong style="color:#666666;">My Local Time</strong></div></td>
+                                        </tr>
+                                        <tr class="curn_save1">
+                                            <td  rowspan="2" valign="top"><div style="color:#999999"><%=Time.now.in_time_zone(current_user.try(:time_zone)).strftime("%Y-%d-%m %H:%M:%S %Z") unless current_user.try(:time_zone).blank?%></div>
+                                                <div><%=f.time_zone_select :time_zone, ActiveSupport::TimeZone.zones_map.values.collect{|z| z.name}.compact!,{select: current_user.try(:time_zone)}%></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <table cellpadding="0" cellspacing="0" border="0" width="40%">
+                                                    <tr class="curn_save">
+                                                        <td width="26%">
+                                                            <br><%=f.submit 'Save',:type => :image, :src => "/assets/save1.jpg" %>
+                                                        </td>
+                                                        <td width="74%"><br><a href="/account/my_preferences"><img src="/assets/cancel2.jpg" name="Image2" width="109" height="30" border="0"></a></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="col-md-5">
+                <%= render :partial=>'advertisements/show_ads', locals: { page_no: "8"} %>
+            </div>
+        </section>
+    </div>
+</div>

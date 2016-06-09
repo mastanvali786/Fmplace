@@ -1,0 +1,12 @@
+<% p = profile_complete %>
+<div class=" col-md-4">
+	<div class="pro_complete">
+		<h4 class="atxt_lbl gotham_medium">Profile Completeness</h4>
+		<div class="seperator"></div>
+		<div class="profile_complete">
+			<input class="knob" data-fgColor="#fe5a01" data-thickness=".1" data-width="150" readonly value="<%= p%>">
+			<br><br>
+			<%= link_to 'EDIT PROFILE',user_info_path, :class=>"btn btn-warning alg_reg" %>
+		</div>
+	</div>
+</div>

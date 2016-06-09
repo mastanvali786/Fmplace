@@ -1,0 +1,2 @@
+class PayFastInvoice < MilestoneInvoice
+end

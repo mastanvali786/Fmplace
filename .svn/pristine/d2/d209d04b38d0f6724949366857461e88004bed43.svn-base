@@ -1,0 +1,469 @@
+$(document).ready(function() {
+  $('.country_class').change(function(){
+    var country_id = $('.country_class').val();
+    var mydata = {country_id: country_id}
+    $.ajax({
+      url: "/projects/update_states",
+      type: "post",
+      dataType: "json",
+      data: mydata,
+      success: function(data) {
+        $('.state_div').show();
+        $('.state_class').find('option').remove();
+        $('.state_class').append(
+           $("<option></option>")
+           .attr("value","")
+           .text("Please select city")
+           );
+        $.each( data, function( key, value ) {
+         $('.state_class').append(
+           $("<option></option>")
+           .attr("value", value.id)
+           .text(value.state_name)
+           );
+       });
+      },
+      error: function() {
+        alert("Please Select state.")
+      }
+    });
+  })
+
+  $('.country_class1').change(function(){
+    var country_id = $('.country_class1').val();
+    var mydata = {country_id: country_id}
+    $.ajax({
+      url: "/projects/update_states",
+      type: "post",
+      dataType: "json",
+      data: mydata,
+      success: function(data) {
+        $('.state_div1').show();
+        $('.state_class1').find('option').remove();
+        // $('.state_class1').append(
+        //    $("<option></option>")
+        //    .attr("value","")
+        //    .text("Please select state")
+        //    );
+        $('.state_class1').append(
+           $("<option></option>")
+           .attr("value","")
+           .text("All")
+           );
+        $.each( data, function( key, value ) {
+         $('.state_class1').append(
+           $("<option></option>")
+           .attr("value", value.id)
+           .text(value.state_name)
+           );
+       });
+      },
+      error: function() {
+        alert("Please Select city.")
+      }
+    });
+  })
+
+  $('.project_categories_options').change(function(){
+    var category_id = $('.project_categories_options').val();
+    var mydata = {category_id: category_id}
+    $.ajax({
+      url: "/projects/update_subcategoires",
+      type: "post",
+      dataType: "json",
+      data: mydata,
+      success: function(data) {
+        $('.project_subcategories_options').find('option:gt(0)').remove();
+        $('#subcategory_div').show();
+        $.each( data, function( key, value ) {
+         $('.project_subcategories_options').append(
+           $("<option></option>")
+           .attr("value", value.id)
+           .text(value.name)
+           );
+       });
+      },
+      error: function() {
+        alert("Please Select Category.")
+      }
+    });
+  })
+
+  $("input[name=project_budget]:radio").change(function () {
+    var id = $("input[name=project_budget]:checked").val();
+    var mydata = {id: id}
+    $.ajax({
+      url: "/projects/update_project_budget",
+      type: "post",
+      dataType: "json",
+      data: mydata,
+      success: function(data) {
+        $('.project_budget_options').find('option').remove();
+
+        $('.project_budget_options').append(
+           $("<option></option>")
+           .attr("value", " ")
+           .text("Select Budget")
+           );
+
+        $.each( data, function( key, value ) {
+         $('.project_budget_options').append(
+           $("<option></option>")
+           .attr("value", value.id)
+           .text(value.name)
+           );
+       });
+      },
+      error: function() {
+        alert("Please Select Budget Type.")
+      }
+    });
+  })
+});
+
+function getUrlVars()
+{
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for(var i = 0; i < hashes.length; i++)
+  {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }
+  return vars;
+}
+
+function hide_popup(id)
+{
+  $(id).hide('slow');
+  location.reload();
+}
+
+function search_shop_no_pref(id){
+  $('#'+id).hide('slow');
+  sessionStorage.setItem("location_pref", false);
+  search_shops_on_filter();
+}
+
+function hide_popup_without_load(id)
+{
+  $('#'+id).hide('slow');
+}
+function show_popup(id)
+{
+  $('#'+id).show('slow');
+}
+function categorysearch(val)
+{
+  sessionStorage.setItem("category", val);
+  search_shops_on_filter();
+}
+function subcategorysearch(val)
+{
+  sessionStorage.setItem("subcategory", val);
+  search_shops_on_filter();
+}
+
+function location_preference()
+{
+  sessionStorage.setItem("location_pref", true);
+  sessionStorage.setItem("country", $( "#post_country option:selected" ).val());
+  sessionStorage.setItem("state", $( "#post_state option:selected" ).val());
+  search_shops_on_filter();
+}
+
+function search_shops_on_filter(){
+
+  my_form=document.createElement('FORM');
+  my_form.name='myForm';
+  my_form.method='POST';
+  my_form.action='/projects/find_freelancers';
+
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='authenticity_token';
+  my_tb.value= AUTH_TOKEN;
+  my_form.appendChild(my_tb);
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='find_category';
+  my_tb.value= sessionStorage.category ? sessionStorage.category : '';
+  my_form.appendChild(my_tb);
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='find_subcategory';
+  my_tb.value= sessionStorage.subcategory ? sessionStorage.subcategory : '';
+  my_form.appendChild(my_tb);
+  document.body.appendChild(my_form);
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='location_pref';
+  my_tb.value= sessionStorage.location_pref ? sessionStorage.location_pref : '';
+  my_form.appendChild(my_tb);
+  document.body.appendChild(my_form);
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='find_check';
+  my_tb.value= sessionStorage.find_check ? sessionStorage.find_check : '';
+  my_form.appendChild(my_tb);
+  document.body.appendChild(my_form);
+
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='feed';
+  my_tb.value= sessionStorage.feed ? sessionStorage.feed : '';
+  my_form.appendChild(my_tb);
+  document.body.appendChild(my_form);
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='country';
+  my_tb.value= sessionStorage.country ? sessionStorage.country : '';
+  my_form.appendChild(my_tb);
+  document.body.appendChild(my_form);
+
+  my_tb=document.createElement('INPUT');
+  my_tb.type='TEXT';
+  my_tb.name='state';
+  my_tb.value= sessionStorage.state ? sessionStorage.state : '';
+  my_form.appendChild(my_tb);
+  document.body.appendChild(my_form);
+  
+  my_form.submit();
+}
+
+
+
+function show_map() {
+var country = sessionStorage.getItem("country");
+var state = sessionStorage.getItem("state");
+var feed = sessionStorage.getItem("feed");
+var find_check = sessionStorage.getItem("find_check");
+var location_pref = sessionStorage.getItem("location_pref");
+var subcategory = sessionStorage.getItem("subcategory");
+var category = sessionStorage.getItem("category");
+if ((typeof state !== 'undefined') && (state != '') && (typeof location_pref !== 'undefined')) {
+ var mydata = {authenticity_token: AUTH_TOKEN,map:'map',state:state,location_pref:location_pref}  
+}
+ else if ((typeof country !== 'undefined') &&  (typeof location_pref !== 'undefined')){
+ var mydata = {authenticity_token: AUTH_TOKEN,map:'map',country:country,location_pref:location_pref}
+}
+else if (typeof feed !== 'undefined') {
+ var mydata = {authenticity_token: AUTH_TOKEN,map:'map',feed:feed}  
+}
+else if (typeof find_check !== 'undefined') {
+ var mydata = {authenticity_token: AUTH_TOKEN,map:'map',find_check:find_check}  
+}
+else if (typeof subcategory !== 'undefined') {
+  var mydata = {authenticity_token: AUTH_TOKEN,map:'map',subcategory:subcategory} 
+}
+else if (typeof category !== 'undefined') {
+ var mydata = {authenticity_token: AUTH_TOKEN,map:'map',category:category}  
+}
+else
+{
+var mydata = {authenticity_token: AUTH_TOKEN,map:'map'}   
+}
+  $('#map-canvas').show();
+  $('.my_pro').show();
+  $.ajax({
+    type:'POST',
+    url:window.location,
+
+    data: mydata,
+    success:function(data){
+      initialize(data);
+    }
+  });
+}
+
+var map;
+
+function initialize(mar) {
+  var country = "United States"
+  var mapOptions = {
+    center: new google.maps.LatLng(32.1, -95.7),
+    minZoom: 2, 
+    zoom: 5,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var infoWindow = new google.maps.InfoWindow();
+  var markerBounds = new google.maps.LatLngBounds();
+  var myLatlng, i;
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
+  //map.setZoom(1);
+  google.maps.event.addListenerOnce(map, 'bounds_changed', function() {
+    map.setZoom(2);
+  });
+  var markers = [];
+  $.each( mar, function( key, value ) {
+    var data = value
+    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Click to view details'
+    });
+    markerBounds.extend(myLatlng);
+    //markers.push(marker); 
+
+    (function(marker, data) {
+    // Attaching a click event to the current marker
+    google.maps.event.addListener(marker, "click", function(e) {
+      var content='Freelancer Name : '+data.visible_name+'<br/>Location : '+data.address+'<br/>'+data.state+' , '+data.country_name+' , '+data.zipcode;
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+    });
+  })(marker, data);
+});
+//var markerCluster = new MarkerClusterer(map, markers);
+map.fitBounds(markerBounds);
+}
+
+$(document).ready(function() {
+  $('#map-canvas').hide();
+  $('#map').hide();
+  var feed = getParameterByName('feed');
+  if(feed == ''){
+    $('input:radio[name=ratings][value=all]').attr('checked', true);
+  }else{
+    $('input:radio[name=ratings][value='+feed+']').attr('checked', true);
+  }
+  var url= window.location.href;
+  if(/=/i.test(url)){
+    var result = url.split('=').pop();
+    var status = getParameterByName("find_status");
+    var find_posted = getParameterByName('find_posted');
+    var find_category = getParameterByName("find_category");
+    var find_subcategory = getParameterByName("find_subcategory");
+    
+    if (status == ''){
+      $("#search_status_project").val('all');  
+    }else{
+      $("#search_status_project").val(status);
+    }
+
+    if(find_posted == ''){
+     $("#search_posted_project").val('all');  
+   }else{
+     $("#search_posted_project").val(find_posted);
+   }
+
+   if (find_category == ''){
+    $("#person_category").val('');   
+  }else{
+    $("#person_category").val(find_category);
+  }
+
+  if (find_subcategory == ''){
+   $("#subperson_subcategory").val('');  
+ }else{
+  $("#subcategory_div").show();
+  $("#subperson_subcategory").val(find_subcategory);
+}
+}
+$(".knob").knob({
+  'dynamicDraw': true,
+  'min': 0, 'max':100,
+  'thickness': 0.2,
+  'tickColorizeValues': true,
+  'readOnly': true,
+  'skin': 'tron',
+  'fgColor': '#fe5a01', 
+  'inputColor':'#9d9d9d',
+  'bgColor': '#f5f5f5',
+  'width' : 150,
+  'height' : 150,
+  'draw' : function () {
+    $(this.i).val( parseInt(this.cv) + '%');
+  }
+});
+});
+
+function rehire_freelancer(id){
+  freelance_id = id
+  $.ajax({
+      url: "/projects/rehire_freelancer",
+      type: "post",
+      dataType: "json",
+      data: {id: freelance_id}
+  });
+}
+
+function open_modal_popup(){
+alert("Ghayathri :-P");
+}
+window.ParsleyConfig = {
+    validators: {
+        dateconditionrequired: {
+            fn: function (value, requirements) {
+                var start_date, end_date;
+                if ($('#certificate_start_date').val()) {
+                    start_date = $('#certificate_start_date').val();
+                    end_date = $('#certificate_end_date').val();
+                }
+                else if ($('#user_experience_start_date').val()) {
+                    start_date = $('#user_experience_start_date').val();
+                    end_date = $('#user_experience_end_date').val();
+                } else if ($('#education_start_date').val()) {
+                    start_date = $('#education_start_date').val();
+                    end_date = $('#education_end_date').val();
+                } else if ($('#user_education_start_date').val()) {
+                    start_date = $('#user_education_start_date').val();
+                    end_date = $('#user_education_end_date').val();
+                }
+                var sd_res = start_date.indexOf(".");
+                var ed_res = end_date.indexOf(".");
+                if (sd_res == 2 || ed_res == 2) {
+                    if (sd_res == 2) {
+                        var ss1 = start_date.substring(3, 5);
+                        var ss2 = start_date.substring(0, 2);
+                        var ss3 = start_date.substring(6, 10);
+                        var formated_start_date = (ss1 + '/' + ss2 + '/' + ss3);
+                        startdatefunction(formated_start_date);
+                    } else {
+                        startdatefunction(start_date);
+                    }
+                    if (ed_res == 2) {
+                        var se1 = end_date.substring(3, 5);
+                        var se2 = end_date.substring(0, 2);
+                        var se3 = end_date.substring(6, 10);
+                        var formated_end_date = (se1 + '/' + se2 + '/' + se3);
+                        enddatefunction(formated_end_date);
+                    } else {
+                        enddatefunction(end_date);
+                    }
+                } else {
+                    startdatefunction(start_date);
+                    enddatefunction(end_date);
+                }
+                function startdatefunction(start)
+                {
+                    new_start_date = new Date(start);
+                }
+                function enddatefunction(end)
+                {
+                    new_end_date = new Date(end);
+                }
+                if (new_start_date > new_end_date)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        },
+        priority: 32
+    }
+};

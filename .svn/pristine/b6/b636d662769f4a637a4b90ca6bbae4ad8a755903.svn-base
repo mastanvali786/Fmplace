@@ -1,0 +1,66 @@
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+if(window.opener) {
+    
+    window.opener.location.reload(true);
+    window.close()
+  }
+  </script>
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render(:partial => '/projects/dashboard_header') %>
+        <!-- Side Menu -->
+        <aside class="user_left">
+            <%= render(:partial => '/account/menu') %>
+        </aside>
+        <section class="row user_right">
+            <h3 class="orange" style="padding-left: 10px;">Referral Program</h3>
+            <div class="pull-right">
+                <%= link_to "My Referral Account", referral_account_path %>
+            </div>
+            <h3 class="orange" style="padding-left: 10px;">Invite Friends and Earn $10 or 10 Connects</h3>
+            <div class="row">
+                <div class="col-md-12 pprof">
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="/assets/1.png" alt="..." >
+                        </div>
+                        <div class="media-body">
+                            <div >For every qualified referral you invite you'll earn</div>
+                            <div>$10 or 10 Connects.Also,any Freelancer you</div>
+                            <div><%= SITE_NAME_SHORT%> Bidding <%= DISPLAY_LABEL_SHORT %></div>
+                            <div>bring will receive 10 Connects as a gift from you!</div>
+                            <div style="padding-top: 10px;">There's no limit on the rewards you can earn!</div>
+                            <div style="padding-top: 10px;">
+                                <a href = "https://www.facebook.com/dialog/feed?app_id=564064217029604&display=popup&caption='Testing for referelprogram'&link=<%= ENV["APPLICATION_URL"] %>/homes/sign_up?ref_id=<%= current_user.id %>%26source=Facebook&redirect_uri=<%= SITE_URL%>/referal_program/referral_program" onclick = "window.open(this.href, 'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
+                                    <img src="/assets/2.png" alt="..." >
+                                </a>
+                                <a href = "https://twitter.com/intent/tweet?url=<%= ENV["APPLICATION_URL"] %>/homes/sign_up?ref_id=<%= current_user.id %>%26source=Twitter&via=Auctionsoftware&text=Working in ReverseAuction" onclick = "window.open(this.href, 'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
+                                    <img src="/assets/3.png" alt="..." >
+                                </a>
+                            <a href="https://plus.google.com/share?url=<%= ENV["APPLICATION_URL"] %>/homes/sign_up?ref_id=<%= current_user.id %>%26source=Google-plus"  onclick = "window.open(this.href, 'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
+                                     <img src="/assets/4.png" alt="..." >
+                                </a>
+                            </div>
+                        </div>
+                        <div class="seperator" style="width: 792px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="orange" >What is this?</h3>
+                    If you enjoy being a part of us , we want you to share your experiences to your world.For every Client that you bring you'll earn $10.For every freelancer you bring onto reverse auction,you'll earn 10 Connects,and you'll also give them a gift of 10 Connects to help them to get started.It's our way of saying "thankyou" for sharing the love and spreading the word.
+                </div>
+                <div class="col-md-4">
+                    <h3 class="orange" >How do I get started?</h3>
+                    Share with your friends using the tools above.We take care of all tracking details and credit you automatically.
+                </div>
+                <div class="col-md-4">
+                    <h3 class="orange" >What are the rules?</h3>
+                    If you refer a client,all they need to do is register and make a payment of at least $10, and you'll receive $10.For freelancer referrals,all they need to do is register,verify their email and you'll receive 10 Connects.As an added bonus,they'll also receive 10 Connects as a gift from you.
+                </div>
+            </div>
+      </section>
+    </div>
+</div>

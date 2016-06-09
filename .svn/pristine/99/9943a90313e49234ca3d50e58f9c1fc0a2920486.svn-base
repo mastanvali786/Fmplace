@@ -1,0 +1,106 @@
+class RegistrationsController < Devise::RegistrationsController
+  before_filter :authenticate_user!, :only => :token
+   prepend_before_filter :require_no_authentication, only: [ :new, :cancel ]
+
+  def new
+    super
+  end
+
+  def create
+    if User.find_by_email(params[:user][:email])
+      flash[:error] = "Email Address is Already Registered With Us."
+      if params[:platform] == "mobileApp"
+        render json: {result: false, msg: "Email Address is Already Registered With Us."}
+      else
+        redirect_to_his_path(params[:user][:project])
+      end
+    else
+      if params[:user][:ref_id].present?
+         @user = User.new(user_params_ref)
+       else
+      @user = User.new(user_params)
+    end
+      if params[:platform] == "mobileApp"
+        @user.skip_confirmation!
+      end
+      if @user.save
+        if params[:user][:project] && @user.role_id.eql?(2)
+          modify_date_params
+          @project = @user.projects.create(project_params)
+          if @project
+            post_project_attachment(params[:user])
+            send_after_project_create(@project)
+          end
+        end
+        flash[:notice] = "A confirmation link has been sent to #{params[:user][:email]}. Click the link to activate your account."
+        if params[:platform] == "mobileApp"
+          render json: {result: true, user_id: @user.id, role_id: @user.role_id, msg: ""}
+        else
+          if @user.role_id.eql?(1)
+            redirect_to homes_freelancer_confirmation_path
+          else
+            redirect_to homes_user_confirmation_path
+          end
+        end
+      else
+        flash[:error] = "Please Try After Some Time."
+        if params[:platform] == "mobileApp"
+          render json: {result: false, msg: "Please Try After Some Time."}
+        else
+          redirect_to_his_path(params[:user][:project])
+        end
+      end
+    end
+  end
+
+  def redirect_to_his_path(user_project)
+    if user_project
+      redirect_to users_signup_buyer_path
+    else
+      redirect_to users_signup_seller_path
+    end
+  end
+
+  def update
+    super
+  end
+
+  def login_as_admin
+    session[:admin_login] = false
+    sign_out current_user
+    redirect_to admin_users_path
+  end
+
+  private
+
+  def user_params_ref
+    params.require(:user).permit(:first_name,:last_name, :user_name,
+     :phone, :display_name,:country_id, :state_id, :zipcode,
+     :city, :address,:role_id,:profile_photo,:video_url,:time_zone,
+     :lat,:lng,:currency,:business_started,:category_ids,:notify_category,:day_light_saving,
+     :tagline, :hourly_rate,:summary,:detail_info,:skill_ids,:notify_skill,
+     :approved,:visible,:email,:password,:password_confirmation, :membership_plan_id,:ref_id,:referral_source)
+  end
+  def user_params
+    params.require(:user).permit(:first_name,:last_name, :user_name,
+     :phone, :display_name,:country_id, :state_id, :zipcode,
+     :city, :address,:role_id,:profile_photo,:video_url,:time_zone,
+     :lat,:lng,:currency,:business_started,:category_ids,:notify_category,:day_light_saving,
+     :tagline, :hourly_rate,:summary,:detail_info,:skill_ids,:notify_skill,
+     :approved,:visible,:email,:password,:password_confirmation, :membership_plan_id)
+  end
+  def project_params
+    params.require(:user).require(:project).permit(:title, :description, :business_type_id,
+      :project_photo, :category_id, :subcategory_id,:budget_option_id,:project_time_frame_id,:start_date, :end_date,
+      :country_id, :state_id, :city,:zip_code,:user_id,:visible,
+      { project_tag_ids: [], skill_tags_ids: []})
+  end
+
+  def modify_date_params
+    unless isint(params[:user][:project][:state_id])
+      params[:user][:project][:state_id] = State.find_by_state_code(params[:user][:project][:state_id]).try(:id)
+    end
+    params[:user][:project][:project_tag_ids].reject!(&:blank?) if params[:user][:project][:project_tag_ids]
+    params[:user][:project][:skill_tags_ids].reject!(&:blank?) if params[:user][:project][:skill_tags_ids]
+  end
+end

@@ -1,0 +1,75 @@
+<% if (user.user_biography.present? && user.domain_expertise.present? && user.user_skill.present? && user.user_experiences.present? && user.user_educations.present?) %>
+
+<div class="desc_pb">
+    <h4 class="pref_lbl">Biography</h4>
+	<p class="pt_lbl notes">
+		<%= user.user_biography.try(:summary) %>
+	</p>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl">Domain expertise</h4>
+	<p class="pt_lbl notes">
+		<%= user.domain_expertise.try(:title) %>
+	</p>
+	<p class="pt_lbl notes">
+		Range of Expertise:
+		<br>
+		<%= user.domain_expertise.try(:range) %>
+	</p>
+	<p class="pt_lbl notes">
+		<%= user.domain_expertise.try(:description) %>
+	</p>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl ">Skills</h4>
+	<% if user.user_skill.present? %>
+		<% user.user_skill.known_skills.reject(&:empty?).each do |skill| %>
+	        <% @skill_category = SkillTag.find_by_id(skill) %>
+            	<div class="label label-default "><%= @skill_category.name %></div>
+	     <% end %>
+	<% end %>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl">Years of experience</h4>
+	<div class="media">
+		<% user.user_experiences.each do |exp| %>
+			<div class="media-heading main-header-field notes"><%= exp.company_name %></div>
+			<div class="sub-header-field notes"><%= exp.job_title %></div>
+			<div><%= exp.start_date.strftime("%B %Y") %>  -  <%= exp.end_date.strftime("%B %Y") %></div>
+			<div class="notes"><%= exp.description %></div>
+			<!-- <div class="dots"></div> -->
+			<br>
+		<% end %>
+	</div>
+</div>
+
+<div class="seperator"></div>
+
+<div class="desc_pb">
+	<h4 class="pref_lbl">Education <a href="" class="pull-right"></a>
+	</h4>
+	<div class="media">
+		<% user.user_educations.each do |edu| %>
+			<div class="media-heading main-header-field notes"><%= edu.college_name %></div>
+			<div class="sub-header-field notes"><%= edu.user_degree_name %></div>
+			<div class="sub-header-field notes"><%= edu.field_of_study %></div>
+			<div class="notes"><%= edu.start_date.strftime("%B %Y") %>-<%= edu.end_date.strftime("%B %Y") %></div>
+			<div class="notes"><%= edu.activities_societies %></div>
+			<div class="notes"><%= edu.description %></div>
+			<br>
+		<% end %>
+	</div>
+</div>
+
+<% else %>
+	Expert profile has not been updated
+<% end %>

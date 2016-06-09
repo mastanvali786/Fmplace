@@ -1,0 +1,10 @@
+<div class="main_container">
+  <div class="container user_profile">
+    <%= render(:partial => '/projects/dashboard_header') %>
+    <aside class="user_left">
+        <%= render partial: "account/menu" %>
+    </aside>
+    <section class="row user_right">
+      <h3 class="orange">User Information</h3><h3><%= link_to 'Edit' ,user_info_edit_path,:class=>'orange'%></h3> 
+</section>
+</div>

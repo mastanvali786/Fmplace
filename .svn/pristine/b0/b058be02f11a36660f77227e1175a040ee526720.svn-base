@@ -1,0 +1,89 @@
+<div class="main_container">
+    <div class="container clearfix post_project">
+        <section class="left_con">
+
+            <%= form_for(@project,:html => {"data-parsley-validate" => true}) do |f| %>
+                <%= f.hidden_field :user_id, :value => current_user.id%>
+                <%= render(:partial => 'shared/project_post_form', :locals => {:f => f}) %>
+                <div class="row">
+                    <div class="col-md-12 alg_reg">
+                        <input type="checkbox" id="terms_post"/> I agree to the <a href="<%= homes_terms_path %>" target="_blank">Terms and Conditions</a>
+                    </div>
+                </div>
+                <% if params[:rehire].present? %>
+                    <%= f.hidden_field :rehired_freelancer, :value => params[:rehire] %>
+                    <%= f.hidden_field :rehire_project, :value => true %>
+                <% end %>
+                <div class="row">
+                    <div class="col-md-12">
+                        <% if params[:rehire].present? %>
+                            <%= f.submit 'Rehire',:class=>"btn btn-warning bget_started clr343",id: 'submit_new_project', :disabled=>"disabled", name: "rehire" %>
+                        <% else %>
+                            <%= f.submit 'Post Your Project',:class=>"btn btn-warning bget_started clr343",id: 'submit_new_project', :disabled=>"disabled" %>
+                            <% if current_user.projects.present? %>
+                            <button class="btn btn-default rehire_button" id = "hire_freelancer"  data-toggle="modal" data-target=".bs-example-modal-lg">No thanks, I want to rehire a freelancer</button>
+                            <!-- <button class="btn btn-default rehire_button" id = "hire_freelancer" onclick="open_modal_popup();">No thanks, I want to rehire a freelan</button> -->
+                            <% end %>
+                        <% end %>
+                    </div>
+                </div>
+            <% end %>
+        </section>
+        
+        <aside class="right_con">
+            <div class="gray_box hig175px">
+                <h5 class="gotham_medium light_blck ">Hire with Confidence</h5>
+                <p class="alg_reg need_help light_black">Tell us what you need and we'll send you quotes from the best <%= DISPLAY_LABELS %> around.</p>
+            </div>
+            <div class="gotham_medium need_help light_black pad145w">
+                Need help? Call us <%= PHONE_NUMBER%> or email <a href="mailto:<%= SUPORT_EMAIL%>"><%= SUPORT_EMAIL%></a>
+                <br><br>
+            </div>
+            <%= render :partial=>'advertisements/show_ads', locals: { page_no: "4"} %>
+        </aside>
+    </div>  
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+        <h4 class="modal-title modal_heading" id="myModalLabel">Who do  you want to rehire for this job?</h4>
+        <div class="modal-body">
+            <div class="col-md-12">
+                <% User.sellers.each do |seller| %>
+                    <div class="col-md-5 well well-sm freelancer_list" >
+                        <div class="nppro_img">
+                            <a href="/account/user_public_profile?id=<%= seller.id %>">
+                                <% if seller.profile_photo &&  seller.profile_photo.blank? %>
+                                    <img src="/assets/nophoto2.gif" border="0" alt="" class="profile_photo"/>
+                                <% else %>
+                                    <img src=<%= seller.profile_photo%> border="0" alt="" class="profile_photo"/>
+                                <% end %>
+                            </a>
+                            <div class="freelancer_list_details">
+                                <div>
+                                    Freelancer Name - <%= seller.full_name  %>
+                                    <br>
+                                    <%= seller.full_location %>
+                                </div>
+                                <div class="pull-right">
+                                    <input type="radio" name="<%= seller.id %>" value="<%= seller.id %>"><br>
+                                </div>
+                                <br>
+                                <div class="">
+                                    Reviews: <%= render :partial => "shared/user_rating", :locals => { :user => seller } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+            <div class="modal_footer">
+                <button type="button" class="btn btn-warning" onclick="rehire_freelancer(2);">Rehire</button>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

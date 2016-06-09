@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<p>Hi <b><%= @project.seller.visible_name %>,</b></p>
+
+<p>We’re pleased to tell you that the Client has awarded the following project to your Freelancer:</p>
+<p>Project Details</p>
+  <p><b>Project Title:</b> <%= @project.full_title %></p>
+  <p><b>Category:</b> <%= @project.category_name %> </p>
+  <p><b>Subcategory:</b> <%= @project.subcategory_name %> </p>
+  <p><b>Project Tags:</b> <%= @project.tags %></p>
+  <p><b>Skills Required:</b> <%= @project.skills %></p>
+  <p><b>Budget:</b> <%= @project.budget %></p>
+  <p><b>Estimated Time Frame:</b> <%= @project.estimated_time %></p>
+  <p><b>Location:</b> <%= @project.location %></p>
+  <p><b>Description:</b> <%= @project.description %> </p>
+<p><b>Your Proposal:</b></p>
+<p><b>Details:<b><%= @bid.details %></p>
+<p><b>Delivery Timeline:</b> <%= estimated_days_display @bid.estimated_days %></p>
+<p><b>Bid Amount:</b>US $<%= @bid.proposed_amount%> </p>
+<p><b>Earn Amount:</b>US $<%= @bid.earned_amount%> </p>
+
+<p>Here are your next steps:</p>
+	<ul>
+		<ol>Discuss milestones (payment stages) with Client</ol>
+		<ol>Create milestones</a> in the project’s workroom by <a href="<%= @project.workroom_url%>">clicking here</a></ol>
+	</ul>
+
+<p><a href="<%=@how_it_work_link%>">Here’s</a> a 1 minute video showing those next steps in action.</p>
+
+<p>If you have any questions, don’t hesitate to ask.</p>
+
+<p>Sincerely,</p>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p><%= EMAIL_SIGN_EMAIL %></p>
+<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

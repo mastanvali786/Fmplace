@@ -1,0 +1,65 @@
+class BidPdf < Prawn::Document
+	def initialize(bid ,view, logo)
+		super()
+		@bid = bid
+		@project = @bid.project
+		@project_user = @project.user
+		@user = @bid.user
+		@view = view
+		# Logo
+		image logo
+		move_down 30
+		# Heading
+		font_size 15
+		text "Project and Quote Details", :align => :center
+		move_down 30
+		# Project Details
+		font_size 15
+		text "Project Details:"
+		move_down 15
+		font_size 10
+		text "Project Title:  #{@project.full_title}"
+		move_down 15
+		text "Project ID:  #{@project.id}"
+		move_down 15
+		text "Category: #{@project.category_name}"
+		move_down 15
+		text "Subcategory: #{@project.subcategory_name}"
+		move_down 15
+		text "Project Tags: #{@project.tags}"
+		move_down 15
+		text "Skills Required: #{@project.skills}"
+		move_down 15
+		text "Budget: #{@project.budget}"
+		move_down 15
+		text "Estimated Time Frame: #{@project.estimated_time}"
+		move_down 15
+		text "Location: #{@project.location}"
+		move_down 15
+		text "Project Status: #{@project.project_state}"
+		move_down 15
+		font_size 15
+		text "Client Details:"
+		font_size 10
+		move_down 15
+		text "Client Name: #{@project.buyer.visible_name}"
+		move_down 15
+		text "Posted Date:  #{@project.created_at.in_time_zone(@project_user.try(:time_zone)).strftime("%e %b %Y, %I:%M %p")}"
+		move_down 15
+		text "Bidding Ends at:  #{@project.end_date.in_time_zone(@project_user.try(:time_zone)).strftime("%e %b %Y, %I:%M %p")}"
+		move_down 20
+		font_size 15
+		text "Freelancer Details:"
+		move_down 15
+		font_size 10
+		text "Freelancer Name: #{@user.visible_name}"
+		move_down 15
+		text "Earnings: US $#{@user.earnings}"
+		move_down 15
+		text "Projects: 1 Project"
+		move_down 15
+		text "Quote Details: #{@bid.details}"
+		move_down 15
+		text "Bid Proposed Amount: #{@bid.proposed_amount}"
+	end
+end

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+	<p>Hi <%= @admin_name %>,</p>
+
+	<p>Message From:&nbsp;<%=@sender.visible_name%></p>
+	<p>Message To:&nbsp;<%=@receiver.visible_name%></p>
+	<p>Message Body:&nbsp;<%= @message.body%></p>
+
+	<img src="<%=SITE_LOGO%>" height="35px" />
+	<p><%=EMAIL_SIGN_EMAIL%></p>
+	<p><%=EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

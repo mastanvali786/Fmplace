@@ -1,0 +1,2 @@
+class BrainTreeInvoice < MilestoneInvoice
+end

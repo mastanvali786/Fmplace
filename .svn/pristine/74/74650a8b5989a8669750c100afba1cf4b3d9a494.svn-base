@@ -1,0 +1,69 @@
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-4 col-md-5">
+				<div class="f-logo">
+					<% logo = get_logo %>
+         <% if logo.present? %>
+							<% if current_user %>
+								<%= link_to image_tag(logo.thumb,:class=>'logo img-responsive'),projects_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% else %>
+								<%= link_to image_tag(logo.thumb,:class=>'logo img-responsive'),root_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% end %>
+						<% else %>
+							<% if current_user %>
+								<%= link_to image_tag("logo.png",:class=>'logo img-responsive'),projects_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% else %>
+								<%= link_to image_tag("logo.png",:class=>'logo img-responsive'),root_path,:class=>"navbar-brand", style:'width: 336px!important'%>
+							<% end %>
+
+						<% end %>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-3 col-md-2">
+				<h5 class="gotham_medium ftw500">Company</h5>
+				<ul>
+					<li>
+						<%= link_to 'About',homes_about_us_path,:class=>"alg_reg light_blck ftw500"%>
+					</li>
+					<li>
+						<%= link_to 'Contact',contact_path,:class=>"alg_reg light_blck ftw500"%>
+					</li>
+					<li>
+						<%=link_to 'News',homes_news_path,:class=>'alg_reg light_blck ftw500'%>
+					</li>
+					<li>
+						<%= link_to "Terms and Conditions", homes_terms_path, class: 'alg_reg light_blck ftw500' %>
+					</li>
+				</ul>
+			</div>
+			<div class="col-xs-6 col-sm-3 col-md-2">
+				<h5 class="gotham_medium ftw500">Services</h5>
+				<ul>
+					<li>
+						<%=link_to 'How it Works',homes_how_it_works_path,:class=>'alg_reg light_blck ftw500'%>
+					</li>
+					<li>
+						<%=link_to 'For Freelancers',homes_freelancers_path,:class=>'alg_reg light_blck ftw500'%>
+					</li>
+					<li>
+						<%=link_to 'FAQ',homes_faq_path,:class=>'alg_reg light_blck ftw500'%>
+					</li>
+					<li>
+						<%= link_to "Privacy", homes_privacy_path, class: 'alg_reg light_blck ftw500' %>
+					</li>
+				</ul>
+			</div>
+			<div class="col-sm-2 col-md-3 call_us">
+				<div class="gotham_medium lcall_us ftw500">Contact Us</div>
+				<div class="gotham_medium cu_num orange ftw500"><%= PHONE_NUMBER %></div>
+				<div class="gotham_medium orange ftw500"><%= SUPORT_EMAIL %></div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container copyright text-center">
+	<div class="row">
+		<div class="">© AuctionSoftware.com 2014-2015, All rights reserved</div>
+	</div>
+</div>

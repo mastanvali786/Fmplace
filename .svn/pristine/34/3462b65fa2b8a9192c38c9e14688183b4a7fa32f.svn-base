@@ -1,0 +1,87 @@
+module BidsHelper
+	
+  ESTIMATED_DAYS = { 
+   1 => "Within 24 hours",
+   3 => "Within 3 days",
+   7 => "Within 1 week",
+   14 => "Within 2 weeks",
+   21 => "Within 3 weeks",
+   30 => "Within 1 month",
+   60 => "Within 2 months",
+   90 => "Within 3 months",
+   100 => "More than 3 months"
+  }
+  def estimated_days_display(days)
+    ESTIMATED_DAYS[days]
+  end
+  # following methods is for seller role only
+
+  def bid_accepted?(project_id = 0)
+    project = Project.find_by_id(project_id)
+    if project.project_seller && project.project_seller.user.try(:id) == current_user.try(:id)
+      return project.project_seller.bid.accepted
+    else 
+      return false
+    end
+  end
+
+  def my_bid?(bid)
+    bid.user.try(:id) == current_user.id
+  end
+
+  def bid_awarded?(project_id = 0)
+    project = Project.find_by_id(project_id)
+    if project.project_seller && project.project_seller.user.try(:id) == current_user.try(:id)
+      return project.project_seller.bid.awarded
+    else 
+      return false
+    end
+  end
+
+  def bid_declined?(project_id = 0)
+    project = Project.find_by_id(project_id)
+    if project.project_seller && project.project_seller.user.try(:id) == current_user.try(:id)
+      return project.project_seller.bid.declined
+    else 
+      return false
+    end
+  end
+
+  def bid_date(project_id = 0)
+    if current_user.bids
+      bid = current_user.bids.find_by_project_id(project_id)
+      return bid.created_at
+    end
+  end
+
+  def bid_awarded_date(project_id = 0)
+    project = Project.find_by_id(project_id)
+    if project.project_seller && project.project_seller.user.try(:id) == current_user.try(:id)
+      return project.project_seller.bid.awarded_date
+    else 
+      return false
+    end
+  end
+
+   def bid_accepted_date(project_id = 0)
+    project = Project.find_by_id(project_id)
+    if project.project_seller && project.project_seller.user.try(:id) == current_user.try(:id)
+      return project.project_seller.bid.accepted_date
+    else 
+      return false
+    end
+  end
+
+   def bid_declined_date(project_id = 0)
+    project = Project.find_by_id(project_id)
+    if project.project_seller && project.project_seller.user.try(:id) == current_user.try(:id)
+      return project.project_seller.bid.declined_date
+    else 
+      return false
+    end
+  end
+
+   # above methods is for contractor role only
+  
+
+end

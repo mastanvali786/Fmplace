@@ -1,0 +1,12 @@
+<% @sim_transaction = AuthorizeNet::SIM::Transaction.new(PaymentType.authorize_api_login_id, PaymentType.authorize_api_transaction_key, @deposit_request.amount, :hosted_payment_form => true) %>
+<% @sim_transaction.set_hosted_payment_receipt(AuthorizeNet::SIM::HostedReceiptPage.new(:link_method => AuthorizeNet::SIM::HostedReceiptPage::LinkMethod::POST, :link_text => 'Continue', :link_url => ipn_authorize_credit_deposit_url(:only_path => false))) %>
+  <%= form_for :sim_transaction, :url => PaymentType.authorize_mode_url do |f| %>
+  <%= sim_fields(@sim_transaction) %>
+  <%= hidden_field_tag("x_invoice_num", @deposit_request.invoice.id, {:id => @deposit_request.invoice.id}) %>
+  <%= hidden_field_tag("x_request_id", @deposit_request.id, {:id => @deposit_request.id}) %>
+  <%= f.submit 'Click to Pay', class: 'btn btn-warning', style: 'padding-bottom: 3px;',id: 'AuthorizeNet_deposit' %>
+  <% end %>
+  
+<script>
+$('form').submit();
+</script>

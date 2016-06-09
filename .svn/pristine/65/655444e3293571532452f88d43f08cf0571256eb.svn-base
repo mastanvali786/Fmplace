@@ -1,0 +1,6 @@
+<%= render(:partial => 'projects/dashboard_header') %>
+<div style="margin-top: 10px;margin-left: 2px;">
+	<a onclick="history.back(-1)" style="color:#001FE2;font-size:12px;">
+		Go Back
+	</a>
+</div>

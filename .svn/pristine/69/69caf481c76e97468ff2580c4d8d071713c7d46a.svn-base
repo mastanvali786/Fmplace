@@ -1,0 +1,242 @@
+<style>
+  hr{
+    margin-top: 8px;
+    margin-bottom: 10px;
+  }
+  .timeeffect
+  {
+   color: FE5A01!important;
+ }
+</style>
+
+<div class="row project_view1">
+  <div class="col-md-9 project_lbox">
+    <div style="margin-top: 10px;margin-left: 2px;">
+      <a onclick="history.back(-1)" style="color:#001FE2;font-size:12px;">
+        Go Back</a>
+      </div>
+      <h3 class="my_plbl gotham_medium"><%= @project.full_title %></h3>
+      <% if @project.current_state == "opened" %>
+      <div class="pro_title gotham_medium" id="clock" style="color: #FE752A; font-size: 14px;">
+      </div>
+      <%end%>
+      <div class="my_plbl gotham_medium">Project Description:</div>
+      <div class="pv_lbl alg_reg">
+        <span class="main_label">Service Required:</span>&nbsp;
+        <span class="value_proj"><%= @project.category_name%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <span class="main_label">Positions:</span>&nbsp;
+        <span class="value_proj"><%= @project.subcategory_name%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <span class="main_label">Business Type:</span>&nbsp;
+        <span class="value_proj"><%= @project.tags%></span>
+      </div>
+      <div class="pv_lbl alg_reg"> 
+        <span class="main_label">Additional Services:</span>&nbsp;
+        <span class="value_proj"><%= @project.skills%></span>&nbsp;
+       <!--  <span class="main_label">Budget:</span>&nbsp;<span class="value_proj"><%#= @project.budget %></span> -->
+      </div>
+      <div class="pv_lbl alg_reg">
+        <span class="main_label">Photography Date:</span>&nbsp;
+        <span class="value_proj"><%= @project.estimated_time %></span>
+      </div>
+      <!-- <div class="pv_lbl alg_reg">
+        <span class="main_label">Location:</span>&nbsp;
+        <span class="value_proj"><%#= @project.location %></span>
+      </div> -->
+      <% if current_user.seller? %>
+      <div class="pv_lbl alg_reg">
+        <a onclick="show_popup('send_message_buyer_details')">Send Message to this Buyer <i class="fa fa-envelope"></i></a>&nbsp;
+        <!-- Message start -->
+        <div class="check_message_open msg_rhtbox" id="send_message_buyer_details" style="display:none;">
+          <div style="color: green;"></div>
+          <%= form_for Message.new,url: {:controller=>"messages", action: "send_praposal_message"},:html => {"data-parsley-validate" => true} do |f| %>
+          <input type="hidden" name="message[to]" id="to_email" value="<%=@project.user.email%>">
+          <input type="hidden" name="message[subject]" id="message_subject"
+          value="Message from seller for project <%= @project.full_title%>">
+          <input type="hidden" name="message[type]" id="message_subject" value="Normal">
+          <div class="row">
+            <div class="col-md-12">
+              <%= f.text_area :body,:rows => "4",'data-parsley-required'=>"true", :style=>"color:#666666;font-size:12px;width:100%;height:90px;border: 1px solid #999999;resize:none;",:value=> ''%>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              <%= f.submit 'Send',name: 'BidMessage', class: 'btn btn-warning save alg_reg'%>
+            </div>
+            <div class="col-md-2">
+              <a href="javascript:void(0);" onclick="hide_popup_without_load('send_message_buyer_details')">
+                <span class="cancel_button alg_reg">Cancel</span></a>
+              </div>
+            </div>
+            <% end %>
+          </div>
+          <!-- Message End -->
+        </div>
+        <% end %>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="my_plbl gotham_medium">Project Details:</div>
+            <div class="pv_lbl project_details alg_reg">
+              <span><%= @project.description[0...300] %></span>
+              <span class="full_state2_<%=@project.id%>" style="display:none;">
+                <%= @project.description[300..-1]%>
+              </span>
+              <% if @project.description.length >= 300%></br>
+              <a href="javascript:void(0);" class="flip2_<%=@project.id%>" style="color:#001FE2;" 
+               onclick="show_read_more(<%=@project.id%>)">
+               <i class="fa fa-sort-desc fa-2x "></i> More</a>
+               <% end %>
+             </div>  
+           </div>  
+         </div>
+       </div>
+
+       <div class="col-md-3 my_project nmy_project alg_reg">
+
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active"><a href="#overview" role="tab" data-toggle="tab">Overview</a></li>
+          <li><a href="#msg-con" role="tab" data-toggle="tab">Public Messages</a></li>
+          <li><a href="#files" role="tab" data-toggle="tab">Attachments</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+          <!-- Project overview Tab Start -->
+          <div class="tab-pane  active" id="overview">
+            <div class="row">
+              <div class="col-md-6">
+                <%=BUYER_NAME_SHORT %>:&nbsp;<%= @project.user.try(:visible_name)%>           
+              </div>  
+              <div class="col-md-6">
+                <%= render :partial => "shared/user_rating", :locals => { :user => @project.user } %>          
+              </div>
+            </div>
+            <div class="seperator"></div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="blue_txt1">Post Date </div>                             
+                <div class="pv_lbl"><%= user_time_zone @project.created_at %></div>   
+              </div>
+              <div class="col-md-6">        
+                <div class="blue_txt1">Bidding Ends</div> 
+                <div class="pv_lbl"><%= user_time_zone @project.end_date %></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="blue_txt1">Project ID </div>                            
+                <div class="pv_lbl"><%= @project.id%></div>   
+              </div>  
+              <div class="col-md-6">        
+                <div class="blue_txt1">Status</div> 
+                <div class="pv_lbl"><%= @project.project_state %></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Message Tab Start -->
+          <div class="tab-pane" id="msg-con">
+            <div class="row m-top-md">
+             <div class="col-md-12">
+              <%= form_for PostMessage.new,:url=>{:controller=>'projects',:action=>'post_public_message',:id=>@user.id},:method=>:post,:html => {"data-parsley-validate" => true} do |f| %>
+              <%= f.hidden_field :user_id, :value => @user.id %>
+              <%= f.hidden_field :project_id, :value => @project.id %>
+              <div class="content_bottom">
+                <%= f.text_area :message, :class=> 'form-control msg_con',
+                'data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter your message'%>
+                <div class="row" style="padding-right: 15px;padding-top: 5px;">
+                  <%=f.submit 'SEND',class: "pull-right btn btn-primary"%>
+                </div>
+              </div>
+              <% end %>
+              <div class="post_message">
+                <% @project.post_messages.each do |message| %>
+                <div class="content_top">
+                  <p><span class="mr_head">
+                    <%=message.user.visible_name%>:
+                  </span><span class="mr_txt">
+                  <%= message.message %>
+                </span></p>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Tab End -->
+
+      <!-- Attchment Tab Start -->
+      <div class="tab-pane project_files" id="files">
+       <div class="col-md-12">
+        <% if current_user.buyer? && current_user.user_project?(@project.id)%>
+        <%= form_for Attachment.new,:url=>{:controller=>'projects',:action=>'project_attachment'},:method=>:post,:html => {:class=> "form-post-preview"} do |f| %>
+        <%= f.hidden_field :user_id, :value => @user.id %>
+        <%= f.hidden_field :project_id, :value => @project.id %>
+        <%= f.label :file_name, 'Add Attachments +',
+        :style=>'color:#001FE2;cursor:pointer !important;font-size:12px;' %>
+        <%= f.file_field :file_name, :multiple => true, name: "attachments[file_name][]",
+        :onchange => "javascript:this.form.submit()" %>
+        <% end %>
+      </br>
+      <span>choose jpg, jpeg, gif, png, ods, xls, xlsx, doc, docx & pdf.</span>
+      <% end %>
+      <hr style="color:#cccccc" size="1" width="100%">
+      <% if current_user.seller? %>
+      <div class="post_message" style="height: 227px!important;">
+        <% else %>
+        <div class="post_message">
+          <% end %>
+          <%if @project.attachments.present? %>
+          <% @project.attachments.each do |attach| %>
+
+          <% file = attach.file_name.url %>
+          <% extension = attach.file_name.file.extension.downcase %>
+          <div class="content_top"><p>
+            <span class="mr_head">
+              <img src="/assets/<%= extension%>.png" border="0" width="20px"
+              height="20px" alt=<%= file.split('/').last %> >
+            </span>
+
+            <span class="mr_txt">
+              <a href=<%= file%> target="_blank" style="color:#666666;">
+                <%= file.split('/').last %></a>
+                <span style="color:#666666 !important;">
+                  (<%= number_to_human_size(file.size)%>)
+                </span>
+                <span style="color:#666666 !important;">
+                  <% if current_user.buyer? && current_user.id == attach.user_id %>
+                  <div style="float:right;padding-right:25px;">
+                    <%=link_to '(Delete)',{:controller=>'projects',:action=>'destroy_attachment',
+                      :id=>attach.id},data: { confirm: "Are you sure to delete a file?"},:style=>"color:#001FE2;"%>
+                    </div>
+                    <% end %>
+                  </span>
+                </p>
+                <div>
+                  Date Uploaded :&nbsp;&nbsp;
+                  <%= user_time_zone attach.created_at %>
+                </div>
+              </div>
+              <hr style="color:#cccccc" size="1" width="100%">
+              <% end %>
+              <%else%>
+              <div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Attachment Found</div>
+              <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $('#clock').countdown('<%= @project.end_date %>').on('update.countdown', function(event) {
+     var $this = $(this).html(event.strftime(''
+      + '<span  class="timeeffect">%D</span> D: '
+      + '<span  class="timeeffect">%H</span> H: '
+      + '<span  class="timeeffect">%M</span> M: '
+      + '<span  class="timeeffect">%S</span> S'));
+   });
+  </script>

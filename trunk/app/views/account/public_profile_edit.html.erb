@@ -1,0 +1,282 @@
+<div class="ds main_container">
+  <div class="container user_profile">
+   <%= render(:partial => '/projects/dashboard_header') %> 
+   <aside class="user_left1">
+    <%= render partial: "menu" %>
+  </aside>
+  <section class="row user_right1">
+    <div class="user_ppedit">
+      <div class="edit_plbl">Edit Profile</div>
+      <div class="edit_plbl1">Basic information</div><br>
+      <div style="color:red;font-size:10px;padding-bottom:0px;padding-top:5px;padding-left:14px;">* Required</div>
+      <table cellpadding="0" cellspacing="0" border="0" width="98%">
+        <tbody><tr valign="top">
+          <td>
+
+            <%= form_for @contractor, url:public_profile_edit_path ,:html => {"data-parsley-validate" => true ,:id=>'contractor_profile'} do |f| %>
+            <%=f.hidden_field :save_type,value: 'contractor'%>
+            <table cellpadding="12" cellspacing="0" border="0" width="100%">
+              <tbody>
+                <tr>
+                  <td><strong style="color:#666666;">Summary</strong><br>
+                    <%= f.text_area :summary,'data-parsley-maxlength'=>"100", size: "60x12",:value => current_user.contractor.try(:summary),:class => "form-control" %>
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong style="color:#666666;">Services Offered</strong><span style="color:red;">*</span><br>
+                    <label class="field select">
+                     <select name="dropdown" id="dropdown" >
+                       <% @cat.each do |c|%>
+                       <option value="<%=c.id%>"><%=c.name%></option>
+                       <%end %>
+                     </select>
+                           <i class="arrow"></i>                
+                   </label>
+                   <button id="add" class="btn btn-warning">ADD</button>
+                   <div id="uiIDs" >
+                    <span id='selectlist'>
+
+                    </span>
+
+                  </div>
+                  <div class="input_fields_wrap"style="display:none;">
+                    <button class="add_field_button">Add More Fields</button>
+
+                  </div>
+                  <br />
+                  
+                </td>
+              </tr>
+              <tr>
+                <td><strong style="color:#666666;">Engines Supported</strong><span style="color:red;">*</span><br>
+                  <label class="field select">
+                    <select name="sdropdown" id="sdropdown" >
+                      <% @sub.each do |s|%>
+                      <option value="<%=s.id%>"><%=s.name%></option>
+                      <%end %>
+                    </select> 
+                   <i class="arrow"></i>    
+                                     
+                  </label>
+
+                  <button id="sadd" class="btn btn-warning">ADD</button>
+                  <div id="suiIDs">
+                    <span id='sselectlist'>
+
+                    </span></div>
+                    <div class="sinput_fields_wrap"style="display:none;">
+                      <button class="sadd_field_button">Add More Fields</button>
+
+                    </div>
+                    
+                  </td>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+                  <td style="padding-top: 10px;">
+                    <strong style="color:#666666;">FAA Certified Repair Station</strong><br>
+                    <div class="custom-radio col-md-3">
+                      <label class="radio-label">
+                        <%= f.radio_button :certified_repair, 1,:class=>"radio-input",:checked =>current_user.contractor.try(:certified_repair),:onclick=>"show_ceritification('#ceritification');" %>
+                        <span class="info"></span>Yes                 
+                      </label>
+                    </div>
+                    <div class="custom-radio col-md-3">
+                      <label class="radio-label">
+                       <% if current_user.contractor.try(:certified_repair).eql?(false)%>
+                       <%= f.radio_button :certified_repair, 0,:checked=>'checked' ,:class=>"radio-input",:onclick=>"hide_ceritification('#ceritification');" %>
+                       <%else%>
+                       <%= f.radio_button :certified_repair, 0,:class=>"radio-input",:onclick=>"hide_ceritification('#ceritification');" %>
+                       <%end%>
+                       <span class="info"></span>No            
+                     </label>
+                   </div>
+
+                 </td>
+               </tr>
+
+               <tr id="ceritification" style="display:none;">
+                <td><strong style="color:#666666;">Certification Number</strong><span style="color:red;">*</span>
+
+                 <%= f.text_field :certification_number,
+                 :value => current_user.contractor.try(:certification_number),:class => "form-control"%>   
+
+               </td>
+             </tr>
+
+             <tr>
+              <%=f.hidden_field :certifyval, :value => current_user.contractor.try(:certified_repair) %>
+              <td style="padding-top: 10px;padding-bottom: 15px;">
+                <strong style="color:#666666;">Random Drug Testing Program</strong><br>
+                <div class="custom-radio col-md-3">
+                  <label class="radio-label">
+                    <%= f.radio_button :drug_testing, 1 ,:class=>"radio-input",:checked =>current_user.contractor.try(:drug_testing)%>
+                    <span class="info"></span>Yes                 
+                  </label>
+                </div>
+                <div class="custom-radio col-md-3">
+                  <label class="radio-label">
+                    <% if current_user.contractor.try(:drug_testing).eql?(false)%>
+                    <%= f.radio_button :drug_testing, 0,:class=>"radio-input",:checked=>'checked'%>
+                    <%else%>
+                    <%= f.radio_button :drug_testing, 0,:class=>"radio-input"%>
+                    <%end%>     
+                    <span class="info"></span>No       
+                  </label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table cellpadding="0" cellspacing="0" border="0" width="40%">
+                  <tr>
+                    <td width="26%"><a href="/account/user_info_edit" class="btn btn-default cancel">Back</a></td>
+                    <td width="24%"><%= f.submit 'save_profile', :value => "Save",:class=>"btn btn-warning",:id=>'save_personal' %></td>
+                    <td width="24%"><a href="/account/public_profile" class="btn btn-default cancel">Cancel</a></td>
+                  </td>
+                </tr>
+              </table>
+              <% end %>
+            </td>
+          </tr>
+        </tbody></table>
+      </td>
+    </tr>
+
+  </tbody></table>
+
+
+
+
+  <div style="padding-bottom:20px;"></div>
+</div>
+
+</section>
+</div>
+
+
+<script>
+
+  $(document).ready(function(){
+    var mydata='test';
+    $.ajax({
+      url: "/account/listcat",
+      type: "post",
+      dataType: "json",
+      data: mydata,
+      success: function(data) {
+        if (data.services!='nothing')
+        {
+         for(var i=0;i<data.services.length;i++)
+         {
+          $('#selectlist').append("<span class=sss"+data.services[i]+" onclick='javascript:$(this).remove()'><a href='javascript:void(0)'><img src='http://www.1miniface.com/skin/frontend/default/miniface/images/system-delete.png' /><input type='hidden' id='contractor_services_offered' class='contractor_services_offered' name='contractor[services_offered][]' value="+data.services[i]+" /></a>"+data.servicename[i]+'</span>');
+        }
+      }
+      if (data.engines!='nothing')
+      {
+        for(var i=0;i<data.engines.length;i++)
+        {
+          $('#sselectlist').append("<span class=sel"+data.engines[i]+" onclick='javascript:$(this).remove()'><a href='javascript:void(0)'><img src='http://www.1miniface.com/skin/frontend/default/miniface/images/system-delete.png' /><input type='hidden' id='contractor_engines_supported' class='contractor_engines_supported' name='contractor[engines_supported][]' value="+data.engines[i]+" /></a>"+data.enginename[i]+'</span>');
+        }
+      }
+    }
+  });
+var val='';
+var val=$('#contractor_certifyval').val();
+
+if (val=='true')
+{
+  $('#ceritification').css('display','block');
+}
+});
+
+function hide_ceritification(id)
+{
+  $(id).hide('slow');
+}
+function show_ceritification(id)
+{
+  $(id).show('slow');
+}
+
+$("#save_personal").click(function(e) {
+  var val=$('#contractor_certifyval').val();
+  if(($('#contractor_services_offered').length<1) && ($('#contractor_other_services_offered').length<1))
+  {
+    alert('Please select atleast one services offered');
+    return false;
+  } 
+  if(($('#contractor_engines_supported').length<1) &&  ($('#contractor_other_engines_supported').length<1))
+  {
+    alert('Please select atleast one Engines Supported');
+    return false;
+  } 
+  if(($('#contractor_certified_repair_1').is(':checked'))&&($('#contractor_certification_number').val()=='')) {alert('Please enter the certification number');
+  return false; }
+
+//   var radiiochecked=$('#contractor_certified_repair_1').val;
+//   alert(radiiochecked);
+//  var selValue = $('input[name=rbnNumber]:checked').val();
+//   if ((radiiochecked==1))
+//   {
+//   alert('Please enter the certification number');
+//     return false;
+// }
+}); 
+$("#add").click(function(e) {
+  e.preventDefault();
+  var selected = $("#dropdown").val();
+  var text = $("#dropdown option:selected").text();
+  
+  if($('#selectlist').find('span').hasClass("sss"+selected))
+  {
+
+    alert('already exist');return 0;
+  }
+
+  $('#selectlist').append("<span class=sss"+selected+" onclick='javascript:$(this).remove()'><a href='javascript:void(0)'><img src='http://www.1miniface.com/skin/frontend/default/miniface/images/system-delete.png' /><input type='hidden' id='contractor_services_offered' class='contractor_services_offered' name='contractor[services_offered][]' value="+selected+" /></a>"+text+'</span>');
+});
+
+
+$("#sadd").click(function(e) {
+  e.preventDefault();
+  var selected = $("#sdropdown").val();
+  var text = $("#sdropdown option:selected").text();
+  
+  if($('#sselectlist').find('span').hasClass("sel"+selected))
+  {
+
+    alert('already exist');return 0;
+  }
+
+  $('#sselectlist').append("<span class=sel"+selected+" onclick='javascript:$(this).remove()'><a href='javascript:void(0)'><img src='http://www.1miniface.com/skin/frontend/default/miniface/images/system-delete.png' /><input type='hidden' id='contractor_engines_supported' class='contractor_engines_supported' name='contractor[engines_supported][]' value="+selected+" /></a>"+text+'</span>');
+});
+
+
+
+    var x = 1; //initlal text box count
+    $(".add_field_button").click(function(e){ //on add input button click
+      e.preventDefault();
+        if(x < 10){ //max input box allowed
+            x++; //text box increment
+            $(".input_fields_wrap").append('<div ><input type="text" id="contractor_other_services_offered" name="contractor[other_services_offered][]"/><a href="#" class="remove_field" >Remove</a></div>'); //add input box
+          }
+        });
+   var y = 1; //initlal text box count
+    $(".sadd_field_button").click(function(e){ //on add input button click
+      e.preventDefault();
+
+        if(y < 10){ //max input box allowed
+            y++; //text box increment
+            $(".sinput_fields_wrap").append('<div><input type="text" id="contractor_other_engines_supported" name="contractor[other_engines_supported][]"/><a href="#" class="sremove_field" >Remove</a></div>'); //add input box
+          }
+        });
+    $(".input_fields_wrap").on("click",".remove_field", function(e){ //user click on remove text
+     e.preventDefault(); $(this).parent('div').remove(); x--;
+   })
+$(".sinput_fields_wrap").on("click",".sremove_field", function(e){ //user click on remove text
+ e.preventDefault(); $(this).parent('div').remove(); x--;
+})
+</script>

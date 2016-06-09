@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <%= @seller.visible_name %>,</p>
+	<p>Congratulations on finishing your project on <%= SITE_NAME%>.</p>
+
+	<p>If you don’t mind, I’d like to ask you a favor. Please log in and write a review of your client by
+	<a href="<%= @project_url %>">clicking here</a>.</p>
+
+	<p>We take reviews very seriously as they are a big reason why we exist. Your help is very much appreciated.</p><br><br>
+
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

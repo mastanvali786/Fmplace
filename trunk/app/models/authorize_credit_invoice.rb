@@ -1,0 +1,2 @@
+class AuthorizeCreditInvoice < MilestoneInvoice
+end

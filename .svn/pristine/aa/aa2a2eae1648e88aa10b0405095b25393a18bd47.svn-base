@@ -1,0 +1,202 @@
+<style type="text/css">
+  .select_all {
+    margin-left: 10px;
+  }
+  #selecctall {
+    margin-left: 36px;
+    vertical-align: -2px;
+  }
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) { 
+.mleft_box .custom-check input:checked+.info:before{
+  top: 17px;
+}
+}
+
+</style>
+<div class="main_container inbox">
+  <div class="container mpro_container">
+    <%= render(:partial => '/projects/dashboard_header') %>
+    <div class="container my_account">
+      <div class="row messages">
+       <div class="col-md-2 right_menu alg_reg">
+        <% folder_name = lambda  {|folder| folder} %>
+        <% folders = %w(Inbox Sent Saved) %>
+        <% folders.each do |folder| %>
+        <div class="divider"></div>
+        <% downcased = folder.downcase %>
+        <a style="color:white;" href="<%= messages_path(folder: folder.downcase) %>">
+          <div class="messages_menu"><% downcased == @folder ? "#{downcased} current" : "#{downcased}"%>
+            <%= folder_name.call(folder) %><% if (count = @counts[downcased]) > 0 %>
+            (<%=@counts[downcased]%>)
+            <% end %>
+          </div></a>
+          <% end %>
+        </div>
+        <div class="col-md-10 mleft_box alg_reg">
+          <div class="inbox">
+          </div>
+          <div class="row msg_itop">
+            <div class="col-xs-8 col-md-8">
+             <div class="row">
+              <div class="col-xs-4 col-md-4">
+               <!-- <button class="btn btn-warning show-new-popup rad5px">NEW MESSAGE</button> -->
+             </div>
+             <div class="col-xs-6 col-md-6">
+              <label class="field select gotham_medium">
+                <select id="sort_by_messages">
+                  <option value="desc">Sort By DESC</option>
+                  <option value="asc">Sort By ASC</option>
+                </select>
+                      <i class="arrow"></i>               
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="ol-xs-4 col-md-4 msg_save">
+         <div class="btn-group">
+          <button class="btn btn-default pull-left" id="multiple_save"><i class="fa fa-download"></i> <span class="clr12">&nbsp;SAVE</span></button>
+          <button class="btn btn-default" id="multiple_delete"><i class="fa fa-times-circle"></i> <span class="clr12">&nbsp;DELETE</span></button>
+        </div>
+      </div>
+    </div>
+    <%unless @messages.blank?%>
+    <input type="checkbox" id="selecctall"/><span class="select_all">Select All</span>
+    <% @messages.each_with_index do |message, index| %>
+    <div class="row msg_inbox">
+     <div class="col-md-1 pull-left custom-check sel_all">
+       <div class="check_row">
+        <label class="check-label">
+         <input class="checkbox1" type="checkbox" name="check" value="<%=message.id%>">
+         <span class="info"></span>
+       </label>
+     </div>
+   </div>
+   <div class="col-xs-4 col-md-2  pull-left msg_status">
+     <div><%= message.from %></div>
+     <div><%= month_day message.sent_at %></div>
+   </div>
+   <div class="col-xs-6 col-md-8 msg_desc <%= message.read.eql?(false) ? 'alg_bold' : 'alg_reg' %>" style="padding-top:9px;">
+    <%= link_to message.subject,message_path(message)%>
+  </div>
+  <!-- <div>
+    <%#= link_to "Reply", {:controller => "messages", :action => 
+"reply_to", :id => message.id},:class=>'btn btn-warning' %>
+</div> -->
+</div>
+<%end %>
+<%else%>
+<div class="row">
+  <div class="col-md-12 messages_menu" style="text-align: center;padding-top: 59px;">
+    No messages found    
+  </div>
+</div>
+<%end %>
+
+</div>
+<div class="clearfix pagination_box">
+  <div class="pull-left alg_reg">Page <%= @messages.current_page%> of <%= @messages.total_pages%></div>
+  <div class="pull-right alg_reg">
+    <%= paginate @messages %>
+  </div>
+</div>
+
+
+</div>
+</div>
+</div>
+<%= render partial: "shared/popup_container" %>
+<script>
+  $(document).ready(function() {
+    $('#selecctall').click(function(event) {  
+      if(this.checked) { 
+        $('.checkbox1').each(function() {
+          this.checked = true;         
+        });
+      }else{
+        $('.checkbox1').each(function() { 
+          this.checked = false;            
+        });        
+      }
+    });
+
+    $('.checkbox1').click(function(event) { 
+      if(this.checked) { 
+             $('#selecctall').prop('checked',false);   
+        }else{
+          $('#selecctall').prop('checked',false)  
+
+        }
+
+    });
+    var url= window.location.href;
+    if(/=/i.test(url)){
+      var result = url.split('=').pop();
+      var status = getUrlVars()["sort_by"];
+      if (typeof(status) == 'undefined'){
+        $("#sort_by_messages").val('desc');  
+      }else{
+        $("#sort_by_messages").val(status);
+      }
+    }
+
+  });
+
+  $('#multiple_delete').click(function() {
+    var ids = $("input[name=check]:checked").map(function () {
+      return this.value;}).get().join(",");
+    var mydata = {"ids": ids,'multiple_delete': true};
+    if(ids.length == 0)
+    {
+      alert('Please select atleast one .')
+      return false;
+    }
+    bootbox.confirm("Are you sure you want to delete the selected messages?", function(result) {
+      if(result==true)
+      {
+        $.ajax({
+          type:'POST',
+          url:'/messages/mutiple_messages',
+          data: mydata,
+          success:function(data){
+            location.reload();
+            $('#selecctall').attr('checked', false);
+            $('.checkbox1').attr('checked', false);
+          }
+
+        });
+
+      }
+    }); 
+
+
+  });
+  $('#multiple_save').click(function() {
+    var ids = $("input[name=check]:checked").map(function () {
+      return this.value;}).get().join(",");
+    var mydata = {"ids": ids,'multiple_save': true};
+    if(ids.length == 0)
+    {
+      alert('Please select atleast one.')
+      return false;
+    }
+    $.ajax({
+      type:'POST',
+      url:'/messages/mutiple_messages',
+      data: mydata,
+      success:function(data){
+        location.reload();
+      }
+    });
+  });
+
+  $('select#sort_by_messages').change( function() {
+    var folder= '<%= request.fullpath.include?("folder")%>';
+    var result = getUrlVars()["folder"];
+    if(folder && result && result != 'undefined'){
+      window.location = '?folder='+result+'&sort_by='+$(this).val();
+    }else{
+      window.location = '?sort_by='+$(this).val();
+    }
+  });
+</script>
+</div>

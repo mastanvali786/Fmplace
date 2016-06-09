@@ -1,0 +1,149 @@
+<div class="main_container" style="margin:50px;">
+	<div class="container mpro_container">
+	  <h1 class="orange" style="font-size: 22px;">Submit Feedback for <%= @user.full_name%></h1>
+		<%= form_for(@guest_user,url: '/guest_user/record_feedback',:html => {"data-parsley-validate" => true,:method=>:post}) do |f| %>
+		  <div style="margin-top:20px;margin-bottom:20px;">
+		  <div class="row">
+				<div class="col-md-10">
+					<label class="alg_reg reg_lbl">Your Name*</label>
+					<%= f.text_field :name, class: 'form-control','data-parsley-required'=>"true",
+					   value:@guest_user.name%>
+				</div>
+			</div>
+			<div class="row voffset2">
+				<div class="col-md-10">
+					<label class="alg_reg reg_lbl">Your Email*</label>
+					<%=f.text_field :email, :class=>'form-control',
+					'data-parsley-required'=>"true",'data-parsley-type'=>"email",
+					 value:@guest_user.email %>
+				</div>
+			</div>
+			</div>
+		 <%= f.fields_for(Feedback.new) do |u| %>
+		 		<%= u.hidden_field :guest_user_id, value: @guest_user.id %>
+		<p class="para_grp">Please&nbsp;Leave&nbsp;Feedback to
+			<span class="colr295"><a href="/account/user_public_profile?id=<%= @user.id %>">
+				<%= user_name = @user.display_name %></a>
+				</span>
+				<%= u.hidden_field :to_id, value: @user.id %>
+				regarding the services delivered during his projects.
+			</p>
+			<h3 class="hding_pra">How likely are you to recommend this  <%= user_name%> to others?</h3>
+			<div class="row" style="padding-bottom: 25px;">
+				<p class="praa">The response will not be revealed to contractor and will be displayed in aggregate</p>
+				<div class="col-md-2  ftcloru66">Not Likely</div>
+				<div class="col-md-8">
+					<div class="slider1"></div>
+					<%= u.hidden_field :aggregate, value: 5, class:"feed_aggregate" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Likely</div>
+			</div>
+			<h3 class="rtew hding_pra">Rate Your Experience with This <%= user_name%></h3>
+			<div class="seperator mrgtopdelet12"></div>
+			<div class="row">
+				<p class="para_grp hding_pra547">This Feedback will be posted on <%= user_name%>'s profile.Remember  that feedback cannot be changed once posted</p>
+				<h3 class="clrr ftcloru66 hding_pra547">Quality of work:</h3>
+				<div class="col-md-2 ftcloru66 ">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider2"></div>
+					<%= u.hidden_field :quality_work, value: 3, class:"feed_quality_work" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66 hding_pra547">Responsiveness:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider3"></div>
+					<%= u.hidden_field :responsiveness, value: 3, class:"feed_responsiveness" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66 hding_pra547">Professionalism:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider4"></div>
+					<%= u.hidden_field :professionalism, value: 3, class:"feed_professionalism" %>
+				</div>
+				<div class="col-md-2  ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66 hding_pra547">Subject Matter Expertise:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider5"></div>
+					<%= u.hidden_field :expertise, value: 3, class:"feed_expertise" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66 hding_pra547">Adherence to cost:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider6"></div>
+					<%= u.hidden_field :cost, value: 3, class:"feed_cost" %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<div class="seperator"></div>
+			<div class="row">
+				<h3 class="clrr ftcloru66 hding_pra547">Adherence to Schedule:</h3>
+				<div class="col-md-2 ftcloru66">Not Satisfied</div>
+				<div class="col-md-8">
+					<div class="slider7"></div>
+					<%= u.hidden_field :schedule, value: 3, class:"feed_schedule"  %>
+				</div>
+				<div class="col-md-2 ftcloru66">Very Satisfied</div>
+			</div>
+			<h3 class="clrrr ftcloru66 fxtbxt58">Feedback Comments</h3>
+			<div class="seperator"></div>
+			<div class="row">
+				<p class="fedbk">This Feedback will be posted on <%= user_name%>'s profile.Remember that feedback cannot be changed once posted</p>
+				<h3 class="gdline ftcloru66">Guidelines</h3>
+									<ul class="dotfun">
+										<li>For privacy reasons,Only use <%= user_name%>'s Company Name or Username</li>
+										<li>Be fair, accurate and professional</li>
+									</ul>
+				<div class="row">
+					<div class="col-sm-8">
+						<%= u.text_area :comment,:rows => "4" , class: 'form-control feed_comment',"maxlength"=>"2000"%>
+						<div class="pull-right">
+							<h6><span class="char">2000</span> characters left</h6>
+							</div>
+					</div>
+				</div>
+			</div>
+			<% end %>
+
+			<div class="row bgrow12">
+				<div class="final12">
+				<div class="col-md-1">
+					<%= f.submit 'Submit', class: 'btn btn-warning bget_startd' %>
+				</div>
+				<div class="col-md-1" style="margin-left:15px;">
+					<button class="btn btn-warning bget_strtd" type="button">cancel</button>
+				</div>
+			</div>
+
+			<div class="row">
+									<div class="col-md-10 pdlbf5">											
+											<p class="bkfdbk">You will not be able to change this feedback once submitted</p>
+											<p class="bkfdbk">Review your rating and comments carefully</p>
+										</div>
+									</div>
+									</div>
+		</div>
+		<% end %>
+	</div></div>
+  <script type="text/javascript">
+   function keypresschar(e)
+   {
+       var
+   }
+  </script>
+	<%= javascript_include_tag 'feedback' %>

@@ -1,0 +1,106 @@
+<%= javascript_include_tag 'jquery-video-lightning.js'%>
+<div class="main_container">
+	<div class="container user_profile">
+		<%= render(:partial => '/projects/dashboard_header') %>
+		<section class="row user_right1 pp_prof">
+			<h3 class="orange">Public Profile</h3>
+			<div class="row">
+				<div class="col-md-7">
+					<div class="media">
+						<p class="media-left" href="#">
+							<% unless @user.profile_photo.blank? %>
+								<%=image_tag @user.profile_photo,:class=>"pro_pic" %>
+							<%else%>
+								<img src="/assets/nophoto2.gif" alt="..." class="pro_pic">
+							<% end %>
+						</p>
+						<div class="media-body">
+							<div class="pp_tname"><%=@user.full_name%></div>
+							<% if @user.seller?%>
+								<div><%= DISPLAY_LABEL%>  - <%=@user.visible_name%></div>
+								<div><%= SITE_NAME_SHORT %> Bidding <%=DISPLAY_LABEL_SHORT %>
+									<% if @user.approved %>
+										<img src="/assets/check_box1.png" alt />
+									<% else%>
+										<img src="/assets/check_box2.png" alt />
+									<%end %>
+								</div>
+							<%end %>
+							<div><% unless @country.blank?%><%=@country.try(:name)%> &nbsp;&nbsp; | &nbsp; &nbsp;<%=@state%><%end %></div>
+							<div>Member Since : <%=@user.created_at.strftime("%b, %Y")%><br>Last Seen : <%=@user.updated_at.strftime("%b, %Y")%></div>
+							<% if @user.approved%>
+								<div>Phone Number : <%=@user.phone%></div> 
+							<%end %>
+						</div>
+
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr>
+									<td align="right">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<tbody>
+												<tr>
+													<% unless @video_url.blank? %>
+														<td align="right"><img src="/assets/WatchVideo.png" border="0"></td>
+														<td align="left" style="width:160px;">
+															<%url = (@video_url["v="]) ? @video_url.split("v=")[1] : @video_url.split("/")[-1] %>
+															<% video = "http://www.youtube.com/watch?v=" + url %>
+															<span class="video-target" style="cursor: pointer;">
+																<a class="youtube" href="<%= video %>"><span style="cursor: pointer;color:#000">Watch Video</span></a>
+															</span>
+														</td>
+													<% end %>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="seperator"></div>
+
+						<% if @user.seller? %>
+							<div class="row pv_btabs">
+								<ul class="nav nav-tabs" role="tablist">
+									<li class="active"><a href="#overview" role="tab" data-toggle="tab">Overview</a></li>
+									<li><a href="#reviews" role="tab" data-toggle="tab">Reviews</a></li>
+								</ul>
+								<div class="tab-content pproposals">
+									<div class="tab-pane active" id="overview" style="color:#000;">
+										<% if @user.seller?%>
+											<h1><%= render 'seller_public_profile', user: @user %></h1>
+										<%end %>
+									</div>
+									<!-- review tab -->
+									<div class="tab-pane" id="reviews">
+										<%= render 'reviews' %>
+									</div>
+									<!-- end of review div-->
+								</div>
+								<!-- end of tab pane-->
+							</div>
+						<% else %>
+							<%= render 'reviews' %>
+						<% end %>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<%= render :partial => "seller_summary", :locals => { :user => @user } %>
+				</div>
+			</div>
+			<br><br>
+			<%= render :partial=>'advertisements/show_ads', locals: { page_no: "8"} %>
+		</section>
+	</div>
+</div>
+<script>
+	$(function() {
+		$(".video-link").jqueryVideoLightning({
+			autoplay: 1,
+			backdrop_color: "#ddd",
+			backdrop_opacity: 0.6,
+			glow: 20,
+			glow_color: "#000"
+		});
+	});
+</script>

@@ -1,0 +1,60 @@
+<style>
+	.User_label{
+		font-size:12px;
+		margin-bottom:20px;
+	}
+	.continue{
+		margin:20px 0;
+	}
+	.password_head{
+		font-size: 28px;
+		padding: 20px 0px;
+	}
+	.getnew_password {
+		font-size: 20px;
+		padding: 10px 0px;
+	}
+	.password_getway{
+		font-size: 15px;
+		padding: 5px 0px;
+	}
+	.email_address{
+		font-size: 15px;
+		padding: 20px 0px 0px;
+	}
+	.np_container {
+		min-height:300px;
+	}
+
+	#error_explanation h2 {
+		display: none;
+	}
+
+	#error_explanation ul li {
+		padding: 5px;
+	}
+</style>
+
+<div class="main_container">
+	<div class="container np_container">
+		<div class="col-md-6 col-md-offset-3" style="padding-top: 100px;">
+			<h2 class="getnew_password">Get a New Password</h2>
+			<h6 class="password_getway">
+				Enter the information below and we'll send you an email with the next steps to get a new password.
+			</h6>
+			<label class="email_address">
+				Email Address
+			</label>
+			<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {"data-parsley-validate" => true, method: :post }) do |f| %>
+			<%= devise_error_messages! %>
+			<div>
+				<%= f.email_field :email, autofocus: true,:class=>"form-control",
+				'data-parsley-required'=>"true", 'data-parsley-type'=>"email",'data-parsley-required-message'=>'Please enter email address'%>
+			</div>
+			<div><%= f.submit "Submit",:class=>"btn btn-warning bget_started continue" %></div>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+

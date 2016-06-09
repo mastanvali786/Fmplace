@@ -1,0 +1,433 @@
+GIT
+  remote: git://github.com/gocardless/statesman.git
+  revision: 5f37b3174267847a906f730670159148377ebff8
+  specs:
+    statesman (1.3.1)
+
+GIT
+  remote: git://github.com/gregbell/active_admin.git
+  revision: 95b4a71e8ec4536cf292d67071560acdf4160419
+  specs:
+    activeadmin (1.0.0.pre1)
+      arbre (~> 1.0, >= 1.0.2)
+      bourbon
+      coffee-rails
+      formtastic (~> 3.1)
+      formtastic_i18n
+      inherited_resources (~> 1.6)
+      jquery-rails
+      jquery-ui-rails (~> 5.0)
+      kaminari (~> 0.15)
+      rails (>= 3.2, < 5.0)
+      ransack (~> 1.3)
+      sass-rails
+
+GIT
+  remote: git://github.com/metaskills/pdf-writer.git
+  revision: 7f5bc6c9ce69c26574bbfde36ebdb9ecf06709d0
+  specs:
+    pdf-writer (1.2.3)
+      color (>= 1.4.0)
+      transaction-simple (~> 1.3)
+
+GIT
+  remote: git://github.com/stefanpenner/country_select.git
+  revision: 20f83bda911abd7c1d5cb96fd37f9ea22d892f0e
+  specs:
+    country_select (2.2.0)
+      countries (~> 0.11.0)
+      sort_alphabetical (~> 1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    actionmailer (4.1.5)
+      actionpack (= 4.1.5)
+      actionview (= 4.1.5)
+      mail (~> 2.5.4)
+    actionpack (4.1.5)
+      actionview (= 4.1.5)
+      activesupport (= 4.1.5)
+      rack (~> 1.5.2)
+      rack-test (~> 0.6.2)
+    actionview (4.1.5)
+      activesupport (= 4.1.5)
+      builder (~> 3.1)
+      erubis (~> 2.7.0)
+    active_median (0.1.2)
+      activerecord
+    active_utils (3.0.0)
+      activesupport (>= 3.2)
+      i18n
+    activemodel (4.1.5)
+      activesupport (= 4.1.5)
+      builder (~> 3.1)
+    activerecord (4.1.5)
+      activemodel (= 4.1.5)
+      activesupport (= 4.1.5)
+      arel (~> 5.0.0)
+    activesupport (4.1.5)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.1)
+      tzinfo (~> 1.1)
+    arbre (1.0.3)
+      activesupport (>= 3.0.0)
+    arel (5.0.1.20140414130214)
+    authorize-net (1.5.2)
+      nokogiri (~> 1.4)
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
+    axlsx_rails (0.4.0)
+      axlsx (>= 2.0.1)
+      rails (>= 3.1)
+    bcrypt (3.1.10)
+    bourbon (3.2.4)
+      sass (~> 3.2)
+      thor
+    braintree (2.33.1)
+      builder (>= 2.0.0)
+    builder (3.2.2)
+    cancan (1.6.10)
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+    chartkick (1.2.5)
+    chosen-rails (1.4.1)
+      coffee-rails (>= 3.2)
+      compass-rails (>= 1.1.2)
+      railties (>= 3.0)
+      sass-rails (>= 3.2)
+    chronic (0.10.2)
+    chunky_png (1.3.4)
+    ckeditor (4.1.2)
+      cocaine
+      orm_adapter (~> 0.5.0)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.7)
+      climate_control (>= 0.0.3, < 1.0)
+    coderay (1.1.0)
+    coffee-rails (4.0.1)
+      coffee-script (>= 2.2.0)
+      railties (>= 4.0.0, < 5.0)
+    coffee-script (2.4.1)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.9.1.1)
+    color (1.7.1)
+    compass (0.12.7)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.2.19)
+    compass-rails (2.0.0)
+      compass (>= 0.12.2)
+    countries (0.11.4)
+      currencies (~> 0.4.2)
+      i18n_data (~> 0.7.0)
+    currencies (0.4.2)
+    customerio (0.5.1)
+      httparty (>= 0.5, < 1.0)
+    daemon-spawn (0.4.2)
+    daemons (1.2.3)
+    delayed_job (4.0.6)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
+    devise (3.4.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
+    domain_name (0.5.24)
+      unf (>= 0.0.5, < 1.0.0)
+    erubis (2.7.0)
+    eventmachine (1.0.7)
+    execjs (2.5.2)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
+    formtastic (3.1.3)
+      actionpack (>= 3.2.13)
+    formtastic_i18n (0.4.1)
+    fssm (0.2.10)
+    geocoder (1.2.9)
+    gon (5.1.2)
+      actionpack (>= 2.3.0)
+      json
+      multi_json
+      request_store (>= 1.0.5)
+    groupdate (2.1.1)
+      activerecord (>= 3.0.0)
+    has_scope (0.6.0)
+      actionpack (>= 3.2, < 5)
+      activesupport (>= 3.2, < 5)
+    hashie (3.4.2)
+    hike (1.2.3)
+    htmlentities (4.3.4)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    httparty (0.13.5)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    i18n (0.7.0)
+    i18n_data (0.7.0)
+    inherited_resources (1.6.0)
+      actionpack (>= 3.2, < 5)
+      has_scope (~> 0.6.0.rc)
+      railties (>= 3.2, < 5)
+      responders
+    jbuilder (2.3.1)
+      activesupport (>= 3.0.0, < 5)
+      multi_json (~> 1.2)
+    jquery-rails (3.1.3)
+      railties (>= 3.0, < 5.0)
+      thor (>= 0.14, < 2.0)
+    jquery-ui-rails (5.0.5)
+      railties (>= 3.2.16)
+    json (1.8.3)
+    jwt (1.5.1)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
+    libv8 (3.16.14.11)
+    mail (2.5.4)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
+    method_source (0.8.2)
+    mime-types (1.25.1)
+    mini_magick (4.2.7)
+    mini_portile (0.6.2)
+    minitest (5.7.0)
+    money (6.5.1)
+      i18n (>= 0.6.4, <= 0.7.0)
+    multi_json (1.11.2)
+    multi_xml (0.5.5)
+    multipart-post (2.0.0)
+    mysql2 (0.3.18)
+    netrc (0.10.3)
+    nokogiri (1.6.6.2)
+      mini_portile (~> 0.6.0)
+    oauth (0.4.7)
+    oauth2 (1.0.0)
+      faraday (>= 0.8, < 0.10)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (~> 1.2)
+    offsite_payments (2.1.0)
+      actionpack (>= 3.2.20, < 5.0.0)
+      active_utils (~> 3.0.0)
+      activesupport (>= 3.2.14, < 5.0.0)
+      builder (>= 2.1.2, < 4.0.0)
+      i18n (~> 0.5)
+      money (>= 5.0.0, < 7.0.0)
+      nokogiri (~> 1.4)
+    omniauth (1.2.2)
+      hashie (>= 1.2, < 4)
+      rack (~> 1.0)
+    omniauth-facebook (2.0.1)
+      omniauth-oauth2 (~> 1.2)
+    omniauth-linkedin (0.2.0)
+      omniauth-oauth (~> 1.0)
+    omniauth-oauth (1.1.0)
+      oauth
+      omniauth (~> 1.0)
+    omniauth-oauth2 (1.3.1)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
+    orm_adapter (0.5.0)
+    parsley-rails (2.0.7.0)
+      railties (>= 3.0.0)
+    paypal-sdk-adaptivepayments (1.117.1)
+      paypal-sdk-core (~> 0.3.0)
+    paypal-sdk-core (0.3.1)
+      multi_json (~> 1.0)
+      xml-simple
+    paypal-sdk-invoice (1.117.0)
+      paypal-sdk-core (~> 0.3.0)
+    paypal-sdk-merchant (1.116.0)
+      paypal-sdk-core (~> 0.3.0)
+    pdf-core (0.4.0)
+    polyamorous (1.2.0)
+      activerecord (>= 3.0)
+    polyglot (0.3.5)
+    prawn (1.3.0)
+      pdf-core (~> 0.4.0)
+      ttfunk (~> 1.4.0)
+    prawn-table (0.1.2)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    rack (1.5.5)
+    rack-test (0.6.3)
+      rack (>= 1.0)
+    rack-timeout (0.3.2)
+    rails (4.1.5)
+      actionmailer (= 4.1.5)
+      actionpack (= 4.1.5)
+      actionview (= 4.1.5)
+      activemodel (= 4.1.5)
+      activerecord (= 4.1.5)
+      activesupport (= 4.1.5)
+      bundler (>= 1.3.0, < 2.0)
+      railties (= 4.1.5)
+      sprockets-rails (~> 2.0)
+    railties (4.1.5)
+      actionpack (= 4.1.5)
+      activesupport (= 4.1.5)
+      rake (>= 0.8.7)
+      thor (>= 0.18.1, < 2.0)
+    rake (10.4.2)
+    ransack (1.6.6)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.2)
+    rdoc (4.2.0)
+    recursive-open-struct (0.6.5)
+    ref (1.0.5)
+    request_store (1.1.0)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    rubyzip (1.0.0)
+    sass (3.2.19)
+    sass-rails (4.0.5)
+      railties (>= 4.0.0, < 5.0)
+      sass (~> 3.2.2)
+      sprockets (~> 2.8, < 3.0)
+      sprockets-rails (~> 2.0)
+    sdoc (0.4.1)
+      json (~> 1.7, >= 1.7.7)
+      rdoc (~> 4.0)
+    sendgrid-ruby (0.0.3)
+      rest-client
+      smtpapi
+    slop (3.6.0)
+    smtpapi (0.1.0)
+    sort_alphabetical (1.0.1)
+      unicode_utils (>= 1.2.2)
+    spring (1.3.6)
+    sprockets (2.12.4)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
+    sprockets-rails (2.3.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      sprockets (>= 2.8, < 4.0)
+    therubyracer (0.12.2)
+      libv8 (~> 3.16.14.0)
+      ref
+    thin (1.6.3)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0)
+      rack (~> 1.0)
+    thor (0.19.1)
+    thread_safe (0.3.5)
+    tilt (1.4.1)
+    transaction-simple (1.4.0.2)
+    treetop (1.4.15)
+      polyglot
+      polyglot (>= 0.3.1)
+    ttfunk (1.4.0)
+    turbolinks (2.5.3)
+      coffee-rails
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+    uglifier (2.7.1)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
+    unicode_utils (1.4.0)
+    useragent (0.14.0)
+    wannabe_bool (0.1.1)
+    warden (1.2.3)
+      rack (>= 1.0)
+    whenever (0.9.4)
+      chronic (>= 0.6.3)
+    wisper (1.6.0)
+    xml-simple (1.1.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  active_median (~> 0.1.0)
+  activeadmin!
+  authorize-net
+  axlsx_rails
+  braintree (~> 2.33.1)
+  cancan
+  carrierwave
+  chartkick (~> 1.2.4)
+  chosen-rails
+  ckeditor
+  coffee-rails (~> 4.0.0)
+  country_select!
+  customerio
+  daemon-spawn
+  daemons
+  delayed_job_active_record
+  devise (~> 3.4.1)
+  execjs
+  figaro (~> 0.7.0)
+  geocoder
+  gon (~> 5.1.2)
+  groupdate (~> 2.1.1)
+  jbuilder (~> 2.0)
+  jquery-rails
+  kaminari
+  mail
+  mini_magick
+  mysql2
+  offsite_payments
+  omniauth-facebook
+  omniauth-linkedin
+  parsley-rails
+  paypal-sdk-adaptivepayments
+  paypal-sdk-invoice
+  paypal-sdk-merchant
+  pdf-writer!
+  prawn (= 1.3.0)
+  prawn-table (~> 0.1.0)
+  pry (~> 0.10.0)
+  rack-timeout
+  rails (= 4.1.5)
+  rake (~> 10.4.2)
+  recursive-open-struct
+  sass-rails (~> 4.0.3)
+  sdoc (~> 0.4.0)
+  sendgrid-ruby
+  spring
+  statesman!
+  therubyracer
+  thin
+  turbolinks
+  uglifier (>= 1.3.0)
+  useragent
+  wannabe_bool
+  whenever
+  wisper
+
+BUNDLED WITH
+   1.10.6

@@ -1,0 +1,2 @@
+class AuthorizeCreditWithdrawalRequest < WithdrawalRequest
+end

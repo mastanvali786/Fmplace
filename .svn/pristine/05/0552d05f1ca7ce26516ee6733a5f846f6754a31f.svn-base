@@ -1,0 +1,16 @@
+<style type="text/css">
+  form fieldset ol > li label {
+    width: 9%;
+}
+</style>
+<%= semantic_form_for [:admin, @banner]  do |f| %>
+<fieldset class="inputs">
+  <ol>
+      <%= f.input :slider_image, :as => :file, :input_html => { :multipart => true } %>
+      <%= f.actions do %>
+          <%= f.action :submit, :as => :button %>
+          <%= f.action :cancel, :as => :link %>
+        <% end %>
+    </ol>
+<%end%>
+

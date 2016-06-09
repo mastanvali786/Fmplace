@@ -1,0 +1,66 @@
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render(:partial => '/projects/dashboard_header') %>
+        <!-- Side Menu -->
+        <aside class="user_left">
+            <%= render(:partial => '/account/menu') %>
+        </aside>
+        <section class="row user_right">
+            <h3 class="orange gotham_medium">My Referral Account</h3>
+            <div class="clearfix">
+                <div class="row">
+                    <div class="col-md-4">Total Rewards:</div>
+                    <div class="col-md-4"><%= number_to_currency current_user.referral_amount %></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">Bonus Connects:</div>
+                    <div class="col-md-4"><%= current_user.bonus_connects %></div>
+                </div>
+                <div class="pull-right">
+                    <%= link_to "Referral Program", referral_program_path %>
+                </div>
+            </div>
+            <div class="row ngray_box mtxt_lftm md_hide clrbk5">
+                <div class="col-md-2 first_ltxt">Username</div>
+                <div class="col-md-2">Join Date</div>
+                <!-- <div class="col-md-2"">Source</div> -->
+                <div class="col-md-2">First Payment</div>
+                <div class="col-md-2">Total Reward</div>
+                <div class="col-md-2">Connects</div>
+                <div class="col-md-1">Role</div>
+                <div class="col-md-1">Status</div>
+            </div>
+            <% if @referrals.present? %>
+                <% @referrals.each do |referral| %>
+                    <div class="col-md-2 first_ltxt"><%= referral.first_name %></div>
+                    <div class="col-md-2"><%= user_date_zone referral.confirmed_at %></div>
+                    <!-- <div class="col-md-2"><%#= referral.referral_source %></div> -->
+                    <% if referral.buyer? %>
+                        <% if referral.referral_bonus != true %>
+                            <div class="col-md-2">-</div>
+                            <div class="col-md-2">-</div>
+                        <% else %>
+                            <div class="col-md-2">&#x2713;</div>
+                            <div class="col-md-2">$10</div>
+                        <% end %>
+                        <div class="col-md-2">-</div>
+                    <% else %>
+                        <div class="col-md-2">-</div>
+                        <div class="col-md-2">-</div>
+                        <div class="col-md-2">10</div>
+                    <% end %>
+                    <div class="col-md-1"><%= referral.role_name %></div>
+                    <% if referral.buyer? %>
+                        <% if referral.referral_bonus == true %>
+                            <div class="col-md-1">Approved</div>
+                        <% else %>
+                            <div class="col-md-1">Pending</div>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            <% else %>
+                <div class="row nd_box txt_lftm clrbk5">you have no referral rewards yet</div>
+            <% end %>
+        </section>
+    </div>
+</div>

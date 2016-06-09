@@ -1,0 +1,131 @@
+<style type="text/css">
+	.font26,.font16 {
+		color: #000;
+	}
+</style>
+<script>
+$(document).ready(function(){
+	$("#hire").click(function(){
+	    $('.bgsilver').css("background-color", "#72D153");
+	    $('.bgorng').css("background-color", "#D0D0D0");
+	    $('#hire').attr("datavalue", "hire");
+	    $('#work').removeAttr("datavalue");
+	});
+	$("#work").click(function(){
+		$('.bgsilver').css("background-color", "#D0D0D0");
+	    $('.bgorng').css("background-color", "#72D153");
+	    $('#work').attr("datavalue", "work");
+	    $('#hire').removeAttr("datavalue");
+	});
+});
+</script>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="accountfont">Create an account</div>
+			<div class="centeralign">What are you looking to do?</div>
+			<!-- <div id="selectable"> -->
+	  			<!-- <div id="selectable"> -->
+	  			<div class="col-md-6  padiingtop" id="type1">
+	  				<div class="row row-centered">
+	  					<div class="bgsilver" >
+	  						<a href="#" id="hire" datavalue="">
+	  							<div class="hire">
+	  								<div class="font26">I want to hire</div>
+	  								<!-- <div class="font16">Find the best freelancers.</div> -->
+	  							</div>
+	  						</a>
+	  					</div>
+	  				</div>  
+	  			</div>
+	  			<div class="col-md-6 padiingtop " id="type2">
+	  				<div class="row row-centered">
+	  					<div class="bgorng" >
+	  						<a href="#" id="work" datavalue="">
+		  						<div class="hire">
+		   							<div class="font26">I want to work</div>
+		 							<!-- <div class="font16">Find clients, get hired, get paid.</div> -->
+		    					</div>
+		    				</a>
+	  					</div>
+	  				</div>
+	  			</div>
+				<div class="col-md-12">
+				<div class="row wrapper">
+					<button type="button" class="btn btn-warning" id="get_started">Continue</button>
+					<img src="/assets/or.png">&nbsp; &nbsp;
+					<span>Sign Up with</span>
+					<%= link_to "#{image_tag('facebook_32.png', class: "fb_style")}".html_safe, user_omniauth_authorize_path(:facebook),:id => "facebook" %>
+					<%= link_to "#{image_tag('linkedin_32.png', class: "fb_style")}".html_safe, user_omniauth_authorize_path(:linkedin),:id => "linkedin" %>
+					<br><br>
+					<p>Already a member? <a href="/users/sign_in">Sign in</a></p>
+				</div>
+			</div>
+		</div><!--12-->
+	</div>
+</div>
+<script type="text/javascript">
+	
+$(function() {
+	$("#get_started").click(function(){
+		var hire = $("#hire").attr('datavalue')
+		var work = $("#work").attr('datavalue')
+		if (hire == "hire" && work != "work")
+		{
+			window.location.href = "/users/signup_buyer";
+		}
+		else if (hire != "hire" && work == "work")
+		{
+			window.location.href = "/users/signup_seller";
+		}
+		else if (hire != "hire" && work != "work")
+		{
+			alert("Please Select the Options")
+		}
+	});
+});
+
+</script>
+<script type="text/javascript">
+	$(function() {
+		$("#facebook").click(function(e) {
+			var hire = $("#hire").attr('datavalue')
+			var work = $("#work").attr('datavalue')
+			if (hire == "hire" && work != "work")
+			{
+				$(this).attr("href").replace("?role_id=", "");
+				$("#facebook").attr('href', this.href + '?role_id=' + 2)
+				
+			}
+			else if (hire != "hire" && work == "work")
+			{	
+				$(this).attr("href").replace("?role_id=", "");
+				$("#facebook").attr('href', this.href + '?role_id=' + 1)
+			}
+			else if (hire != "hire" && work != "work")
+			{
+				e.preventDefault();
+				alert("Select any option")
+			}
+		});
+		$("#linkedin").click(function(e) {
+			var hire = $("#hire").attr('datavalue')
+			var work = $("#work").attr('datavalue')
+			if (hire == "hire" && work != "work")
+			{
+				$(this).attr("href").replace("?role_id=", "");
+				$("#linkedin").attr('href', this.href + '?role_id=' + 2)
+			}
+			else if (hire != "hire" && work == "work")
+			{	
+				$(this).attr("href").replace("?role_id=", "");
+				$("#linkedin").attr('href', this.href + '?role_id=' + 1)
+			}
+			else if (hire != "hire" && work != "work")
+			{
+				e.preventDefault();
+				alert("Select any option")
+			}
+		});
+	});
+</script>

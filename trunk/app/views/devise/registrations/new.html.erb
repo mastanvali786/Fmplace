@@ -1,0 +1,13 @@
+<% if request.fullpath.include?('signup_buyer') %>
+  <%= render 'signup_buyer'%>
+<% else %>
+	<%= render 'signup_seller'%>
+<% end %>
+<script type="text/javascript">
+	$("form").bind("keypress", function (e) {
+    if (e.keyCode == 6) {
+        $(".zip-code").attr('value');
+        return false;
+    }
+});
+</script>

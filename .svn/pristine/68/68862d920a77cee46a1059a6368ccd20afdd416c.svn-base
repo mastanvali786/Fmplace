@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<p>Hi <b><%= @project.buyer.visible_name %>,</b></p>
+
+<p><%= @project.seller.visible_name %> has created the following milestones for <%= @project.full_title %></p>
+<p><b>Milestone Details</b></p>
+<p><b>Description:</b>  <%= @milestone.description %></p>
+<p><b>Delivery Date:</b>  <%= @milestone.delivery_date %></p>
+<p><b>Price:</b> $<%= @milestone.price %></p>
+
+<p><a href="<%=@login_link%>">Login</a> to securely submit payment on any of the milestones.</p>
+
+<p>Note: Only the <%= @milestone.creator.visible_name %> can edit the milestones they’ve created.</p>
+
+<p>We are always here to help if you have any questions or concerns.</p>
+
+<p>Sincerely,</p>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p><%= EMAIL_SIGN_EMAIL %></p>
+<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

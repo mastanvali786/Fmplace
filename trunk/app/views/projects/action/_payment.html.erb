@@ -1,0 +1,167 @@
+<%= javascript_include_tag "mm" %>
+<section class="row user_right1 alg_reg">
+  <%= render partial:"shared/flash" %>
+  <h3 class="orange">Payments</h3>
+  <!-- <div>Need paypal account to perform this transaction.</div> -->
+  <div id="payment-messages" style="max-width:740px">
+    <%= render partial: "shared/alert" %>
+  </div>
+  <div class="row ngray_box md_hide clrbk5">
+    <div class="col-md-3 first_ltxt">Received</div>
+    <div class="col-md-3">Milestone</div>
+    <div class="col-md-1">Amount</div>
+    <div class="col-md-3">Fund Escrow</div>
+    <div class="col-md-2">Release Escrow</div>
+    <!-- <div class="col-md-2">Admin Action</div> -->
+  </div>
+  <% unless @milestones.empty? %>
+  <% @milestones.each_with_index do |milestone, index| %>
+  <div class="row nd_box">
+    <div class="col-md-3 first_ltxt clrbk5">
+      <div data-label="Received" class="account_p_lbl"><%= user_time_zone milestone.delivery_date%></div>
+    </div>
+    <div class="col-md-3 clrbk5">
+     <div data-label="Milestone" class="account_p_lbl"><%= index+1%>&nbsp;<%= milestone.description%></div>
+   </div>
+   <div class="col-md-1 clrbk5">
+     <div data-label="Amount" class="account_p_lbl"> USD&nbsp;<%= number_to_currency milestone.price %></div>
+   </div>
+   <div class="col-md-3" id="milestone_fund_<%=milestone.id%>">
+    <% if milestone.funded? %>
+    Funded
+    <% elsif milestone.funding_requested? %>
+    Request Sent <%= user_time_zone milestone.funding_request.sent_at %>
+    <%elsif milestone.funding_request.present? && !milestone.funding_requested? %>
+    <% if @project.buyer? current_user %>
+    <% if milestone.funding_request.try(:type) == 'PayFastFundingRequest' %>
+    <div style="padding-top:5px;padding-bottom: 10px;">
+      <%= form_tag(PaymentType.payfast_mode_url) do %>
+        <%= hidden_field_tag('amount', milestone.payfast_amount)%>
+        <%= hidden_field_tag('item_name', 'Milestone Payment')%>
+        <%= hidden_field_tag('return_url', milestone.current_url)%>
+        <%= hidden_field_tag('cancel_url', milestone.current_url)%>
+        <%= hidden_field_tag('notify_url', milestone.paypal_ipn_url)%>
+        <% if milestone.funding_request.invoice.present? %>
+          <%= hidden_field_tag('custom_int1',milestone.funding_request.invoice.id)%>
+          <%= hidden_field_tag('custom_int2', milestone.funding_request.invoice.receiver_id)%>
+        <% end %>
+        <%= hidden_field_tag('merchant_id',PaymentType.payfast_merchant_id) %>
+        <%= hidden_field_tag('merchant_key', PaymentType.payfast_merchant_key) %>
+        <%= submit_tag "Click to Pay", class: 'btn btn-warning', style: 'padding-bottom: 3px;' %>
+      <% end %>
+
+      <%#= payment_service_for 1000, Rails.configuration.offsite_payments['payfast']['login'], amount: milestone.payfast_amount, service: :pay_fast do |service| %>
+      <%# service.item_name 'Milestone Payment' %>
+      <%# service.currency 'USD' %>
+      <%# service.return_url milestone.current_url %>
+      <%# service.cancel_url milestone.current_url %>
+      <%# service.notify_url milestone.paypal_ipn_url %>
+      <%# if milestone.funding_request.invoice.present? %>
+      <%# service.custom_int1 milestone.funding_request.invoice.id %>
+      <%# service.custom_int2 milestone.funding_request.invoice.receiver_id %>
+      <%# end %>
+      <%# service.merchant_id Rails.configuration.offsite_payments['payfast']['merchant_id'].to_i %>
+      <%# service.merchant_key Rails.configuration.offsite_payments['payfast']['merchant_key'] %>
+      <%#= submit_tag "Click to Pay", class: 'btn btn-warning', style: 'padding-bottom: 3px;' %>
+      <%# end %>
+
+    </div>
+    <% elsif milestone.funding_request.try(:type) == 'BrainTreeFundingRequest' %>
+      <button type="button" data-amount="<%= milestone.funding_request.invoice.amount%>" data-id="<%= milestone.funding_request.invoice.id%>" class="btn btn-warning braintree_open_pay_modal" data-toggle="modal" data-target=".bs-example-modal-lg">
+        Click to Pay
+      </button>
+    <% elsif milestone.funding_request.try(:type) == 'AuthorizeCreditFundingRequest' %>
+    <% @sim_transaction = AuthorizeNet::SIM::Transaction.new(PaymentType.authorize_api_login_id,
+        PaymentType.authorize_api_transaction_key, milestone.authorize_credit_amount, :hosted_payment_form => true) %>
+    <% @sim_transaction.set_hosted_payment_receipt(AuthorizeNet::SIM::HostedReceiptPage.new(:link_method => AuthorizeNet::SIM::HostedReceiptPage::LinkMethod::POST, :link_text => 'Continue', :link_url => ipn_authorize_credit_url(:only_path => false))) %>
+    <div style="padding-top:5px;padding-bottom: 10px;">
+      <%= form_for :sim_transaction, :url => AuthorizeNet::SIM::Transaction::Gateway::TEST do |f| %>
+      <%= sim_fields(@sim_transaction) %>
+      <%= hidden_field_tag("x_invoice_num", milestone.funding_request.invoice.id, {:id => milestone.funding_request.invoice.id}) %>
+      <%= hidden_field_tag("x_cust_id", milestone.funding_request.invoice.receiver_id, {:id => milestone.funding_request.invoice.receiver_id}) %>
+      <%= hidden_field_tag("x_project_id", @project.id, {:id => @project.id}) %>
+      <%= f.submit 'Click to Pay', class: 'btn btn-warning', style: 'padding-bottom: 3px;'%>
+      <% end %>
+    </div>
+    <% end %>
+    <% end %>
+    <% elsif @project.buyer? current_user %>
+    <%= link_to "Fund Milestone", fund_milestone_path(milestone, project_id:@project.id),
+    method: :put, class:"btn btn-warning fund-link", remote:true %>
+    <% elsif @project.seller? current_user %>
+    <%= link_to "Request Funding", request_fund_milestone_path(milestone, project_id:@project.id), method: :put, class:"btn btn-warning request-fund-link", remote:true %>
+    <% end %>
+  </div>
+  <div class="col-md-2" id="milestone_release_<%=milestone.id%>">
+   <div data-label="Release Escrow" class="account_p_lbl">
+    <% if milestone.funded? %>
+    <span class="release-fund" style="color:#666666;">
+      <span class="status">
+        <% unless milestone.funding_released? %>
+        <% if milestone.release_fund_requested? %>
+        <% if @project.seller?(current_user) %>
+        <% if milestone.release_fund_request.declined_request? %>
+        Admin declined this Release request
+        <span class="colr295">
+          <%= link_to "Click here", release_fund_milestone_path(milestone, project_id:@project.id),
+          class:" release-fund-link", method: :put, remote:true %></span>
+          to resend Request.
+          <% else %>
+          Release requested <br/> on
+          <%= user_time_zone milestone.release_fund_request.sent_at %>
+          <% end %>
+          <% else %>
+          Release requested <br/> on
+          <%= user_time_zone milestone.release_fund_request.sent_at %>
+          <% end %>
+          <% else %>
+          <% if @project.seller?(current_user) %>
+          <%= link_to "Release Fund", release_fund_milestone_path(milestone, project_id:@project.id), class:"btn btn-warning release-fund-link", method: :put, remote:true %>
+          <% end %>
+          <% end %>
+          <% else %>
+          Escrow Released
+          <% end %>
+        </span>
+      </span>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>
+<%else%>
+<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Results Found</div>
+<%end%>
+<br>
+<div class="seperator"></div>
+<div class="clearfix pagination_box">
+  <div class="pull-left">Page <%= @milestones.current_page%> of <%= @milestones.total_pages%></div>
+  <div class="pull-right">
+    <%= paginate @milestones %>
+  </div>
+</div>
+</section>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+   class="brain_tree_modal">
+  <div class="modal-dialog modal-lg payment_pay">
+    <div class="modal-content">
+     <div class="pull-right" style="padding-right: 5px;padding-top: 5px;">
+       <a class="hide-popup btn btn-warning img-circle" class="close" data-dismiss="modal" data-target="#myModal"> X </a>
+       </div>
+     <div class="form-container radius-box glassy-bg small-10 small-centered medium-8 large-6 columns">
+      <%= form_tag transactions_path do%>
+        <%= render 'transactions/customer_form' unless current_user.has_payment_info? %>
+        <p class="alg_reg reg_lbl ftwg100" style="padding-bottom: 15px;">Please enter your payment details:</p>
+        <div id="dropin"></div>
+        <%=hidden_field_tag 'invoice_id', '' %>
+        <%=hidden_field_tag 'project_id', @project.id %>
+        <%=hidden_field_tag 'payment_type', 'MILESTONE_FUND' %>
+        <%=submit_tag "Pay", class: "btn btn-warning fund_pay_braintree", style: 'width: 120px;' %>
+      <%end%>
+    </div>
+  </div>
+</div>
+</div>
+

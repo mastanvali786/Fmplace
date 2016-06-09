@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+	<p>Hi <%= @receiver.visible_name %>,</p>
+
+	<p><%=@sender.visible_name%> Wrote:</p>
+	<p><%= @message.body%></p>
+
+	<p><a href="<%= SITE_LOGIN_URL %>">Log in</a> to send a message back from your inbox.</p>
+
+	<img src="<%=SITE_LOGO%>" height="35px" />
+	<p><%=EMAIL_SIGN_EMAIL%></p>
+	<p><%=EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

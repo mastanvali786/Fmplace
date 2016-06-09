@@ -1,0 +1,38 @@
+<div class="main_container toppd50" style="min-height: 250px;">
+  <div class="container user_profile">
+    <%=render :partial=>'homes/sidebar'%>
+    <section class="row user_right">
+      <div class="ft25 gotham_medium">Frequently Asked Questions</div>
+        <div class="terms_head alg_reg">
+        <% if @faqs.present? %>
+          <% @faqs.each do |faq| %>
+            <div style="padding-bottom:10px">
+            <span style="font-weight: bold;font-size: 17px;"><%= faq.question %></span>
+            <span style="font-weight: normal;font-size: 17px;"><%= raw(faq.answer) %></span>
+            </div>
+          <% end %>
+        <% else %>
+          <p>1.What is the minimun budget to start ?
+            <p class="answer">Minimum budget to start with our project is 750$.</p>
+          </p>
+          <br>
+          <p>2.What are all the subscriptions available in ReverseAuction?
+            <p class="answer">There are four subscription models availabale to start your business in your budget.</p>
+            <p class="answer">
+              <ul class="answer">
+                <li>Startup Model.</li>
+                <li>Business Model.</li>
+                <li>Enterprise Model.</li>
+                <li>Cloud Model.</li>
+              </ul>
+              <p class="answer">To know more about features of individual models, please <a href="http://www.auctionsoftware.com/buy-now/">click here.</a></p>
+            </p>
+          </p>
+          <br>
+          <p>For more details, please visit our site</p>
+          <a href="http://www.auctionsoftware.com">www.auctionsoftware.com</a>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<p>Hi <b><%= @project.buyer.visible_name %>,</b></p>
+
+<p>You have awarded the following bid to <b><%= @bid.user.visible_name %></b> for <%= @project.full_title %></p>
+
+<p><b>Details:<b><%= @bid.details %></p>
+<p><b>Delivery Timeline:</b> <%= estimated_days_display @bid.estimated_days %></p>
+<p><b>Bid Amount:</b>US $<%= @bid.proposed_amount%> </p>
+<% unless @bid.attachments.present? %>
+  <p><b>Attachments:</b>&nbsp;None</p>
+<% else %>
+  <p><b>Attachments:</b>&nbsp;</p>
+  <ul>
+    <% @bid.attachments.each do |attachment| %>
+      <li>
+        <a href="<%=SITE_URL%><%= attachment.url %>" style="font-size:1em" >
+        <%= attachment.name %>
+        </a>
+      </li>
+   <% end %>
+  </ul>
+<% end %>
+
+<p>We’ve sent an email to <b><%= @bid.user.visible_name %></b> letting them know you’ve awarded them the project.</p>
+
+<p>Don’t hesitate to ask us if you have any questions or concerns.</p>
+
+<p>Sincerely,</p>
+<img src="<%= SITE_LOGO %>" height="35px" />
+<p><%= EMAIL_SIGN_EMAIL %></p>
+<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

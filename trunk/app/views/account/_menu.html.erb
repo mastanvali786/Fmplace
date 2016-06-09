@@ -1,0 +1,30 @@
+<h3 class="orange">My Account settings</h3>
+
+<div class="usr_lbl">
+	<a href="/account/user_info", class= "<%= (request.fullpath.include?("user_info") || request.fullpath.include?("user_info_edit"))  == true ? 'active' : '' %>">My User Info</a>
+</div>
+
+<div class="usr_lbl">
+	<a href="/account/public_profile", class= "<%= (request.fullpath.include?("public_profile") || request.fullpath.include?("user_image_edit") ||request.fullpath.include?("user_biography")||request.fullpath.include?("domain_expertise")||request.fullpath.include?("user_skills")||request.fullpath.include?("user_experience")||request.fullpath.include?("user_education")) == true ? 'active' : '' %>">My Public Profile</a>
+</div>
+<div class="usr_lbl">
+	<a href="/account/my_preferences", class= "<%= request.fullpath.include?("my_preferences") == true ? 'active' : '' %>">My Preferences</a>
+</div>
+
+<% if current_user.seller? %>
+	<div class="usr_lbl">
+		<a href="/memberships", class= "<%= request.fullpath.include?("memberships") == true ? 'active' : '' %>">Membership</a>
+	</div>
+
+	<!-- <div class="usr_lbl">
+		<a href="/teams", class= "<%#= request.fullpath.include?("team") == true ? 'active' : '' %>">Team</a>
+	</div>
+
+	<div class="usr_lbl">
+		<a href="/referal_program/referral_program", class = "<%#= (request.fullpath.include?("referral_program") || request.fullpath.include?("referral_account"))  == true ? 'active' : '' %>">Referral Program</a>
+	</div> -->
+<% end %>
+
+<div class="usr_lbl">
+	<a href="<%= advertisements_path%>", class= "<%= request.fullpath.include?("advertisements") == true ? 'active' : '' %>">My Banner Ads</a>
+</div>

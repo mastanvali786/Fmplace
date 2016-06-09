@@ -1,0 +1,13 @@
+development: &default
+  username: overhaulbids-facilitator_api1.gmail.com
+  password: A66D8RHJ6YH2CLKX
+  signature: ANA7yiyfTMPUhsLDSIhknpRkDmIZARSZXfGVblBb3LAZohyn-5swi2oc
+  app_id: APP-80W284485P519543T
+  http_timeout: 30
+  mode: sandbox
+test:
+  <<: *default
+staging:
+  <<: *default
+production:
+  <<: *default

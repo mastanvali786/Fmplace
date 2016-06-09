@@ -1,0 +1,1 @@
+Rails.application.config.app = RecursiveOpenStruct.new(YAML.load(File.read Rails.root.join('config', 'app.yml')))

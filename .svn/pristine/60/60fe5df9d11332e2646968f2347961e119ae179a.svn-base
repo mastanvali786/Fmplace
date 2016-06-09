@@ -1,0 +1,247 @@
+class AccountController < ApplicationController
+  def user_info
+    @country=Country.find_by_id(current_user.try(:country_id))
+    @state=current_user.state_name
+    respond_to do |format|
+      format.html
+      format.json { render :json =>  { result: true,first_name: current_user.first_name,
+         last_name: current_user.last_name, email: current_user.email, phone: current_user.phone,
+         address: current_user.address, city: current_user.city, zipcode: current_user.zipcode,
+         country_name: current_user.country_name, state_name: current_user.state_name,
+         country_id: current_user.country_id, state_id: current_user.state_id } }
+      format.js { render :json =>  { result: true,first_name: current_user.first_name,
+         last_name: current_user.last_name, email: current_user.email, phone: current_user.phone,
+         address: current_user.address, city: current_user.city, zipcode: current_user.zipcode,
+         country_name: current_user.country_name, state_name: current_user.state_name,
+         country_id: current_user.country_id, state_id: current_user.state_id } }
+    end
+  end
+
+  def public_profile
+   @country=Country.find_by_id(current_user.try(:country_id))
+   @state=current_user.state_name
+   @degree = UserDegree.all
+ end
+
+ def user_public_profile
+  @user = User.find(params[:id])
+  @country=Country.find_by_id(@user.country_id)
+  @state=@user.state_name
+  @video_url = @user.video_url
+  @feedbacks = @user.feedbacks.approved.order('updated_at DESC')
+  @feedbacks = @feedbacks.page(params[:page]).per(PER_PAGE_COUNT)
+end
+
+def public_profile_edit
+  @cat=Category.all
+end
+
+def user_info_edit
+ unless params[:user].blank?
+  @country=Country.find_by_id(current_user.country_id)
+  @state=current_user.state_name
+  if current_user.update_attributes(person_params)
+    flash[:notice] = "Profile saved successfully"
+  else
+    flash[:error] = "Profile saving failed. Please try again."
+  end
+  redirect_to user_info_path
+end
+end
+
+def user_image_edit
+ unless params[:user].blank?
+   if params[:user][:profile_photo]
+    current_user.update_attribute :profile_photo ,params[:user][:profile_photo]
+  end
+  if params[:user][:video_url]
+   current_user.update_attribute(:video_url,params[:user][:video_url])
+ end
+end
+end
+
+def my_preferences
+  @user=current_user
+  @category_ids = Category.where(:id => current_user.category_ids)
+  unless current_user.currency.blank?
+    curr=Currency.find_by_currency_abbrev(current_user.currency)
+    @currency=curr.symbol
+  end
+  unless params[:user].blank?
+   params[:user][:category_ids].reject!(&:blank?) unless params[:user][:category_ids].blank?
+   current_user.update_attributes(person_params)
+ end
+ if params[:platform] == "mobileApp"
+  render json: {result: true, msg: "information updated successfully"}
+ end
+end
+
+def team
+ @country=Country.find_by_id(current_user.try(:country_id))
+ @state=current_user.state_name
+end
+def preferences_edit
+ unless params[:user].blank?
+   current_user.update_attributes(person_params)
+ end
+end
+
+def get_name_by_ids(model=nil, ids=[])
+  ids.map! { |x| x.to_i }
+  model.select { |c| ids.include?(c.id) }.map(&:name) if model
+end
+
+def listcat
+
+end
+
+
+def person_params
+  params.require(:user).permit(:first_name,:last_name, :user_name, :company_name,
+   :phone, :display_name,:country_id, :state_id, :zipcode,
+   :city, :address,:role_id,:profile_photo,:video_url,:time_zone,
+   :lat,:lng,:currency,:business_started,{category_ids: []},:notify_category,:day_light_saving,
+   :tagline, :hourly_rate,:summary,:detail_info,:skill_ids,:notify_skill,
+   :approved,:visible,:email,:password,:password_confirmation)
+end
+
+ # User Biography
+ def user_biography
+  if current_user.user_biography
+    @biography = current_user.user_biography
+  else
+    @biography = UserBiography.new
+  end
+  unless params[:user_biography].blank?
+    if current_user.user_biography
+      current_user.user_biography.update_attributes(bio_params)
+      redirect_to public_profile_path
+    else
+      current_user.user_biography = UserBiography.create(bio_params)
+      current_user.save
+      redirect_to public_profile_path
+    end
+  end
+end
+
+  # User Biography
+  def domain_expertise
+    if current_user.domain_expertise
+      @domain = current_user.domain_expertise
+    else
+      @domain = DomainExpertise.new
+    end
+    unless params[:domain_expertise].blank?
+      if current_user.domain_expertise
+        current_user.domain_expertise.update_attributes(domain_expertise_params)
+        redirect_to public_profile_path
+      else
+        current_user.domain_expertise = DomainExpertise.create(domain_expertise_params)
+        current_user.save
+        redirect_to public_profile_path
+      end
+    end
+  end
+
+  # Skills
+  def user_skills
+    if current_user.user_skill
+      @skills = current_user.user_skill
+    else
+      @skills = UserSkill.new
+    end
+    unless params[:user_skill].blank?
+      if params[:user_skill][:known_skills].count > current_user.membership_plan.highlight_skills
+        flash[:error] = "Please add only #{current_user.membership_plan.highlight_skills} skills"
+        render 'user_skills'
+      else
+        if current_user.user_skill
+          current_user.user_skill.update_attributes(user_skill_params)
+          redirect_to public_profile_path
+        else
+          current_user.user_skill = UserSkill.create(user_skill_params)
+          current_user.save
+          redirect_to public_profile_path
+        end
+      end
+    end
+  end
+
+  # Experience
+  def user_experience
+    if params[:certificate].present?
+      result = UserExperience.find_by_id(params[:certificate][:id])
+      if result
+        result.update_attributes(experience_params)
+        redirect_to public_profile_path
+      else
+        current_user.user_experiences.create(experience_params)
+        redirect_to public_profile_path
+      end
+    end
+  end
+
+  def user_experience_edit
+    @experience = UserExperience.find_by_id(params[:exp_id])
+    if params[:user_experience].present?
+      @experience = UserExperience.find_by_id(params[:user_experience][:id])
+      @experience.update_attributes(experience_edit_params)
+      redirect_to public_profile_path
+    end
+  end
+
+
+    # Experience
+    def user_education
+      if params[:education].present?
+        education = UserEducation.find_by_id(params[:education][:id])
+        if education
+          education.update_attributes(education_params)
+          redirect_to public_profile_path
+        else
+          current_user.user_educations.create(education_params)
+          redirect_to public_profile_path
+        end
+      end
+    end
+
+    def user_education_edit
+      @education = UserEducation.find_by_id(params[:exp_id])
+      if params[:user_education].present?
+        @education = UserEducation.find_by_id(params[:user_education][:id])
+        @education.update_attributes(education_edit_params)
+        redirect_to public_profile_path
+      end
+    end
+
+    private
+
+    def bio_params
+      params.require(:user_biography).permit(:summary)
+    end
+
+    def domain_expertise_params
+      params.require(:domain_expertise).permit(:title, :range, :description)
+    end
+
+    def user_skill_params
+      params.require(:user_skill).permit({known_skills: []})
+    end
+
+    def experience_params
+     params.require(:certificate).permit(:company_name, :job_title, :start_date, :end_date, :description)
+   end
+
+   def experience_edit_params
+     params.require(:user_experience).permit(:company_name, :job_title, :start_date, :end_date, :description)
+   end
+
+   def education_params
+     params.require(:education).permit(:college_name, :start_date, :end_date, :degree_id, :field_of_study, :activities_societies, :description)
+   end
+
+   def education_edit_params
+     params.require(:user_education).permit(:college_name, :start_date, :end_date, :degree_id, :field_of_study, :activities_societies, :description)
+   end
+
+ end

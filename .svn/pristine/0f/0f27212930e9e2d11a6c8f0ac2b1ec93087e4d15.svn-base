@@ -1,0 +1,29 @@
+<section class="row user_right1">
+   <section class="left_con">
+    <h3 class="orange">Report a Dispute to Site Admin</h3>
+    <%= form_for(Dispute.new,url: '/disputes',:html => {"data-parsley-validate" => true,:method=>:post}) do |f| %>
+    <input type="hidden" name="dispute[project_id]" value="<%= @project.id%>">
+    <input type="hidden" name="dispute[user_id]" value="<%= current_user.id%>">
+    <div class="row">
+      <div class="col-md-6">
+          <label class="alg_reg reg_lbl">Subject</label>
+        <%= f.text_field :subject, class: 'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter subject name'%>
+      </div>
+     </div>
+     <div class="row">
+      <div class="col-md-12">
+          <label class="alg_reg reg_lbl">Explain Dispute</label>
+        <%= f.text_area :body,:rows => "4" , class: 'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter dispute detail'%>
+      </div>
+     </div>
+     <div class="row">
+      <div class="col-md-3">
+        <%= f.submit 'Submit', class: 'btn btn-warning save' %>
+      </div>
+      <div class="col-md-3">
+          <input type="reset" class="btn btn-default cancel" value="Clear"/>
+      </div>
+     </div>
+     <% end %>
+   </section>
+</section>

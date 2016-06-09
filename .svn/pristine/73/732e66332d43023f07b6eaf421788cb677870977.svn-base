@@ -1,0 +1,111 @@
+<style type="text/css">
+  form fieldset ol > li label {
+    width: 20%;
+  }
+
+  .pay_div{
+    font-size: 30px;
+    margin-bottom: 20px;
+    margin-left: 10px
+  }
+
+  form input[type="text"], form input[type="password"], form input[type="email"], form input[type="number"], form input[type="url"], form input[type="tel"], form textarea {
+    width: 300px;
+  }
+  select {
+    width: 325px;
+  }
+</style>
+<div class="pay_div"><%= @payment_setting.payment_type.display_name %>&nbsp;Settings</div>
+<%= form_for [:admin, @payment_setting]  do |f| %>
+<fieldset class="inputs">
+  <ol>
+    <% if @payment_setting.key1.present? %>
+    <li>
+      <%= f.label :key1, @payment_setting.key1,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value1,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+     <% if @payment_setting.key2.present? %>
+    <li>
+      <%= f.label :key2, @payment_setting.key2,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value2,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+    <% if @payment_setting.key3.present? %>
+    <li>
+      <%= f.label :key3, @payment_setting.key3,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value3,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+    <% if @payment_setting.key4.present? %>
+    <li>
+      <%= f.label :key4, @payment_setting.key4,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value4,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+    
+    <% if @payment_setting.key5.present? %>
+    <li>
+      <%= f.label :key5, @payment_setting.key5,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value5,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+
+    <% if @payment_setting.key6.present? %>
+    <li>
+      <%= f.label :key6, @payment_setting.key6,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value6,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+
+    <% if @payment_setting.key7.present? %>
+    <li>
+      <%= f.label :key7, @payment_setting.key7,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value7,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+    
+    <% if @payment_setting.key8.present? %>
+    <li>
+      <%= f.label :key8, @payment_setting.key8,  :input_html => { :class => "form-control" }%>
+      <%= f.text_field :value8,  :input_html => { :class => "form-control"} %>
+    </li>
+    <% end %>
+    
+    <% if @payment_setting.key9.present? %>
+    <li>
+      <%= f.label :key9, @payment_setting.key9,  :input_html => { :class => "form-control" }%>
+      <% if @payment_setting.value9.eql?(true) %>
+      <input type="radio" name="test_value_radio" class="form-control" value="true"
+      style="float: left;margin-left: 35px;" checked>
+      <% else %>
+      <input type="radio" name="test_value_radio" class="form-control" value="true"
+      style="float: left;margin-left: 35px;">
+      <% end %>
+      <%= f.hidden_field :value9, value:'', id: 'test_mode_payment' %>
+      <%= f.label :value9, "Yes", class: 'form-control', style: 'width: 84px!important;padding-left: 5px;' %>
+      <% if @payment_setting.value9.eql?(false) %>
+      <input type="radio" name="test_value_radio" class="form-control" value="false"
+      style="float: left;margin-left: 35px;" checked>
+      <% else %>
+      <input type="radio" name="test_value_radio" class="form-control" value="false"
+      style="float: left;margin-left: 35px;">
+      <% end %>
+      <%= f.label :value9, "No", class: 'form-control', style: 'width: 84px!important;padding-left: 5px;' %>
+    </li>
+    <% end %>
+  </ol>
+  <br>
+  <%= f.submit "Update Settings", style: "margin-left: 250px;margin-top: 20px;" %>
+</fieldset>
+<%end%>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("input[name=test_value_radio]:radio").change(function () {
+     $('#test_mode_payment').val($(this).val());
+   });
+  });
+</script>
+

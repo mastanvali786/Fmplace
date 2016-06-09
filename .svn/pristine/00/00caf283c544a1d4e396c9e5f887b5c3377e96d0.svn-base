@@ -1,0 +1,36 @@
+<style type="text/css">
+  form fieldset ol > li label {
+    width: 20%!important;
+}
+
+form input[type="text"], form input[type="password"], form input[type="email"], form input[type="number"], form input[type="url"], form input[type="tel"], form textarea {
+    width: 300px;
+}
+select {
+  width: 325px;
+}
+</style>
+<%= semantic_form_for [:admin, @membership_plan]  do |f| %>
+<fieldset class="inputs">
+  <ol>
+      <li><%= f.input :name,  :input_html => { :class => "form-control" }%></li>
+      <li><%= f.input :amount, label: "Plan Amount", :as => :number,  :input_html => { :class => "form-control"} %></li>
+      <li><%= f.input :highlight_skills, label: "Highlight Skills", :input_html => { :class => "form-control"} %></li>
+      <li><%= f.input :team_count, label: "Team Members Count", :as => :select,:collection => [0, 5, 10, 15, "unlimited"] , :input_html => { :class => "form-control" } %></li>
+      <li><%= f.input :connects,  label: "Connects", :input_html => { :class => "form-control"} %></li>
+      <li><%= f.input :service_fee, label: "Service Fee(%)", :input_html => { :class => "form-control"} %></li>
+      <!-- <li><%#= f.input :showcase_portfolio,  label: "Showcase Portfolio",:input_html => { :class => "form-control"} %></li> -->
+      <li><%= f.input :higher_search,  label: "Appear Higher in Search",:input_html => { :class => "form-control"} %></li>
+      <!-- <li><%#= f.input :more_connects, label: "Add More Connects", :input_html => { :class => "form-control"} %></li> -->
+      <!-- <li><%#= f.input :more_category,  label: "Add More Categories",:input_html => { :class => "form-control"} %></li> -->
+      <li><%= f.input :pricing_view,  label: "View Competitor Pricing",:input_html => { :class => "form-control"} %></li>
+      <li><%= f.input :feature_samples,  label: "Featured Proposals",:input_html => { :class => "form-control"} %></li>
+      <li><%#= f.input :escrow_protection, label: "Escrow Protection", :input_html => { :class => "form-control"} %></li>
+      <li><%#= f.input :wire_transfer, label: "Free Wire Transfer", :input_html => { :class => "form-control"} %></li>
+      <%= f.actions do %>
+          <%= f.action :submit, :as => :button %>
+          <%#= f.action :cancel, :as => :button %>
+        <% end %>
+    </ol>
+<%end%>
+

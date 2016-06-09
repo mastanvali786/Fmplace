@@ -1,0 +1,54 @@
+<style>
+	.User_label{
+	font-size:12px;
+	margin-bottom:20px;
+	}
+	.continue{
+	margin-top:20px;
+	width: 185px;
+	}
+	.lh3_lbl.np_label {
+	font-size: 30px;
+	font-weight: normal;
+	margin: 40px 0 0;
+	text-align: center;
+	}
+
+	#error_explanation h2 {
+	  display: none;
+	}
+
+	#error_explanation ul li {
+	  padding: 5px;
+	}
+</style>
+
+<div class="main_container">
+	<div class="container login clearfix">
+	<h3 class="gotham_medium lh3_lbl light_black np_label">Create a New Password </h3>
+	    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {"data-parsley-validate" => true, method: :put }) do |f| %>
+	    <%= devise_error_messages! %>
+      <%= f.hidden_field :reset_password_token %>
+				<div class="row">
+					<div class="col-md-12">
+				    <%= f.label :password, "New Password" %>
+				    <%= f.password_field :password, autofocus: true, autocomplete: "off",
+				        :class=>'form-control','data-parsley-required'=>"true",
+				        'data-parsley-minlength'=>"6" %>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+					  <%= f.label :password_confirmation, "Confirm New Password" %>
+					  <%= f.password_field :password_confirmation, autocomplete: "off",
+					     :class=>'form-control','data-parsley-required'=>"true",'data-parsley-minlength'=>"6",'data-parsley-equalto'=>"#user_password" %>
+					</div>
+				</div>		 
+			 <div class="row">
+				 <div class="col-md-6">
+				  <%= f.submit "Change My Password",:class=>'btn btn-warning bget_started continue' %>
+				</div>
+			</div>	
+		<% end %>
+		</div>
+	</div>

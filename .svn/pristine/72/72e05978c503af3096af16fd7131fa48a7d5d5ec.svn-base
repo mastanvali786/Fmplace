@@ -1,0 +1,61 @@
+<%= stylesheet_link_tag "alert" %>
+<style type="text/css">
+  #payments a {
+    color:blue
+  }
+</style>
+
+<div id="milestone-payments" style="width:760px">
+  <%= render partial: "shared/alert" %>
+</div>
+<div style="color:#30a0be;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+  <span>
+    Payments
+  </span>
+</div>
+<table border="0" cellpadding="3" cellspacing="6" id="payments" style="padding-left:20px;">
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>To</th>
+      <th>Type</th>
+      <th>Approved</th>
+      <th> Approved On</th>
+      <th>Approved By</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payments.each do |payment| %>
+      <tr>
+        <td>
+          <%= payment.klass.titleize %>
+        </td>
+        <td>
+          <%= payment.receiver.name %>
+        </td>
+        <td>
+          <%= payment.type.titleize %>
+        </td>
+        <td>
+          <%= yes_no payment.approved? %>
+        </td>
+        <td>
+          <%= payment.approvedOn %>
+        </td>
+        <td>
+          <% if payment.approved? %>
+            <%= payment.approver.name %>
+          <% end %>
+        </td>
+        <td>
+          <% unless payment.approved? %>
+            <%= link_to "Approve", approve_payment_path(payment),  method: :put %>
+          <% end %>
+        </td>
+      </tr>
+      <tr></tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @payments %>

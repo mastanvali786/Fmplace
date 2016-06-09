@@ -1,0 +1,75 @@
+<style type="text/css">
+	.table_class{
+		width:640px;
+		margin:0px auto;
+		height: 427px;
+		-webkit-border-radius: 11px;
+		-moz-border-radius: 11px;
+		border-radius: 11px;
+		background-color: #fff;
+		border:1px solid #777;
+	}
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body style="font-family:Trebuchet MS;background:#f5f5f5">
+	<table style="width:640px;margin:0px auto;">
+		<tr>
+			<td style="width:300px;float:left;display:block;">
+				<img src="<%= SITE_URL%>/assets/logo.png" alt="" />
+			</td>
+		</tr>
+	</table>
+	<table class="table_class">
+		<tr>
+			<td style="font-size:12px;color:#858585;padding:0px;margin:10px 5px 0px;display: block;">Dear <%= @resource.first_name %>,</td>
+		</tr>
+		<tr>
+			<td style="font-size:12px;color:#858585;padding:0px;margin:5px 5px 0px;display: block;">We have received a request to change your password.</td>
+		</tr>
+		<tr>
+			<td style="font-size:12px;color:#858585;padding:0px;margin:5px 5px 0px;display: block;">
+				<%= link_to 'Click here to change my password', edit_password_url(@resource, reset_password_token: @token),:style=>"color:#5965ff;" %>
+			</td>
+		</tr>
+		<tr>
+			<td style="font-size:12px;color:#858585;padding:0px;margin:5px 5px 0px;display: block;">If your email program does not support html, please copy and paste the link below into your browser. The link will take you to a secure webpage on <%= SITE_URL%> allowing you to change your password.
+			</td></tr>
+			<tr>
+				<td style="font-size:12px;color:#858585;padding:0px;margin:5px 5px 0px;display: block;">
+					<a style="color:#5965ff;" href="<%= SITE_URL %>/users/password/edit?reset_password_token=<%=@token%>">
+            <%= SITE_URL %>/users/password/edit?reset_password_token=<%=@token%>
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td style="font-size:12px;color:#858585;padding:0px;margin:5px 5px 0px;display: block;">
+					<ul>
+						<li>
+							The above link is valid for 24 hours only. If the link is expired, you can request a new one from the password reset page.
+						</li>
+						<li>
+							Use a password with at least 6 characters, using letters and numbers.
+						</li>
+						<li>
+							Do not give out your password (Our representatives will never ask for your password.)
+						</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td style="font-size:12px;color:#858585;padding:0px;margin:5px 5px 0px;display: block;">
+				Please contact us at 505-633-7919 if you have any questions about your account. We look forward to work with you.
+				</td>
+			</tr>
+			<tr>
+
+			</table>
+			<p>Sincerely,</p>
+			<img src="<%= SITE_LOGO %>" height="35px" />
+			<p><%= EMAIL_SIGN_EMAIL%></p>
+	    <p><%= EMAIL_SIGN_NUMBER%></p>
+		</body>
+		</html>

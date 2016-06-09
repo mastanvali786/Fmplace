@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<p>Hi <%=@buyer.visible_name%>,</p>
+
+<p>Half the battle is won now that you have <%= @project.bids.count %> quotes. But, I understand there’s a lot more to consider than just price. In fact, all the options out there can make a decision rather difficult.</p>
+
+<p>I’ve invested extensive man-hours building this learning center to help people understand their options, but to be honest, <b>I’d rather talk with you and answer your questions personally</b>. You have permission to pick my brain.</p>
+
+<p>Please call me any time. I’m here to help.</p>
+
+	<p>Sincerely,</p>
+	<p><%= EMAIL_SIGN_NAME %></p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

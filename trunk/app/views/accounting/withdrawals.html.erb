@@ -1,0 +1,110 @@
+<%= javascript_include_tag "mm" %>
+<%= javascript_include_tag "jquery.alphanum" %>
+<%= javascript_include_tag "jquery.form-validator" %>
+<%= stylesheet_link_tag "alert" %>
+
+<style type="text/css">
+  #withdraw-messages a {
+    color:#30a0be
+  }
+</style>
+<div class="container user_profile">
+  <% if current_user.buyer? %>
+  <%= render 'pay_action' %>
+  <% end %>
+  <% if current_user.seller? %>
+  <%= render 'earnings/earn_action' %>
+  <% end %>
+
+  <section class="row user_right1">
+    <div id="withdraw-messages" style="width:560px;padding-top: 20px;">
+      <%= render partial: "shared/alert" %>
+    </div>
+    <div class="row">
+      <div class="col-md-9 adw_left">
+        <div class="awgbox" id="show_setttings">
+          <div class="pull-right g_lightc alg_bold orange" style="cursor: pointer">
+            <!--             <span onclick="hide_show_by_id('show_setttings','edit_settings');">Edit</span> -->
+            <%= link_to "Edit", accounting_account_list_path %>
+          </div>
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">Withdrawal Method:</div>
+            <div class="col-md-6 lbcolor alg_bold" id="payment_method"> <%= (@accounts.payment_type_id ? @accounts.payment_type_name : "Click edit to update account details") %></div>
+          </div>
+          <div class="row">
+            <% if payment_method(current_user) == "PAYPAL" %>
+            <div class="col-md-3  g_lightc alg_bold">PayPal account</div>
+            <div class="col-md-6 lbcolor alg_bold"><%= @accounts.paypal_email %></div>
+            <% elsif payment_method(current_user) == "PAYFAST" %>
+            <div class="col-md-3  g_lightc alg_bold">PayFast account</div>
+            <div class="col-md-6 lbcolor alg_bold"><%= @accounts.payfast_email %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="awgbox" id="edit_settings" style="display:none;">
+          <%= form_for @accounts, url:accounting_save_account_path ,:html => {"data-parsley-validate" => true} do |f| %>
+          <%=f.hidden_field :user_id, :value => current_user.id %>
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">Withdrawal Method:</div>
+            <div class="col-md-6 lbcolor alg_bold">PayPal Money Request</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3  g_lightc alg_bold">PayPal account</div>
+            <div class="col-md-9 lbcolor alg_bold">
+              <%=f.text_field :paypal_email, value: @withdrawal_email,class:'form-control', 'data-parsley-required'=>"true",'data-parsley-type'=>"email" %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 pull-right g_lightc alg_bold">
+              <input type="button" value="Cancel" class='btn btn-warning save alg_reg' onclick="hide_show_by_id('edit_settings','show_setttings');">
+            </div>
+            <div class="col-md-3 pull-right g_lightc alg_bold">
+              <%= f.submit 'Save', class: 'btn btn-warning save alg_reg'%>
+            </div>
+          </div>
+          <% end %>
+        </div>
+
+        <!-- Mannual withdraw div  -->
+        <div class="awgbox1" id="manual_withdraw">
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">
+              Available Balance<span class="puul-right">:</span>
+            </div>
+            <div class="col-md-3 g_lightc gotham_medium">
+             <input type="hidden" id="available_fix" value="<%= @available_balance %>">
+             <span data-amount="<%= @available_balance %>" id="available">
+               <%= number_to_currency @available_balance %>
+             </span>
+           </div>
+         </div>
+         <div class="row amount">
+          <div class="col-md-3 g_lightc alg_bold">Withdrawal Amount<span class="puul-right">:</span></div>
+          <div class="col-md-3">
+
+            <div class="input-group">
+              <span class="input-group-addon">$</span>
+              <input class="form-control numeric" id="amount" placeholder="Amount" />
+            </div>
+          </div>
+          <div class="col-md-6 g_lightc alg_reg">Amount must be greater than zero and less than or equal to available balance</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 g_lightc alg_bold">New Balance:</div>
+          <div class="col-md-3 gotham_medium">
+            <span id="new-balance">
+              <%= number_to_currency @available_balance %>
+            </span>
+          </div>
+        </div>
+        <div class="row aw_btns">
+          <div class="col-md-3">
+            <button class="btn btn-warning disabled" disabled="disabled" id="withdraw">Withdraw
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,50 @@
+<div class="main_container">
+	<div class="container login clearfix">
+	<h3 class="gotham_medium lh3_lbl light_black">Sign in to Your Account</h3>
+	  <%= form_for(@user, url: session_path(@user),:html => {"data-parsley-validate" => true}) do |f| %>
+			<div class="row">
+				<div class="col-md-12">
+					<%=f.text_field :email, :class=>'form-control',:required => true,'data-parsley-type'=>"email",
+					   placeholder: 'Enter your email', value: @user_email%>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<%= f.password_field :password, autocomplete: "off",:class=>'form-control',
+					    :required => true, placeholder: 'Enter your password'%>
+				</div>
+			</div>
+		 
+		 <div class="row">
+			 <div class="col-md-6">
+			 <%= f.submit 'Get Started',class: 'btn btn-warning bget_started' %>
+			</div>
+			<div class="col-md-6">
+			<% if devise_mapping.rememberable? -%>
+		    <div class="field">
+		      <%= f.check_box :remember_me, checked: @check_value %>
+		      <%= f.label :remember_me,:style=>"font-weight:normal;" %>
+		    </div>
+		  <% end -%>
+			</div>
+		</div>
+	 <div class="row">
+			 <div class="col-md-5">
+			 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+			  <%= link_to "Forget Password ?", new_password_path(resource_name) ,style:'color:#3b44a0' %><br />
+			<% end -%>
+
+			</div>
+			<div class="col-md-7">
+			Don't have an account? <%=link_to 'click here',users_signup_buyer_path,style:'color:#3b44a0'%> 
+			</div>
+		</div>
+	<% end %>
+	<div class="seperator" ></div>
+	<span class="pull-right">Login with &nbsp;&nbsp;
+	<%= link_to "#{image_tag('facebook_32.png',:class =>"fb_style")}".html_safe, user_omniauth_authorize_path(:facebook),:class=>"popup" %>
+	<%= link_to "#{image_tag('linkedin_32.png',:class =>"fb_style")}".html_safe, user_omniauth_authorize_path(:linkedin) %>
+	</span>
+	</div>
+	</div>
+</div>

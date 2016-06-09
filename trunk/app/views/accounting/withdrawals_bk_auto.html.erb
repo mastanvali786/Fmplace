@@ -1,0 +1,281 @@
+<%= javascript_include_tag "mm" %>
+<%= javascript_include_tag "jquery.alphanum" %>
+<%= javascript_include_tag "jquery.form-validator" %>
+<%= stylesheet_link_tag "alert" %>
+
+<style type="text/css">
+  #withdraw-messages a {
+    color:#30a0be
+  }
+</style>
+
+<div class="container user_profile">
+  <% if current_user.buyer? %>
+  <%= render 'pay_action' %>
+  <% end %>
+  <% if current_user.seller? %>
+  <%= render 'earnings/earn_action' %>
+  <% end %>
+
+  <section class="row user_right1">
+    <div id="withdraw-messages" style="max-width:560px;padding-top: 20px;">
+      <%= render partial: "shared/alert" %>
+    </div>
+    <div class="row">
+      <div class="col-md-9 adw_left">
+        <div class="awgbox" id="show_setttings">
+          <div class="pull-right g_lightc alg_bold orange" style="cursor: pointer">
+            <span onclick="hide_show_by_id('show_setttings','edit_settings');">Edit</span>
+          </div>
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">Withdrawal Method:</div>
+            <div class="col-md-6 lbcolor alg_bold">PayPal Money Request</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3  g_lightc alg_bold">PayPal account</div>
+            <div class="col-md-6 lbcolor alg_bold"><%= @withdrawal_email %></div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">Withdraw type</div>
+            <div class="col-md-3 alg_bold">
+              <input class="checkbox pull-left" value="0" name="withdraw-type" type="radio" disabled/>
+              <span>&nbsp;&nbsp;Manually</span>
+            </div>
+            <div class="col-md-6 alg_bold">
+              <input class="checkbox pull-left" value="1" name="withdraw-type" type="radio" disabled/>
+              <span>&nbsp;&nbsp;Automatically</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="awgbox" id="edit_settings" style="display:none;">
+          <%= form_for @accounts, url:accounting_save_account_path ,:html => {"data-parsley-validate" => true} do |f| %>
+          <%=f.hidden_field :user_id, :value => current_user.id %>
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">Withdrawal Method:</div>
+            <div class="col-md-6 lbcolor alg_bold">PayPal Money Request</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3  g_lightc alg_bold">PayPal account</div>
+            <div class="col-md-9 lbcolor alg_bold">
+              <%=f.text_field :paypal_email, value: @withdrawal_email,class:'form-control', 'data-parsley-required'=>"true",'data-parsley-type'=>"email" %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">Withdraw type</div>
+            <% if @accounts.withdraw.eql?(1)%>
+            <div class="col-md-3 alg_bold">
+              <%= f.radio_button :withdraw, 0, :class=>"checkbox pull-left",'data-parsley-required'=>"true",
+                onclick: "hide_show_by_id('auto_withdraw','manual_withdraw');" %>
+              <span>&nbsp;&nbsp;Manually</span>
+            </div>
+            <div class="col-md-6 alg_bold">
+              <%= f.radio_button :withdraw, 1,:checked =>'checked',:class=>"checkbox pull-left",'data-parsley-required'=>"true",
+                onclick:"hide_show_by_id('manual_withdraw','auto_withdraw');" %>
+              <span>&nbsp;&nbsp;Automatically</span>
+            </div>
+            <% else %>
+               <div class="col-md-3 alg_bold">
+                <%= f.radio_button :withdraw, 0, :checked =>'checked', :class=>"checkbox pull-left",'data-parsley-required'=>"true",
+                  onclick: "hide_show_by_id('auto_withdraw','manual_withdraw');" %>
+                <span>&nbsp;&nbsp;Manually</span>
+              </div>
+              <div class="col-md-6 alg_bold">
+                <%= f.radio_button :withdraw, 1 ,:class=>"checkbox pull-left",'data-parsley-required'=>"true",
+                  onclick:"hide_show_by_id('manual_withdraw','auto_withdraw');" %>
+                <span>&nbsp;&nbsp;Automatically</span>
+              </div>
+            <% end %>
+          </div>
+          <div class="row">
+            <div class="col-md-3 pull-right g_lightc alg_bold">
+              <input type="button" value="Cancel" class='btn btn-warning save alg_reg' onclick="hide_show_by_id('edit_settings','show_setttings');">
+            </div>
+            <div class="col-md-3 pull-right g_lightc alg_bold">
+              <%= f.submit 'Save', class: 'btn btn-warning save alg_reg'%>
+            </div>
+          </div>
+          <% end %>
+        </div>
+
+        <!-- Mannual withdraw div  -->
+        <div class="awgbox1" id="manual_withdraw">
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">
+              Available Balance<span class="puul-right">:</span>
+            </div>
+            <div class="col-md-3 g_lightc gotham_medium">
+              <input type="hidden" id="available_fix" value="<%= @available_balance %>">
+              <span data-amount="<%= @available_balance %>" id="available">
+               <%= number_to_currency @available_balance %>
+             </span>
+           </div>
+         </div>
+         <div class="row amount">
+          <div class="col-md-3 g_lightc alg_bold">Withdrawal Amount<span class="puul-right">:</span></div>
+          <div class="col-md-3">
+
+            <div class="input-group">
+              <span class="input-group-addon">$</span>
+              <input class="form-control numeric" id="amount" placeholder="Amount" />
+            </div>
+          </div>
+          <div class="col-md-6 g_lightc alg_reg with_draw_note">Amount must be greater than zero and less than or equal to available balance</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 g_lightc alg_bold">New Balance</div>
+          <div class="col-md-3 gotham_medium">
+            <span id="new-balance">
+              $0.00
+            </span>
+          </div>
+        </div>
+        <div class="row aw_btns">
+          <div class="col-md-3">
+            <button class="btn btn-warning disabled" disabled="disabled" id="withdraw">Withdraw
+            </div>
+          </div>
+        </div>
+
+        <!-- Automatically withdraw div  -->
+        <div class="awgbox1" id="auto_withdraw">
+          <div class="row">
+            <div class="col-md-3 g_lightc alg_bold">
+              Available Balance<span class="puul-right">:</span>
+            </div>
+            <div class="col-md-3 g_lightc gotham_medium">
+              <%= number_to_currency @available_balance %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 g_lightc alg_reg">
+              click here to <a href="<%= accounting_transactions_path %>">Transaction History</a>
+            </div>
+          </div>
+          
+        </div>
+
+      </div>
+      <div class="col-md-3 right_awbox">
+        <div class="gotham_medium orange thd">Withdraw Types</div>
+        <h6 class="gotham_medium aw_p10">Manually:</h6>
+
+        <p class="alg_reg light_black aw_p10">1. Enter the amount you want 
+          to withdraw.</p>
+
+          <p class="alg_reg light_black aw_p10">2. Click withdrawal button.</p>
+
+          <h6 class="gotham_medium aw_p10">Automatically:</h6>
+          <p class="alg_reg light_black aw_p10">1. When selected Automatically 
+            funds should go to paypal either 
+            that day night or immediate to 
+            paypal account without admin 
+            approving.</p>
+          </div>
+        </div>
+      </section>
+
+ <!--  <section class="row user_right1">
+    <div id="withdraw-messages" style="width:560px;padding-top: 20px;">
+      <%= render partial: "shared/alert" %>
+    </div>
+    <div style="font-size:14px;font-weight:bold;padding-bottom:10px;padding-top: 14px;color:#fe5a01;">
+     Withdraw Funds</div>
+    <form id="withdrawals">
+      <table border="0" cellpadding="4" cellspacing="5" width="500px">
+        <tr>
+          <td>
+            <span style="color:#666666;">Withdrawal Method</span>
+          </td>
+          <td align="right">
+            <span style="color:#666666;font-family: Arial">
+              PayPal Money Request
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" valign="top">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr>
+                <td width="46%">
+                  <span style="color:#666666;">Email</span>
+                  &nbsp;
+                </td>
+                <td align="right" colspan="2" width="54%">
+                  <span id="email" style="color:#999999; ">
+                    <%= @withdrawal_email %>
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="color:#666666;">Available Balance</span>
+          </td>
+          <td align="right" style="color:#999999">
+            <span data-amount="<%= @available_balance %>" id="available">
+              <%= number_to_currency @available_balance %>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="color:#666666;">Withdrawal Amount</span>
+          </td>
+          <td align="right" style="color:#999999">
+            <div class="amount">
+              US$
+              <input class="numeric" id="amount" size="8" style="color:#999999;border:1px inset #CCC;text-align:right" type="text"></input>
+              <div class="help" style="color:#666666;font-size:smaller">
+                Amount must be greater than zero and less than or equal to available balance.
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="color:#666666;">New Balance</span>
+          </td>
+          <td align="right" style="color:#999999">
+            <span id="new-balance">
+              $0.00
+            </span>
+          </td>
+        </tr>
+        <br>
+        <tr>
+          <td colspan="2">
+            <table border="0" cellpadding="0" cellspacing="0" width="60%">
+              <tr>
+                <td valign="top" width="42%">
+                  <button class="btn btn-warning disabled" disabled="disabled" id="withdraw">
+                    Withdraw
+                  </button>
+                </td>
+                <td width="58%">
+                  <button class="btn btn-default cancel reset-form">
+                    Cancel
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </section> -->
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var type_val = '<%= @type%>';
+    $('input:radio[name=withdraw-type][value='+type_val+']').attr('checked', true);
+    if(type_val == 0){
+      hide_show_by_id('auto_withdraw','manual_withdraw');
+    }else{
+      hide_show_by_id('manual_withdraw','auto_withdraw');
+    }
+  });
+</script>

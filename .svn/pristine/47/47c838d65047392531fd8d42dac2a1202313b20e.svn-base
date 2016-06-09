@@ -1,0 +1,156 @@
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render(:partial => '/projects/dashboard_header') %>
+        <aside class="user_left1">
+            <%= render partial: "menu" %>
+        </aside>
+
+        <% if get_membership_plan(current_user) %>
+            <div class="gotham_medium need_help light_black">
+                <br><br><br>
+                You are currently in <%= current_user.membership_plan_name %> membership plan.
+                Please upgrade your membership plan to get improve your team.<a href="/memberships">Upgrade</a>
+            </div>
+        <% else %>
+            <section class="row user_right1">
+                <h3 class="orange gotham_medium">My Team</h3>
+                <div class="row sd_gbox">
+                    <div class="col-xs-12 col-sm-6 col-md-2 st_lbl alg_reg">Filter By</div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <label class="field select monst1" style="z-index: 26">
+                            <select id="search_status_project" class="select">
+                                <option value="all">All</option>
+                            </select>
+                            <i class="arrow"></i>       
+                        </label>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-6 sboxs">
+                        <form class="search-box" action="/projects" method="get">
+                            <div class="input-group search_bs">
+                                <input type="search" placeholder="" class="search form-control pull-left" name="sq" value="">
+                                <button type="submit" class="input-group-addon" value=""><i class="fa fa-search"></i></button> 
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <button type="button" class="btn btn-warning alg_reg" data-toggle="modal" data-target="#myModal" data-title="Add New Member">Add New Member</button>
+                    </div>
+                </div>
+       
+                <div class="row ngray_box mtxt_lftm md_hide">
+                    <div class="col-md-3 first_ltxt">Name</div>
+                    <div class="col-md-3" style="text-align: left;">Role</div>
+                    <div class="col-md-3" style="text-align: left;">Assigned Jobs</div>
+                    <div class="col-md-3" style="text-align: left;">Actions</div>
+                </div>
+
+                <div class="row nd_box txt_lftm">
+                    <div class="col-md-3 first_ltxt"><div data-label="Name" class="account_p_lbl">User</div></div>
+                    <div class="col-md-3" style="text-align: left;"><div data-label="Role" class="account_p_lbl">Admin</div></div>
+                    <div class="col-md-3" style="text-align: left;"><div data-label="Assigned Jobs" class="account_p_lbl">12 jobs</div></div>
+                    <div class="col-md-3" style="text-align: left;"><div data-label="Actions" class="account_p_lbl">Active</div></div>
+                </div>
+
+                <div class="seperator"></div>
+                    To expand your freelancer team, upgrade to Small Company or Large Company
+                    <div class="pull-right"><a class="btn btn-warning show-new-popup" data-projectid="21" href="#">Upgrade >></a></div>
+                </div>
+            </section>
+        <% end %>
+    </div>
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="padding: 15px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="orange">Add New Member</h3>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="alg_reg reg_lbl">First Name</label>
+                                <input type="text" class="form-control" id="first_name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="alg_reg reg_lbl">Last Name</label>
+                                <input type="text" class="form-control" id="last_name">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="alg_reg reg_lbl">Email</label>
+                                <input type="text" class="form-control" id="email">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="radio">
+                                    <label><input type="radio" name="optradio" selected>Administrator</label>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                Can perform all Elance tasks. Only this role can manage membership status, team members, financial account setup and withdrawals.
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="radio">
+                                    <label><input type="radio" name="optradio">Hiring Manager</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                Can post jobs, select freelancers and negotiate terms. Can send messages and files, approve status reports and timesheets, and make payments (for assigned workrooms only). Team Members can invite a guest to the job, while Team Leaders can also add existing users and create new users
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="radio">
+                                    <label><input type="radio" name="optradio">Recruiter</label>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                Can post jobs, select freelancers and negotiate terms (but cannot make payments or withdraw funds). Can send messages and files. 
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="radio">
+                                    <label><input type="radio" name="optradio">Staff</label>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                When assigned to a workroom as a client, can send messages and files, view freelancer proposals, terms, status reports and timesheets (but cannot make financial and contractual decisions). When assigned to a workroom as a freelancer, can send messages and files, update status reports and timesheets but has no access to business terms or payments information. Can access assigned workrooms only. 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div style="padding: 15px;">
+                    <button type="button" class="btn btn-primary">Save Team Member</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      $("#myModal").on('show.bs.modal', function(event){
+            var button = $(event.relatedTarget);  // Button that triggered the modal
+            var titleData = button.data('title'); // Extract value from data-* attributes
+
+        });
+    });
+</script>

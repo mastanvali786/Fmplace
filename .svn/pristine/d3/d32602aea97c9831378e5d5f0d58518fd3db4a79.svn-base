@@ -1,0 +1,26 @@
+ <style type="text/css">
+  #error_explanation li {
+           color:red
+    }
+    .field_with_errors { display: inline;}
+
+    .field_with_errors input,.field_with_errors textarea {
+      border: 2px solid red;
+    }
+</style>
+<% if model.errors.any? %>
+  <div id="error_explanation" style="margin-left:20px;">
+    <!-- <strong>
+      Please fix the following
+      <%= pluralize(model.errors.count, "error") %>
+      <%= ':' %>
+    </strong> -->
+    <ul style="margin-left:5px;">
+      <% model.errors.full_messages.each do |msg| %>
+        <li>
+          <%= msg %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -1,0 +1,64 @@
+<div class="main_container">
+  <div class="container mpro_container" style="min-height: 400px;">
+     <%= render partial: "shared/header_back" %>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+      <span>
+        Deposit Request
+      </span>
+    </div>
+    <div class="table-responsive">
+      <table  class="table table-bordered table-hover" border="0" cellpadding="3" cellspacing="6" id="withdrawal-request" style="padding-left:20px;">
+        <tbody>
+          <tr>
+            <td class="md_hide">
+              <strong>Id</strong>
+            </td>
+            <td data-label="Id" class="account_p_lbl">
+              <%= @request.id %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Type</strong>
+            </td>
+            <td data-label="Type" class="account_p_lbl">
+              <%= @request.klass %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Amount</strong>
+            </td>
+            <td data-label="Amount" class="account_p_lbl">
+              <%= to_currency @request.amount %>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="md_hide">
+              <strong>Requested On</strong>
+            </td>
+            <td data-label="Requested On" class="account_p_lbl">
+              <%= user_time_zone @request.created_at %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Status</strong>
+            </td>
+            <td data-label="Status" class="account_p_lbl">
+              <%= @request.status.titleize %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Deposit Invoice</strong>
+            </td>
+            <td data-label="Deposit Invoice" class="account_p_lbl">
+              <%= link_to "Deposit Invoice", deposit_invoice_path(@request.invoice) %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>

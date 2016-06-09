@@ -1,0 +1,181 @@
+<div class="main_container">
+	<div class="container user_profile">
+		<!-- Dashboard Link -->
+		<%= render(:partial => '/projects/dashboard_header') %>
+
+		<!-- Side Menu -->
+		<aside class="user_left">
+ 			<%= render(:partial => '/account/menu') %>
+		</aside>
+
+		<!-- Main Section -->
+		<section class="row user_right">
+			<br>
+			<h1 class="big_text">Select your membership plan.</h1>
+			<h2 class="sub_text">Choose the membership plan that best fits your needs. You can cancel it at any time.	</h2>
+			<p>Click the link to check the status of current plan: <%= link_to "Current Membership Status", current_status_memberships_path %></p>
+			<div class="row">
+				<div class="membership-table" id="membershipTable">
+					<div class="col">
+						<div class="cell">
+							<div class="feature-header increase_visb">Increase Visibility</div>
+						</div>
+						<div class="cell"><div>Highlight Services</div></div>
+						<div class="cell"><div>Appear Higher in Search</div></div>
+						<div class="cell"><div>Add Team Members</div></div>
+						<div class="cell sep">
+							<div class="feature-header">Win More Jobs</div>
+						</div>
+						<div class="cell"><div>Connects</div></div>
+						<div class="cell"><div>View Competitor Pricing</div></div>
+						<div class="cell"><div>Featured Proposals</div></div>
+						<div class="cell sep">
+							<div class="feature-header">Payment Protections and More</div>
+						</div>
+						<div class="cell"><div>Escrow Protection</div></div>
+						<div class="cell"><div>Free Wire Transfer</div></div>
+						<div class="cell"><div>Service Fee</div></div>
+						<div class="cell last"></div>
+					</div>
+
+					<% @membership_plan.each do |plan| %>
+						<div class="col plan">
+							<div class="cell">
+								<% if current_user.membership_plan && current_user.membership_plan.id == plan.id %>
+									<div class="current-tag">CURRENT PLAN</div>
+								<% end %>
+								<div class="highlight">
+									<div class="title"><%= plan.name %></div>
+									<div style="font-size: 16px;" class="subtitle">
+										<% if plan.amount == 0 %>
+										Free
+										<% else %>
+										$<%= plan.amount %>&nbsp;/&nbsp;month
+										<% end  %>
+									</div>
+								</div>
+							</div>
+							<div class="cell">
+								<div>
+									<%= plan.highlight_skills %>
+								</div>
+							</div>
+							<div class="cell">
+								<% if plan.higher_search == true %>
+									<div class="checkmark">&#10004;</div>
+								<% else %>
+									<div class="checkmark">&#x2717;</div>
+								<% end %>
+							</div>
+							<div class="cell">
+								<% if plan.team_count == "0" %>
+									<div class="checkmark">&#x2717;</div>
+								<% else %>
+									<div class="cell"><%= plan.team_count %></div>
+								<% end %>
+							</div>
+							<div class="cell sep"></div>
+							<div class="cell"><div><%= plan.connects %></div></div>
+							<div class="cell">
+								<% if plan.pricing_view == true %>
+									<div class="checkmark">&#10004;</div>
+								<% else %>
+									<div class="checkmark">&#x2717;</div>
+								<% end %>
+							</div>
+							<div class="cell">
+								<% if plan.feature_samples == true %>
+									<div class="checkmark">&#10004;</div>
+								<% else %>
+									<div class="checkmark">&#x2717;</div>
+								<% end %>
+							</div>
+							<div class="cell sep"></div>
+							<div class="cell">
+								<% if plan.escrow_protection == true %>
+									<div class="checkmark">&#10004;</div>
+								<% else %>
+									<div class="checkmark">&#x2717;</div>
+								<% end %>
+							</div>
+							<div class="cell">
+								<% if plan.wire_transfer == true %>
+									<div class="checkmark">&#10004;</div>
+								<% else %>
+									<div class="checkmark">&#x2717;</div>
+								<% end %>
+							</div>
+							<div class="cell"><div><%= plan.service_fee %>%</div></div>
+							<div class="outline"></div>
+							<% if current_user.membership_plan && current_user.membership_plan.id == plan.id %>
+								<% if current_user.user_membership_plan.check_expiry %>
+									<%= link_to "Pay", "#", data: {toggle: "modal", target: "#modal", id: "#{plan.id}", name: "#{plan.name}", amount: "#{plan.amount}"},  class: "btn btn-success plan_select" %>
+								<% else %>
+									<div><button class="btn btn-warning" disabled="true">Selected</button></div>
+								<% end %>
+							<% else %>
+								<%= link_to "Select", "#", data: {toggle: "modal", target: "#modal", id: "#{plan.id}", name: "#{plan.name}", amount: "#{plan.amount}"},  class: "btn btn-success plan_select" %>
+							<% end %>
+							<div class="cell"></div>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</section>
+		</div>
+	</div>
+
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><b>Membership Plan Upgrade</b></h4>
+      </div>
+      <div class="modal-body">
+      <%= form_tag memberships_upgrade_plan_path, :html => {"data-parsley-validate" => true} do %>
+	        <p>Hi <%= current_user.full_name %>,</p>
+	        <p>You are currently in <b><%= curren_plan(current_user)%></b> membership plan.Upgrading from the current plan to <b><span id="plan_name"></span></b>, amount will be debited from your available balance.</p>
+	        <%= hidden_field_tag :payment_method, "" %>
+	        <br>
+	        <div class="form-group">
+	        	<div class="col-md-12">
+	        		<p>Select the option for auto-renewal<small>(Amount will be deducted automatically from your balance)</small></p>
+	        	</div>
+	        	<br>
+	        	<div class="col-md-5">
+	        		<input type="radio" value="true" name="auto_renewal" id="auto_renewal" checked="checked"><label>&nbsp;Auto-Renewal</label>
+	        		<br>
+	        		<input type="radio" value="false" name="auto_renewal" id="auto_renewal"><label>&nbsp;Non Auto-Renewal</label>
+	        	</div>
+	        </div>
+	        <br><br>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+	        <%#= link_to_if(current_user.can_upgrade_plan?, "Upgrade", memberships_upgrade_plan_path, class: "btn btn-success", method: :post, id: "get_plan_id") %>
+	        <%= link_to "Pay", memberships_upgrade_plan_path, class: "btn btn-success", method: :post, id: "get_plan_id" %>
+	      </div>
+	    <% end %>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	 $(document).on("click", ".plan_select", function () {
+     var plan_id = $(this).data('id');
+     $('#auto_renewal').prop('checked', true);
+     var plan_name = $(this).data('name');
+     $('#plan_name').text(plan_name);
+     $('#payment_method').val(plan_id);
+	});
+
+	$('#get_plan_id').on('click', function() {
+		var plan_id = $('#payment_method').val();
+		var auto_renewal = $('#auto_renewal').val();
+		this.href = this.href + '?plan_id=' + plan_id + "&" + 'auto_renewal=' + auto_renewal
+	});
+</script>
+
+

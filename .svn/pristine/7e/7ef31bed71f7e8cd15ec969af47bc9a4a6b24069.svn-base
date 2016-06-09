@@ -1,0 +1,23 @@
+<%= render(:partial => '/projects/dashboard_header') %>
+<aside class="user_left1 alg_reg">
+	<h3>Payments</h3>
+	<div class="usr_lbl">
+	  <a class="<%= request.fullpath.include?("make_payment") == true ? 'active' : '' %>" href="<%= accounting_make_payment_path %>"> Make Payment </a>
+	</div>
+	<div class="usr_lbl">
+	    <a class="<%= request.fullpath.include?("account_list") == true ? 'active' : '' %>" href="<%= accounting_account_list_path %>">Payment Settings</a>
+	</div>
+	<div class="usr_lbl">
+	   <a class="<%= request.fullpath.include?("payment_list") == true ? 'active' : '' %>" href="<%= accounting_payment_list_path %>"> Payment List </a>
+	</div>
+	<div class="usr_lbl">
+	  <a class="<%= request.fullpath.include?("transactions") == true ? 'active' : '' %>" href="<%= accounting_transactions_path %>"> Transaction History</a>
+	</div>
+	<div class="usr_lbl">
+		<a class="<%= request.fullpath.include?("withdrawals") == true ? 'active' : '' %>" href="<%= accounting_withdrawals_path %>">Withdraw Funds</a>
+	</div>
+	<div class="usr_lbl">
+		<a class="<%= request.fullpath.include?("deposits") == true ? 'active' : '' %>" href="<%= accounting_deposits_path %>">Deposit Funds</a>
+	</div>
+
+</aside>

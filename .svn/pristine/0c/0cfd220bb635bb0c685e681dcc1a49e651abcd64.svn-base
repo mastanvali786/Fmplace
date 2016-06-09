@@ -1,0 +1,110 @@
+<div class="main_container">
+  <div class="container mpro_container">
+    <%= render(:partial => 'projects/dashboard_header') %>
+    <div style="margin-top: 10px;margin-left: 2px;">
+     <%= link_to "Back to Messages", messages_path, class:'alg_reg colr295'%>
+   </div>
+   <div style="padding: 15px 0;">Message</div>
+   <div>
+    <div class="msg_details "id="invoice">
+      <div class="row">
+        <div class="col-md-1 conversation_label md_hide">
+          <strong>From</strong>
+        </div>
+        <div data-label="From" class="col-md-11 account_p_lbl">
+          <div class="frht_txt"><%= @message.from %></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-1 conversation_label md_hide">
+          <strong>Subject</strong>
+        </div>
+        <div  data-label="Subject" class="col-md-11 account_p_lbl">
+          <div class="frht_txt"><%= @message.subject%></div>
+        </div>
+      </div>
+      <div class="row">
+        <div  class="col-md-1 conversation_label md_hide">
+          <strong>Body</strong>
+        </div>
+        <div data-label="Body" class="col-md-11 account_p_lbl">
+         <div class="frht_txt"><%= raw @message.body %>
+          <% unless @message.normal? %>
+          <a href="<%= message_type_url(message) %>">
+            <%= @message.type %>
+          </a>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <% @conversations.reverse.each do|c|%>
+    <tr>
+      <div class="row">
+        <div class="col-md-12">
+		
+          <td class="conversation_label md_hide">
+		  <div class="col-md-12 kyci1s">
+		  <div class="col-md-6 kyci1s">
+            <strong><b>
+            <%if c.from_id == current_user.id %>
+             Reply To
+            </b> <%= c.sender.visible_name%></strong></div>
+			 <div class="col-md-6 kyci1s text-right">
+            <strong>At <%= user_time_zone c.created_at%></strong></div>
+            <%else%>
+			 <div class="col-md-6">
+            Reply From
+          </b> <%= c.sender.visible_name%></strong><br>
+          <strong>At <%= user_time_zone c.created_at%></strong></div>
+          <%end%>
+		  
+		  </div>
+        </td>
+		
+      </div>  
+      <div class="col-md-12 kyci1s1">
+        <td class="rftxt">
+         <div class="account_p_lbl" data-label="Reply Message">
+           <%= raw c.body %>
+         </div>
+       </div>
+     </td>
+   </div>
+ </tr>
+ <% end %>
+</div>
+</div>
+<% unless @message.created_by == -1 %>
+<div style='margin-top: 30px;'>
+  <%= form_for(Conversation.new,url: {:controller=>"messages", action: "do_coversation"},:html => {"data-parsley-validate" => true,:method=>:post}) do |f| %>
+  <% if @message.try(:to) == current_user.id %>
+  <% message_to_id = @message.created_by %>
+  <% else %>
+  <% message_to_id = @message.try(:to) %>
+  <% end %>
+  <%= f.hidden_field :from_id, value: current_user.id %>
+  <%= f.hidden_field :to_id, value:  message_to_id %>
+  <%= f.hidden_field :message_id, value: @message.id %>
+  <%= f.text_area :body,:rows => "4",'data-parsley-required'=>"true", class:'form-control'%>
+  <table class="msg_reply_wrap"cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 20px;">
+    <tbody><tr>
+      <td width="70px">
+        <%= f.submit 'Send Reply', class: 'btn btn-warning save alg_reg'%>
+      </td>
+      <td>
+        <%= link_to "Cancel", messages_path, class:'alg_reg cancel_button'%>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<% end %>
+</div>
+<div class="clearfix pagination_box">
+  <div class="pull-left">Page <%= @conversations.current_page%> of <%= @conversations.total_pages%></div>
+  <div class="pull-right">
+    <%= paginate @conversations %>
+  </div>
+</div>
+<% end %>
+</div>
+</div>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @user.full_name %></p>
+    <p>Your membership plan <%= @plan.name %> is nearing to expiry date.</p>
+    <p>please upgrade your plan to get extra services or automatically amount will be detected from your balance.</p>
+    <p>Sincerely,</p>
+    <img src="<%= SITE_LOGO %>" height="35px" />
+    <p><%= EMAIL_SIGN_EMAIL %></p>
+    <p><%= EMAIL_SIGN_NUMBER%></p>
+  </body>
+</html>

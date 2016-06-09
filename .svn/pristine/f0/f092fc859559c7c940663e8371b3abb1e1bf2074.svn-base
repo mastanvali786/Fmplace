@@ -1,0 +1,65 @@
+<div class="main_container">
+  <div class="container user_profile">
+    <%= render(:partial => '/projects/dashboard_header') %>
+    <aside class="user_left">
+        <%= render partial: "menu" %>
+    </aside>
+    <section class="row user_right">
+      <h3 class="orange">User Information</h3><h3><%= link_to 'Edit' ,user_info_edit_path,:class=>'orange'%></h3>
+      <div class="row">
+        <div class="col-md-6">
+          <label class="alg_reg reg_lbl gotham_medium">First Name : </label>
+          <span class="alg_reg"><%=current_user.try(:first_name)%></span>
+        </div>
+        
+        <div class="col-md-6">
+          <label class="alg_reg reg_lbl gotham_medium">Last Name : </label>
+          <span class="alg_reg"><%=current_user.try(:last_name)%></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label class="alg_reg reg_lbl gotham_medium">Email : </label>
+          <span class="alg_reg"><%=current_user.try(:email)%></span>
+        </div>
+        
+        <div class="col-md-6">
+          <label class="alg_reg reg_lbl gotham_medium">Phone Number : </label>
+          <span class="alg_reg"><%=current_user.try(:phone)%></span>
+        </div>
+      </div>
+      <div class="row">
+       <% if current_user.seller?%>
+       <div class="col-md-6">
+        <label class="alg_reg reg_lbl gotham_medium"><%= DISPLAY_LABEL %> : </label>
+        <span class="alg_reg"><%=current_user.try(:display_name) %></span>
+      </div>
+      <%end %>
+      <div class="col-md-6">
+       <label class="alg_reg reg_lbl gotham_medium">Address : </label>
+       <span class="alg_reg"><%=current_user.try(:address) %></span>
+     </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+      <label class="alg_reg reg_lbl gotham_medium">Country : </label>
+      <span class="alg_reg"><%= current_user.country_name %></span>
+    </div>
+    <div class="col-md-6">
+      <label class="alg_reg reg_lbl">State : </label>
+      <span class="alg_reg"><%= current_user.state_name%></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <label class="alg_reg reg_lbl gotham_medium">City : </label>
+      <span class="alg_reg"><%=current_user.try(:city)%></span>
+    </div>
+    <div class="col-md-6">
+      <label class="alg_reg reg_lbl gotham_medium">Zip Code : </label>
+      <span class="alg_reg"><%=current_user.try(:zipcode)%></span>
+    </div>
+  </div>  
+</section>
+</div>
+

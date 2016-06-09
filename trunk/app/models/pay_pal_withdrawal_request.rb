@@ -1,0 +1,2 @@
+class PayPalWithdrawalRequest < WithdrawalRequest
+end

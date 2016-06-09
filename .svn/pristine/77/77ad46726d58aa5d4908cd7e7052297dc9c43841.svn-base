@@ -1,0 +1,57 @@
+
+.mailinbox tbody tr td { background: #fafafa; }
+.mailinbox tbody tr.unread td { background: #fff; font-weight: bold; }
+.mailinbox tbody tr.selected td { background:#FFFFD2; }
+
+.mailinbox thead th,
+.mailinbox tfoot th { border: 1px solid #ccc;  }
+.mailinbox tfoot th { border-bottom: 1px solid #ccc !important; }
+.mailinbox a.title { font-weight: normal; text-decoration:none; }
+.mailinbox tbody tr.unread a.title { font-weight: bold; }
+.mailinbox td.star, .mailinbox td.attachment { text-align: center; }
+/**
+.msgstar {
+    display: inline-block; width: 16px; height: 16px; background: url(unstar.png) no-repeat 0 0;
+    cursor: pointer; opacity: 0.5;
+}
+.msgstar:hover { opacity: 1; }
+
+
+.starred { background-image: asset-path(images/star.png); opacity: 1; }
+
+**/
+.table-bordered caption + thead tr:first-child th:first-child, .table-bordered caption + tbody tr:first-child td:first-child, .table-bordered colgroup + thead tr:first-child th:first-child, .table-bordered colgroup + tbody tr:first-child td:first-child { border-top-left-radius: 0; }
+
+.table-bordered caption + thead tr:first-child th:last-child, .table-bordered caption + tbody tr:first-child td:last-child, .table-bordered colgroup + thead tr:first-child th:last-child, .table-bordered colgroup + tbody tr:first-child td:last-child { border-top-right-radius: 0; }
+
+.table-bordered thead:first-child tr:first-child th:first-child,
+.table-bordered tbody:first-child tr:first-child td:first-child,
+.table-bordered thead:first-child tr:first-child th:last-child,
+.table-bordered tbody:first-child tr:first-child td:last-child,
+.table-bordered thead:last-child tr:last-child th:first-child,
+.table-bordered tbody:last-child tr:last-child td:first-child,
+.table-bordered tfoot:last-child tr:last-child td:first-child { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
+
+
+.table { margin-bottom: 0; width:100%; font-size:14px }
+.table th { background: #fcfcfc; }
+.table tfoot th { border-bottom: 1px solid #ddd; }
+.table th.aligncenter, .table td.aligncenter { text-align: center; }
+.table tr { padding:5px; height:28px}
+table td.center, table th.center { text-align: center; }
+
+.clearall { clear: both; }
+
+.mailinbox-container thead th,
+.mailinbox thead th, .mailinbox tfoot th {
+    background: rgb(237,237,237);
+    background: -moz-linear-gradient(top, rgba(237,237,237,1) 0%, rgba(222,222,222,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,237,237,1)), color-stop(100%,rgba(222,222,222,1)));
+    background: -webkit-linear-gradient(top, rgba(237,237,237,1) 0%,rgba(222,222,222,1) 100%);
+    background: -o-linear-gradient(top, rgba(237,237,237,1) 0%,rgba(222,222,222,1) 100%);
+    background: -ms-linear-gradient(top, rgba(237,237,237,1) 0%,rgba(222,222,222,1) 100%);
+    background: linear-gradient(to bottom, rgba(237,237,237,1) 0%,rgba(222,222,222,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#dedede',GradientType=0 );
+}
+
+.bttn {font-size: 1em}

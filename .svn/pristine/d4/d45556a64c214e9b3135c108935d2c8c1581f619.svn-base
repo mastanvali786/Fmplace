@@ -1,0 +1,8 @@
+$("#allprop #bids_list_buyer").html("<%=raw escape_javascript(render(@proposals_buyer)) %>");
+var count_bids = $("#allprop .project_proposals").length;
+$("#bid_count").text(count_bids);
+if(count_bids >= 1){
+  $('#allprop .no_result').hide();
+}else{
+	$('#allprop .no_result').show();
+}

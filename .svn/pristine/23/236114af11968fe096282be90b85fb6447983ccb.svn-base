@@ -1,0 +1,151 @@
+# This file should contain all the record creation needed to seed the database with its default values.
+# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
+#
+# Examples:
+#
+#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
+#   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Category.destroy_all
+Subcategory.destroy_all
+
+cat1 = Category.create(name: "Category1")
+Subcategory.create(name: "Category1 Subcategory1", category_id: cat1.id)
+Subcategory.create(name: "Category1 Subcategory2", category_id: cat1.id)
+Subcategory.create(name: "Category1 Subcategory3", category_id: cat1.id)
+
+cat2 = Category.create(name: "Category2")
+Subcategory.create(name: "Category2 Subcategory1", category_id: cat2.id)
+Subcategory.create(name: "Category2 Subcategory2", category_id: cat2.id)
+Subcategory.create(name: "Category2 Subcategory3", category_id: cat2.id)
+
+ProjectTimeFrame.destroy_all
+ProjectTimeFrame.create(name: "within 1 day")
+ProjectTimeFrame.create(name: "within 5 days")
+ProjectTimeFrame.create(name: "within 10 days")
+ProjectTimeFrame.create(name: "within 15 days")
+ProjectTimeFrame.create(name: "within 24 hours")
+ProjectTimeFrame.create(name: "within 48 hours")
+
+
+ProjectBudget.destroy_all
+BudgetOption.destroy_all
+
+pb1 = ProjectBudget.create(name: "Fixed Price")
+BudgetOption.create(name: "Under $250", project_budget_id: pb1.id)
+BudgetOption.create(name: "$250 - $500", project_budget_id: pb1.id)
+BudgetOption.create(name: "$500 - $1000", project_budget_id: pb1.id)
+BudgetOption.create(name: "$1000 - $2500", project_budget_id: pb1.id)
+BudgetOption.create(name: "$2500 - $5000", project_budget_id: pb1.id)
+BudgetOption.create(name: "$5000 - $ 10000", project_budget_id: pb1.id)
+BudgetOption.create(name: "$10000 - $ 25000", project_budget_id: pb1.id)
+BudgetOption.create(name: "Over $25000", project_budget_id: pb1.id)
+BudgetOption.create(name: "Not sure/Confidential", project_budget_id: pb1.id)
+
+pb2 = ProjectBudget.create(name: "Hourly")
+BudgetOption.create(name: "$10 for 1 hour", project_budget_id: pb2.id)
+BudgetOption.create(name: "$20 for 2 hours", project_budget_id: pb2.id)
+BudgetOption.create(name: "$40 for 5 hours", project_budget_id: pb2.id)
+BudgetOption.create(name: "$100 for 24 hours", project_budget_id: pb2.id)
+BudgetOption.create(name: "$500 for 48 hours", project_budget_id: pb2.id)
+
+#project tags
+ProjectTag.destroy_all
+ProjectTag.create(name: "Sample 1")
+ProjectTag.create(name: "Sample 2")
+ProjectTag.create(name: "Sample 3")
+ProjectTag.create(name: "Sample 4")
+ProjectTag.create(name: "Sample 5")
+
+#Skills of project
+SkillTag.destroy_all
+SkillTag.create(name: "C++")
+SkillTag.create(name: "C")
+SkillTag.create(name: "PHP")
+SkillTag.create(name: "Rails")
+SkillTag.create(name: "Ruby")
+SkillTag.create(name: "Jquery")
+SkillTag.create(name: "JavaScripts")
+
+UserDegree.delete_all
+
+UserDegree.create(name: "High School")
+UserDegree.create(name: "Associate's Degree")
+UserDegree.create(name: "Bachelor's Degree")
+UserDegree.create(name: "Master's Degree")
+UserDegree.create(name: "Master of Business Administration")
+UserDegree.create(name: "Juris Doctor")
+UserDegree.create(name: "Doctor of Medicine")
+UserDegree.create(name: "Doctor of Philosophy")
+UserDegree.create(name: "Engineer's Degree")
+UserDegree.create(name: "Other")
+
+
+Theme.delete_all
+
+Theme.create(name: "Cadet Grey")
+Theme.create(name: "Greeny Green")
+Theme.create(name: "Aqua Blue")
+
+ThemeSetting.delete_all
+
+ThemeSetting.create(theme_id: 1)
+
+
+MembershipPlan.delete_all
+	MembershipPlan.create(name: "Silver", amount: "0.00", highlight_skills: 10, showcase_portfolio: false, higher_search: false, team_count: 0, connects: 30, more_connects: false, more_category: false, pricing_view: false, feature_samples: false, escrow_protection: true, wire_transfer: true, service_fee: 10.00)
+	MembershipPlan.create(name: "Gold", amount: "20", highlight_skills: 20, showcase_portfolio: true, higher_search: true, team_count: 5, connects: 60, more_connects: true, more_category: true, pricing_view: true, feature_samples: true, escrow_protection: true, wire_transfer: true, service_fee: 5.00)
+	MembershipPlan.create(name: "Platinum", amount: "60", highlight_skills: 25, showcase_portfolio: true, higher_search: true, team_count: "Unlimited", connects: 100, more_connects: true, more_category: true, pricing_view: true, feature_samples: true, escrow_protection: true, wire_transfer: true, service_fee: 5.00)
+
+
+Privacy.delete_all
+
+	Privacy.create(content: "")
+
+Terms.delete_all
+
+	Terms.create(subject: "")
+
+#Ad Section
+AdSection.destroy_all
+AdSection.create(name: 'Clients Signup')
+AdSection.create(name: 'Freelancers Signup')
+AdSection.create(name: 'Find Freelancers')
+AdSection.create(name: 'Post Project')
+AdSection.create(name: 'Clients DashBoard')
+AdSection.create(name: 'Freelancers DashBoard')
+AdSection.create(name: 'Find Projects')
+AdSection.create(name: 'User Account Pages')
+
+
+# Roles
+
+Role.delete_all
+
+	Role.create(name: "Seller", description: "Freelancer")
+	Role.create(name: "Buyer", description: "Client")
+	Role.create(name: "Admin", description: "Admin")
+	Role.create(name: "Hiring Manager", description: "Hiring Manager")
+	Role.create(name: "Staff", description: "Staff")
+
+#payment settings
+
+PaymentType.delete_all
+
+pay = PaymentType.create(name: "PAYPAL", display_name: "Paypal Payment")
+pay.payment_setting = PaymentSetting.create(key1: "PayPal email address", value1: "overhaulbids-facilitator@gmail.com", key2: "PayPal API Username", value2: "overhaulbids-facilitator_api1.gmail.com", key3: "PayPal API Password", value3: "A66D8RHJ6YH2CLKX", key4: "PayPal API Signature", value4: "ANA7yiyfTMPUhsLDSIhknpRkDmIZARSZXfGVblBb3LAZohyn-5swi2oc", key9: "Enable Test Mode?", value9: true)
+pay.save
+
+
+pay = PaymentType.create(name: "PAYFAST", display_name: "Payfast Payment")
+pay.payment_setting = PaymentSetting.create(key1: "Merchant ID", value1: "10002051", key2: "Merchant Key", value2: "c88azknx8uiu4", key9: "Enable Test Mode?", value9: true)
+pay.save
+
+pay = PaymentType.create(name: "AUTHORIZECREDITCARD",display_name: "Authorize Credit Card")
+pay.payment_setting = PaymentSetting.create(key1: "Authorize.Net API Login Id", value1: "8N3AhLe393", key2: "Authorize.Net Transaction Key", value2: "59s7S79TBGHE9srD", key9: "Enable Test Mode?", value9: true)
+pay.save
+
+pay = PaymentType.create(name: "BRAINTREE",display_name: "BrainTree Payment")
+pay.payment_setting = PaymentSetting.create(key1: "BrainTree Private Key", value1: "0bdf260664285f91151000f4c844a8dc", key2: "BrainTree Public Key", value2: "jmz3cw9v3ydv688s", key3: "BrainTree Merchant Id", value3: "gr2nprvfzyr7xxqx", key9: "Enable Test Mode?", value9: true)
+pay.save
+ 

@@ -1,0 +1,2 @@
+class ApproveShop < User
+end

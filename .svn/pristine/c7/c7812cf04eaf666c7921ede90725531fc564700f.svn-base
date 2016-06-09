@@ -1,0 +1,5 @@
+#  insert middleware wherever you want in the stack
+Rails.application.config.middleware.insert_before Rack::Runtime, Rack::Timeout
+
+# customize seconds before timeout
+Rack::Timeout.timeout = 5

@@ -1,0 +1,106 @@
+<div class="container user_profile">
+  <% if current_user.buyer? %>
+  <%= render 'pay_action' %>
+  <% end %>
+  <% if current_user.seller? %>
+  <%= render 'earnings/earn_action' %>
+  <% end %>
+  <% if current_user %>
+  <section class="row user_right1">
+    <div id="withdraw-messages" style="max-width:560px;padding-top: 20px;">
+      <%= render partial: "shared/alert" %>
+    </div>
+    <div class="row">
+      <div class="col-md-9 adw_left">
+      <div class="row">
+        <div id="deposit-messages" style="max-width:740px">
+          <%= render partial: "shared/alert" %>
+        </div>
+      </div>
+      <div class="row" style="color:#fe5a01">
+      Deposit Funds
+      </div>
+       <div class="row">
+        <div class="col-md-3 g_lightc alg_bold">
+          Available Balance<span class="puul-right">:</span>
+        </div>
+        <div class="col-md-3 g_lightc gotham_medium">
+          <span data-amount="<%= @available_balance %>" id="deposit_available">
+           <%= to_currency @available_balance %>
+         </span>
+       </div>
+     </div>
+     <% if payment_method(current_user) == 'AUTHORIZECREDITCARD' %>
+      <%= form_tag(accounting_deposit_path, :method=>'post', :html => {"data-parsley-validate" => true}, class:'deposit-link') do %>
+        <%= render 'common_deposit_form'%>
+      <% end %>
+      <% else %>
+        <%= form_tag(accounting_deposit_path, :method=>'post', :html => {"data-parsley-validate" => true}, remote:true, class:'deposit-link') do %>
+         <%= render 'common_deposit_form'%>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+   class="brain_tree_modal">
+  <div class="modal-dialog modal-lg" style="padding: 40px;width: 55%;">
+    <div class="modal-content">
+     <div class="pull-right" style="padding-right: 5px;padding-top: 5px;">
+       <a class="hide-popup btn btn-warning img-circle" class="close" data-dismiss="modal" data-target="#myModal"> X </a>
+       </div>
+     <div class="form-container radius-box glassy-bg small-10 small-centered medium-8 large-6 columns">
+      <%= form_tag transactions_path do%>
+        <%= render 'transactions/customer_form' unless current_user.has_payment_info? %>
+        <p class="alg_reg reg_lbl ftwg100" style="padding-bottom: 15px;">Please enter your payment details:</p>
+        <div id="dropin"></div>
+        <%=hidden_field_tag 'amount', '' %>
+        <%=hidden_field_tag 'payment_type', 'DEPOSIT_FUND' %>
+        <%=submit_tag "Pay", class: "btn btn-warning braintree_depo_val", style: 'width: 120px;' %>
+      <%end%>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $('.braintree_open_pay_modal').click(function(){
+      var enteded = $('#deposit_amount').val();
+      $("#amount").val(parseFloat(enteded));
+      $('.braintree_depo_val').val("Pay "+parseFloat(enteded)+"$");
+    });
+    $( "#deposit_amount" ).blur(function() {
+      var available = $('#deposit_available').attr('data-amount');
+      var enteded = $('#deposit_amount').val();
+      var new_bal = parseFloat(available) + parseFloat(enteded);
+      if(new_bal.toFixed(2) == 'NaN'){
+        $('#new_balance_deposit').html(convert_price_in_comma(available));
+      }else{
+         $('#new_balance_deposit').html(convert_price_in_comma(new_bal));
+      }
+      if(parseFloat(enteded) >= 1){
+        $('#deposit_amount_button').removeAttr('disabled');
+      }else{
+        $('#deposit_amount_button').attr('disabled','disabled');
+      }
+    });
+    $('#deposit_amount').keypress(function(event) {
+            if(event.which == 8 || event.which == 0){
+                return true;
+            }
+            if(event.which < 46 || event.which > 59) {
+                return false;
+                //event.preventDefault();
+            } // prevent if not number/dot
+
+            if(event.which == 46 && $(this).val().indexOf('.') != -1) {
+                return false;
+                //event.preventDefault();
+            } // prevent if already dot
+        });
+  });
+</script>

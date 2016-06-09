@@ -1,0 +1,66 @@
+<div class="ds main_container">
+  <div class="container user_profile">
+   <%= render(:partial => '/projects/dashboard_header') %> 
+     <aside class="user_left1">
+      <%= render partial: "menu" %>
+    </aside>
+    <section class="row user_right1">
+      <div style="padding-left:40px">
+        <div class="edit_plbl">Domain Expertise</div>
+        <!-- <div style="color:red;font-size:10px;padding-bottom:0px;padding-top:5px;padding-left:14px;">* Required</div> -->
+        <div style="padding-top:20px;">
+        <%= form_for @domain,  url: domain_expertise_path, :html => {"data-parsley-validate" => true} do |b| %>
+
+          <!-- Title -->
+          <div class="row">
+            <div class="col-md-10">
+              <label class="alg_reg reg_lbl ftwg100">Title</label>
+              <%= b.text_field :title, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter title', value: @domain.present? ? @domain.title : ""  %>
+            </div>
+          </div>
+
+          <!-- Description  -->
+          <div class="row">
+            <div class="col-md-10">
+              <label class="alg_reg reg_lbl ftwg100">Range of Expertise</label>
+              <%= b.text_area :range, :class=>'form-control text_area expertise','data-parsley-required'=>"true", 'data-parsley-required-message'=>'Please enter range of expertise', rows: 10, maxLength: '1000', value: @domain.present? ? @domain.range : ""  %>
+              <h6 class="pull-right"><span class="characters">1000</span> characters left</h6>
+            </div>
+          </div>
+
+          <!-- Description  -->
+          <div class="row">
+            <div class="col-md-10">
+              <label class="alg_reg reg_lbl ftwg100">Description</label>
+              <%= b.text_area :description, :class=>'form-control text_area description','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter domain description', rows: 10, maxLength: '1000', value: @domain.present? ? @domain.description : ""  %>
+              <h6 class="pull-right"><span class="char">1000</span> characters left</h6>
+            </div>
+          </div>
+          <br>
+            <div class="form-group">
+              <%= b.submit "Submit", class: "btn btn-warning" %>
+              <a class="btn btn-default cancel" href="/account/public_profile">Cancel</a>
+            </div>
+        <% end %>
+        </div>
+      </div>
+    </section>
+  </div>
+  </div>
+
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+      var maxLength = 1000;
+      $('.description').keyup(function() {
+        var length = $(this).val().length;
+        var length = maxLength-length;
+        $('.char').text(length);
+      });
+      $('.expertise').keyup(function() {
+        var length = $(this).val().length;
+        var length = maxLength-length;
+        $('.characters').text(length);
+      });
+  });
+  </script>

@@ -1,0 +1,54 @@
+<style>
+  .project a {
+    color: blue
+  }
+</style>
+<div class="main_container">
+  <div class="container mpro_container">
+    <%= render partial: "shared/header_back" %>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">
+      <span>
+        Milestone
+      </span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover" border="0" cellpadding="3" cellspacing="6" style="padding-left:20px;">
+        <tbody>
+          <tr class="project">
+              <td class="md_hide">
+              <strong>Project</strong>
+            </td>
+            <td data-label="Project" class="account_p_lbl">
+              <% project = @milestone.project %>
+              <%= link_to project.full_title, project_path(project) %>
+            </td>
+          </tr>
+          <tr>
+			<td class="md_hide">
+              <strong>Description</strong>
+            </td>
+            <td data-label="Description" class="account_p_lbl">
+              <%= @milestone.description %>
+            </td>
+          </tr>
+          <tr>
+           <td class="md_hide">
+              <strong>Note</strong>
+            </td>
+            <td data-label="Note" class="account_p_lbl">
+              <%= @milestone.note %>
+            </td>
+          </tr>
+          <tr>
+            <td class="md_hide">
+              <strong>Price</strong>
+            </td>
+            <td data-label="Price" class="account_p_lbl">
+              <%= number_to_currency @milestone.price %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

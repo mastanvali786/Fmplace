@@ -1,0 +1,2 @@
+class ReferralMembers < User
+end

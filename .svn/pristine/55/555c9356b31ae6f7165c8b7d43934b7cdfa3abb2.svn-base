@@ -1,0 +1,6 @@
+<form action="" method="post">
+<input type="text" value="" name="taskid">Task ID</input>
+<input type="text" value="" name="productid">Product ID</input>
+<input type="text" value="" name="workerid">Worker ID</input>
+<input type="submit" value="Submit"/>
+</form>

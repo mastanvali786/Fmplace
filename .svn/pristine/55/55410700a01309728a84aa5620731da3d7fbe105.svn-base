@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <%= @user.visible_name%>,</p>
+
+	<p>The following payment didn’t go through.</p>
+
+	<p>Project:&nbsp;<%= @project.full_title%></p>
+	<p>Milestone:&nbsp;<%= @milestone.description%></p>
+	<p>Payment Amount:&nbsp;<%= @milestone.price%></p>
+
+	<p>If you feel this is an error, please let us know right away.</p>
+
+	<p>Thank you in advance for your prompt attention.</p>
+
+	<p>Sincerely,</p>
+	<img src="<%= @logo%>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

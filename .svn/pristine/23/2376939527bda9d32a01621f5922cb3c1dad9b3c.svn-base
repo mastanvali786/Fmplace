@@ -1,0 +1,40 @@
+<style type="text/css">
+#skills .parsley-required {
+  margin-left: 14px;
+  margin-top: 41px;
+  color: red;
+}
+</style>
+<div class="ds main_container">
+  <div class="container user_profile">
+   <%= render(:partial => '/projects/dashboard_header') %> 
+     <aside class="user_left1">
+     <%= render partial: "menu" %>
+    </aside>
+    <section class="row user_right1">
+      <div class="skill_style">
+        <div class="edit_plbl">Additional Services</div>
+        <!-- <div style="color:red;font-size:10px;padding-bottom:0px;padding-top:5px;padding-left:14px;">* Required</div> -->
+        <br>
+        <%= form_for @skills,  url: user_skills_path, :html => {"data-parsley-validate" => true} do |b| %>
+        <div id="get_memberhsip" style="display:none;">
+          <%= current_user.membership_plan.highlight_skills %>
+        </div>
+          <!-- Title -->
+          <div class="row" id= "skills">
+            <div class="col-md-10">
+              <label class="alg_reg reg_lbl ftwg100">Additional Services</label>
+              <%= b.collection_select :known_skills, SkillTag.all, :id, :name, {}, {multiple: true, class: "form-control" }  %>
+            </div>
+          </div>
+          <p class="gotham_medium" style="color: rgb(79, 79, 79); font-size: 10px;">Currently you can add only <%= current_user.membership_plan.highlight_skills %> skills. To increase your skill to highlight upgrade your membership plan.</p>
+          <br>
+            <div class="form-group">
+              <%= b.submit "Submit", class: "btn btn-warning", id: "submit_skills" %>
+              <a class="btn btn-default cancel" href="/account/public_profile">Cancel</a>
+            </div>
+        <% end %>
+      </div>
+    </section>
+  </div>
+  </div>

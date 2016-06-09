@@ -1,0 +1,17 @@
+<% user = user%>
+<span class="rating">
+	<% ratings = user.ratings.to_i %>
+	<% half = user.ratings - ratings %>
+	<% off = 5 - user.ratings.to_i %>
+	<% ratings.times do %>
+	<img src="/assets/star_on.gif" alt class="img_star" />
+	<% end %>
+	<% if half >= 0.1 && half <= 0.9%>
+	<img src="/assets/star_half.gif" alt class="img_star" />
+	<% off= 4 - user.ratings.to_i%>
+	<% end %>
+	<% off.times do %>
+	<img src="/assets/star_off.gif" alt class="img_star" />
+	<% end %>
+</span>
+<span class="qick_lbl"> <%= user.ratings if user.ratings > 0%></span>

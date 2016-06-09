@@ -1,0 +1,67 @@
+<!-- - client = @project.client
+- contractor = @project.contractor
+
+%td
+  %table{:border => "0", :cellpadding => "0", :cellspacing => "6", :width => "74%"}
+    %tbody
+      %tr
+        %td{:width => "34%"}
+          %span
+            %strong{:style => "color:#666666"} Client
+        %td{:width => "26%"}
+          %span
+            %strong{:style => "color:#666666"} Project Start Date
+        %td{:width => "28%"}
+          %span
+            %strong{:style => "color:#666666"} Project Amount
+        %td{:width => "12%"}
+          %span
+            %strong{:style => "color:#666666"} Status
+      %tr
+        %td
+          %table
+            %tbody
+              %tr
+                %td
+                  %img{:alt => "client", :src => "images/client.jpg"}/
+                %td{:align => "center", :valign => "middle"}
+                  %span
+                    %a{:href => "", :style => "color:#04448c;"}
+                      = client.name
+        %td
+          %span{:style => "color:#666666"}
+            = day_month_year @project.start_date
+        %td
+          %span{:style => "color:#666666"}
+            US
+            = number_to_currency @project.amount
+        %td
+          %span{:style => "color:#666666"}
+            = @project.project_status.titleize
+      %tr
+        %td
+          %span
+            %strong{:style => "color:#666666"} Contractor
+        %td
+          %span
+            %strong{:style => "color:#666666"} Project End Date
+        %td
+        %td
+      %tr
+        %td
+          %table
+            %tbody
+              %tr
+                %td
+                  %img{:alt => "contractor", :src => "images/contractor.jpg"}/
+                %td{:align => "center", :valign => "middle"}
+                  %span
+                    %a{:href => "members.php?id=191", :style => "color:#04448c;"}
+                      = contractor.name
+        %td
+          %span{:style => "color:#666666"}
+            %a{:href => "javascript:void(0);", :onclick => "show_popup('#edit_milestone_pop116')", :style => "color:#04448c;"}
+              = day_month_year @project.end_date
+        %td
+        %td
+ -->

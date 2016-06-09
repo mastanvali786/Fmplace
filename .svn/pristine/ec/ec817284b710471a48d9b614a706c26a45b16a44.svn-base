@@ -1,0 +1,60 @@
+<%= stylesheet_link_tag "testimonial" %>
+<!-- Head tags to include FontAwesome -->
+
+<div class="container">
+  <div class='row'>
+    <div class='col-md-offset-2 col-md-8'>
+      <div class="carousel slide" data-ride="carousel" id="quote-carousel">
+
+        <% if @testimonials.present? %>
+
+        <!-- Carousel Slides / Quotes -->
+        <div class="carousel-inner">
+
+          <% @testimonials.each_with_index do |testimonial, index| %>
+          <div class="item <% if index == 0 %>active<% end %>">
+            <blockquote>
+              <div class="row">
+                <div class="col-sm-3 text-center">
+                  <%= image_tag testimonial.photo, :class=>"img-circle", style: "width: 100px;height:100px;" %>
+                </div>
+                <div class="col-sm-9">
+                <p style="text-align: justify;"><%= testimonial.comment %><i class="fa fa-quote-right" style="float:right; margin-left:10px"></i></p>
+                  <small><%= testimonial.name %> | <%= testimonial.country_country_code %></small>
+                </div>
+              </div>
+            </blockquote>
+          </div>
+          <% end %>
+        </div>
+
+        <!-- Carousel Buttons Next/Prev -->
+        <% if (@testimonials.count > 1) %>
+        <a data-slide="prev" href="#quote-carousel" class="left carousel-control"><i class="fa fa-chevron-left"></i></a>
+        <a data-slide="next" href="#quote-carousel" class="right carousel-control"><i class="fa fa-chevron-right"></i></a>
+        <%end%>
+        <% else %>
+        
+        <!-- Carousel Slides / Quotes -->
+        <div class="carousel-inner">
+
+          <!-- Quote 1 -->
+          <div class="item active">
+            <blockquote>
+              <div class="row">
+                <div class="col-sm-3 text-center">
+                  <img class="img-circle" src="/assets/users.png" style="width: 100px;height:100px;">
+                </div>
+                <div class="col-sm-9">
+                  <p  style="text-align: justify;">The site is awesome" It has fantastic UI<i class="fa fa-quote-right" style="float:right; margin-left:10px"></i></p>
+                  <small>Keith | UK</small>
+                </div>
+              </div>
+            </blockquote>
+          </div>
+        </div>
+        <% end %>
+       </div>                          
+    </div>
+  </div>
+</div>

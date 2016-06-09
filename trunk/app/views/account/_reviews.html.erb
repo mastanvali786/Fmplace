@@ -1,0 +1,147 @@
+
+<div style="color: gray;">
+	<% @feedbacks.each do |feed| %>
+	<% if feed.guest_user.present? %>
+	<% from_user = feed.guest_user %>
+	<%else %>
+	<% from_user = feed.from_feedback %>
+	<% end %>
+	<div class="row voffset2" style="font-size: 20px;">
+		<div class="col-md-10 gotham_medium">
+			<% if feed.from_feedback && feed.project %>
+			<a href="<%= feed.project.url%>" class="pro_title title_anchor_another">
+				<%= feed.project.full_title %>
+			</a>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="row voffset2">
+		<div class="col-md-4" style="color: #fe5a01">
+			Feedback from:
+		</div>
+		<div class="col-md-8">
+			Name:&nbsp;<%= from_user.try(:visible_name) %></br>
+		</div>
+	</div>
+	<div class="row voffset">
+		<div class="col-md-4 review_label">
+			Quality of work:
+		</div>
+		<div class="col-md-8">
+			<% off = 5 - feed.quality_work %>
+			<% feed.quality_work.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% off.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+		</div>
+	</div>
+	<div class="row voffset">
+		<div class="col-md-4 review_label">
+			Responsiveness:
+		</div>
+		<div class="col-md-8">
+			<% off = 5 - feed.responsiveness %>
+			<% feed.responsiveness.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% off.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+		</div>
+	</div>
+	<div class="row voffset">
+		<div class="col-md-4 review_label">
+			Professionalism:
+		</div>
+		<div class="col-md-8">
+			<% off = 5 - feed.professionalism %>
+			<% feed.professionalism.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% off.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+		</div>
+	</div>
+	<div class="row voffset">
+		<div class="col-md-4 review_label">
+			Subject Matter Expertise:
+		</div>
+		<div class="col-md-8">
+			<% off = 5 - feed.expertise %>
+			<% feed.expertise.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% off.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+		</div>
+	</div>
+	<div class="row voffset">
+		<div class="col-md-4 review_label">
+			Adherence to cost:
+		</div>
+		<div class="col-md-8">
+			<% off = 5 - feed.cost %>
+			<% feed.cost.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% off.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+		</div>
+	</div>
+	<div class="row voffset">
+		<div class="col-md-4 review_label">
+			Adherence to Schedule:
+		</div>
+		<div class="col-md-8">
+			<% off = 5 - feed.schedule %>
+			<% feed.schedule.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% off.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+		</div>
+	</div>
+	<div class="row voffset1">
+		<div class="col-md-4 review_label">
+			Overall Ratings
+		</div>
+    <div class="col-md-8">
+		  <% ratings = feed.rating.to_i %>
+			<% half = feed.rating - ratings %>
+			<% off = 5 - feed.rating.to_i - half%>
+			<% ratings.times do %>
+			<img src="/assets/star_on.gif" alt class="img_star" />
+			<% end %>
+			<% if half >= 0.2 && half <= 0.8%>
+			<img src="/assets/star_half.gif" alt class="img_star" />
+			<% end %>
+			<% off.floor.times do %>
+			<img src="/assets/star_off.gif" alt class="img_star" />
+			<% end %>
+			<span><%= feed.rating%></span>
+		</div>
+	</div>
+	<div class="row voffset2">
+		<div class="col-md-4">
+			Feedback Comment:
+		</div>
+		<div class="col-md-8">
+			<%= feed.comment %>
+		</div>
+	</div>
+	<hr>
+	<% end %>
+</div>
+<div class="clearfix pagination_box voffset3">
+	<div class="pull-left">Page <%= @feedbacks.current_page%> of <%= @feedbacks.total_pages%></div>
+	<div class="pull-right">
+		<%= paginate @feedbacks, params: { reviews: '' }  %>
+	</div>
+</div>

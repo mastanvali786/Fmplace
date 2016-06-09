@@ -1,0 +1,123 @@
+<div class="container user_profile">
+	<% if current_user.buyer? %>
+	<%= render 'pay_action' %>
+	<% end %>
+	<% if current_user.seller? %>
+	<%= render 'earnings/earn_action' %>
+	<% end %>
+	<section class="row user_right1 alg_reg">
+		<h3 class="orange">
+			<% if current_user.buyer? %>
+			Payment List
+			<% end %>
+			<% if current_user.seller? %>
+			Earnings
+			<% end %>
+		</h3>
+		<div class="row payment_lr clrbk5">
+			<div class="col-md-2" style="padding-left: 66px;">Filter By:</div>
+			<div class="col-md-2">
+				<label class="field select">
+					<select id="filter_by_search" class="gotham_medium">
+						<option value="all">All</option>
+						<option value="paid">Paid</option>
+						<option value="unpaid">Unpaid</option>
+					</select>
+					<i class="arrow"></i>                
+				</label>
+			</div>
+			<div class="col-md-1" style="padding-top: 5px;">Past:</div>
+			<div class="col-md-3">
+				<label class="field select">
+					<select id="past_date_search" class="gotham_medium">
+						<option value="">Any date</option>
+						<option value="1">Last 24 hours</option>
+						<option value="7">Last 7 days</option>
+						<option value="14">Last 14 days</option>
+						<option value="30">Last 30 days</option>
+						<option value="60">Last 60 days</option>
+						<option value="90">Last 90 days</option>
+					</select>
+					<i class="arrow"></i>                 
+				</label>
+			</div>
+			<div class="col-md-3 pull-right">
+				<% unless @milestones.empty?  %>
+				<div class="pull-right">
+					<%= link_to "Download Data", accounting_payment_list_pdf_path(result: request.fullpath,format: :pdf), target: "_blank", class:'btn btn-warning' %>
+				</div>
+				<% end %>
+			</div>			
+		</div>
+		<div class="row ngray_box payment usr_inf clrbk5 md_hide">
+			<div class="col-md-3">Received</div>
+			<% if current_user.buyer? %>
+			<div class="col-md-2" style="padding-left: 0;">Project | <%= DISPLAY_LABEL_SHORT%></div>
+			<% else %>
+			<div class="col-md-2" style="padding-left: 0;">Project | <%= BUYER_NAME_SHORT %></div>
+			<% end %>
+			<div class="col-md-2">Milestone</div>
+			<div class="col-md-2">Status</div>
+			<div class="col-md-2">Amount</div>
+			<div class="col-md-1">Action</div>
+		</div>
+		<% unless @milestones.empty? %>
+		<% @milestones.each do |milestone| %>
+		<div class="row nd_box usr_inf plist clrbk5">
+			<div class="col-md-3">
+				<div data-label="Received" class="account_p_lbl"><%= user_time_zone milestone.updated_at %></div>
+			</div>
+			<div class="col-md-2">
+				<div class="row">
+					<div data-label="Project Name" class="account_p_lbl" style="line-height:13px;">
+						<%= milestone.project.full_title %>
+					</div>
+				</div>
+				<div class="colr295">
+					<% if current_user.buyer? %>
+					<div data-label="Freelance Name" class="account_p_lbl">
+						<a href="<%= milestone.seller.try(:public_url)%>" target="_blank">
+
+							<%= milestone.shop_name%></a> 
+						</div>
+						<% else %>
+						<div data-label="Buyer Name" class="account_p_lbl">
+							<a href="<%= milestone.project.buyer.try(:public_url)%>" target="_blank">
+								<%= milestone.project.buyer.full_name%></a> 
+							</div>
+							<% end %>
+						</div>
+					</div>
+					<div class="col-md-2 colr295">
+						<div data-label="Milestone" class="account_p_lbl"> <a href="<%=milestone.url%>">
+							<%= milestone.description %>
+						</a>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div data-label="Status" class="account_p_lbl"><%= milestone.payment_status %>
+					</div>
+				</div>
+				<div class="col-md-2"><div data-label="Amount" class="account_p_lbl">US<%= number_to_currency(milestone.price)%>
+				</div>
+			</div>
+			<div class="col-md-1 colr295">
+				<div data-label="Action" class="account_p_lbl"> <a href="<%= milestone.project.workroom_url %>">View</a>
+				</div>
+			</div>
+		</div>
+		<div class="seperator"></div>
+		<%end%>
+
+		<%else%>
+		<div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Results Found</div>
+		<%end %>
+
+		<div class="clearfix pagination_box">
+			<div class="pull-left">Page <%= @milestones.current_page%> of <%= @milestones.total_pages%></div>
+			<div class="pull-right">
+				<%= paginate @milestones %>
+			</div>
+		</div>
+	</section>
+</div>

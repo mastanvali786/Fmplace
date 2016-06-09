@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h3>Dear <%= @user.first_name %>,</h3>
+    <div>
+      <p>Your membership plan has been degraded to <%= MembershipPlan.first.name %> Plan. due to the following reasons, </p>
+      <p>You may not have enough amount in your balance</p>
+      <p>Your plan may have expired</p>
+    </div>
+  <p>Sincerely,</p>
+  <img src="<%= SITE_LOGO %>" height="35px" />
+  <p><%= EMAIL_SIGN_EMAIL %></p>
+  <p><%= EMAIL_SIGN_NUMBER%></p>
+  </body>
+</html>

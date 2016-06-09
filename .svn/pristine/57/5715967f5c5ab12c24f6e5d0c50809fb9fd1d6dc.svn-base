@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <buyer first name>,,</p>
+	<p>You have cancelled the following project:</p>
+
+	Project:
+	<category>
+	<subcategory> 
+	<engine model>
+	<Tail Number>
+	<aircraft make>
+	<aircraft model>
+	<description>
+
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

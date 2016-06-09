@@ -1,0 +1,138 @@
+<div class="main_container">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h3 class="gotham_medium h3_lbl light_black ftwg100">Join our Network (<%=DISPLAY_LABEL_SHORT %> Registration)</h3>
+			</div>
+			<div class="col-md-4">
+				<%= link_to 'Post your Project',users_signup_buyer_path,:class=>"gotham_medium btn btn-warning post_btn padd-top"%>
+			</div>
+		</div>
+		<div class="seperator"></div>
+	</div>
+	
+	<div class="container clearfix">
+		<section class="left_con">
+			<div class="row">
+				<div class="col-md-6">
+					<label class="gotham_medium creat_account light_black ftwg182">Create an Account</label>
+				</div>
+				<div class="col-md-6 ftw500">
+					<label class="gotham_light have_lbl">Have An Account ?
+						<%= link_to 'Click here',new_user_session_path,:class=>"gotham_medium ftw500"%>
+					</label>
+				</div>
+			</div>
+			<%= form_for(@user, url: registration_path(@user),:html => {"data-parsley-validate" => true, id: "signup_seller_id"}) do |f| %>
+			<%= f.hidden_field :role_id, :value => 1%>
+			<% if params[:ref_id].present? %>
+			<%= f.hidden_field :ref_id, :value => params[:ref_id] %>
+			<% end %>
+			<% if params[:source].present? %>
+			<%= f.hidden_field :referral_source, :value => params[:source] %>
+			<% end %>
+			<%= f.hidden_field :time_zone, :value => DEFAULT_TIME_ZONE %>
+			<div class="row">
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">First Name*</label>
+					<%=f.text_field :first_name, :class=>'form-control',
+					'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter first name"%>
+				</div>
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Last Name*</label>
+					<%=f.text_field :last_name, :class=>'form-control',
+					'data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter last name" %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Email*</label>
+					<%=f.text_field :email, :class=>'form-control', 'data-parsley-required'=>"true",
+					'data-parsley-type'=>"email",'data-parsley-required-message'=>"Please enter email adderss" %>
+				</div>
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Phone Number*</label>
+					<%=f.text_field :phone, :class=>'form-control user_phone_number_class','data-parsley-required'=>"true",'data-parsley-required-message'=>"Please enter phone number"%>
+					<span class="hide valid_msg_class">✓ Valid</span>
+					<span class="hide error_msg_class">Invalid number</span>
+					<input type="hidden" class="hidden_number" value="0">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100"><%= DISPLAY_LABEL%>*</label>
+					<%=f.text_field :display_name, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter freelancer name" %>
+				</div>
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Address*</label>
+					<%=f.text_field :address, :class=>'form-control map_address','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter address" %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Country*</label>
+					<label class="field select">
+						<%=f.select :country_id,options_for_select(Country.all.order('name ASC').collect{ |u| [u.name, u.id] }),{prompt: 'Please select country'},class: 'country_class map_country','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please select country"%>
+						<i class="arrow"></i>            
+					</label>
+				</div>
+				<div class="col-md-6 state_div" style="display:none">
+					<label class="alg_reg reg_lbl ftwg100">City*</label>
+					<label class="field select">
+						<%= f.select :state_id,options_for_select(State.all.collect{ |u| [u.state_name, u.id] }),{:include_blank => false},class: 'state_class map_state','data-parsley-required'=>"true"%>
+						<i class="arrow"></i>     
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<!-- <div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">City*</label>
+					<%#=f.text_field :city, :class=>'form-control map_city','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter city name "%>
+				</div> -->
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Zip Code*</label>
+					<%=f.text_field :zipcode, :class=>'form-control zip-code map_zipcode','data-parsley-required'=>"true",'data-parsley-error-message'=>"Please enter zip code "%>
+				</div>
+			</div>
+			<%=f.hidden_field :lat,:class=>'map_lat', :value => ''%>
+			<%=f.hidden_field :lng,:class=>'map_lng', :value => '' %>
+			<div class="row">
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Password*</label>
+					<%= f.password_field :password, autocomplete: "off",:class=>'form-control',
+					'data-parsley-required'=>"true",'data-parsley-required-message'=>"Please enter password", 'data-parsley-minlength'=>"6"%>
+				</div>
+				<div class="col-md-6">
+					<label class="alg_reg reg_lbl ftwg100">Confirm Password*</label>
+					<%= f.password_field :password_confirmation, autocomplete: "off",:class=>'form-control',
+					'data-parsley-required'=>"true",'data-parsley-minlength'=>"6",'data-parsley-equalto'=>"#user_password",'data-parsley-required-message'=>"Please enter confirm password"%>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 alg_reg">
+					<input type="checkbox" id="terms_seller"/> I agree to the <a href="<%= homes_terms_path%>"
+					target="_blank">Terms and Conditions</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<%= f.submit 'Get Started',class: 'btn btn-warning bget_started' ,:id=>"getstartedseller",
+					:disabled=>"disabled" %>
+					<div class="gs_note g_lightc">Note: <%= DISPLAY_LABELS %> must be approved by <%= SITE_NAME_SHORT %> before they can bid on projects. We will be in touch within 24 hours.</div>
+				</div>
+			</div>
+			<% end %>
+		</section>
+		<aside class="right_con">
+			<div class="gotham_medium need_help light_black">Need help? Call us <%= EMAIL_SIGN_NUMBER %>
+				or email <a href="mailto:<%=SUPORT_EMAIL%>"><%=SUPORT_EMAIL%></a>
+			</div>
+			<div class="gray_box hig175px" style="margin-top: 20px;">
+				<h5 class="gotham_medium light_blck ftwg100 ">Privacy Policy</h5>
+				<p class="alg_reg need_help light_black">Your info is safe with us. We won’t share your email, phone number, or last name with anyone. We will never spam you.</p>
+			</div>
+			<br><br>
+			<%= render :partial=>'advertisements/show_ads', locals: { page_no: "2"} %>
+		</aside>
+	</div>
+</div>

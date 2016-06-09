@@ -1,0 +1,213 @@
+.big_text {
+  color: #7e7e7e;
+    font-size: 21px;
+    font-weight: bold;
+}
+.sub_text {
+    color: #7e7e7e;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 34px;
+}
+.membership-table {
+    font-size: 14px;
+    margin-top: 35px;
+}
+.membership-table .col {
+    float: left;
+    position: relative;
+}
+.membership-table .col:first-child {
+    font-size: 15px;
+    width: 280px;
+}
+.membership-table .col:first-child .cell > div {
+    padding-left: 10px;
+}
+.membership-table .col.plan {
+    background-color: #fafafa;
+    text-align: center;
+    width: 140px;
+    margin-right: 10px;
+    box-shadow: 0 2px 6px rgba(39,65,90,.15);
+}
+.membership-table .col.last {
+    border-right: medium none;
+}
+.membership-table .col .highlight {
+    background: none repeat scroll 0 0 #003F6B;
+    height: 65px;
+    position: relative;
+    color: #fff;
+}
+.membership-table .col.selected {
+    background-color: #ffffff;
+    font-weight: bold;
+}
+.membership-table .col.selected .highlight {
+    background: none repeat scroll 0 0 #d4e596;
+}
+.membership-table .col.selected .checkmark {
+    color:#FF4032;
+}
+.membership-table .col.recommended {
+    background-color: #ffffff;
+    box-shadow: 0 6px 4px -4px #333333;
+    margin-top: -10px;
+}
+.membership-table .col.recommended .recommended-tag {
+    background: none repeat scroll 0 0 rgba(27, 108, 205, 0.85);
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    left: 0;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    top: -27px;
+    width: 141px;
+}
+.membership-table .col.recommended .cell:first-child {
+    height: 90px;
+}
+.membership-table .col.recommended .highlight {
+    background: none repeat scroll 0 0 #d4e596;
+    height: 75px;
+}
+.membership-table .col.selected .highlight::after, .membership-table .col.recommended .highlight::after {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 10px solid #003F6B;
+    bottom: -10px;
+    content: "";
+    display: inline-block;
+    left: 55px;
+    position: absolute;
+}
+.membership-table .col.plan .current-tag {
+    background: none repeat scroll 0 0 #FF3629;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    left: 0;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    top: -27px;
+    width: 140px;
+}
+.membership-table2 .col.current::before {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    content: "CURRENT PLAN";
+    font-size: 11px;
+    font-weight: bold;
+    left: 0;
+    margin-left: 0;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    top: -23px;
+    width: 141px;
+}
+.membership-table .cell {
+    height: 32px;
+}
+.membership-table .cell:first-child {
+    height: 80px;
+}
+.membership-table .cell.last {
+    height: 55px;
+}
+.membership-table .cell.sep {
+    border-top: 1px dotted #939393;
+    height: 35px;
+}
+.membership-table .cell > div {
+    line-height: 17px;
+    padding-top: 5px;
+    position: relative;
+}
+.membership-table .cell:first-child > div {
+    display: block;
+    padding-top: 0;
+}
+.membership-table .cell.sep > div {
+    padding-top: 10px;
+}
+.membership-table .title {
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+.membership-table .subtitle {
+    padding-top: 8px;
+}
+.membership-table .price {
+    font-size: 22px;
+    font-weight: bold;
+}
+.membership-table .dollar {
+    font-weight: bold;
+    position: relative;
+    top: -5px;
+}
+.membership-table .feature-header {
+    font-weight: bold;
+    padding-left: 0 !important;
+}
+.membership-table .checkmark {
+    color: #FF4032;
+    display: inline-block;
+    height: 18px;
+    width: 19px;
+}
+.membership-table .help-icon-content {
+    display: none;
+}
+.membership-table .btn {
+    display: inline-block;
+}
+.membership-table .btn-large {
+    margin-right: 0;
+    width: 70px;
+}
+.membership-table .btn-large-selected {
+    background: url("/media/images/4.0/membership/checkmark-circle-selected.gif") no-repeat scroll 80px 2px rgba(0, 0, 0, 0);
+    color: #50852c;
+    cursor: default;
+    padding-right: 35px;
+    text-decoration: none;
+}
+.membership-table .selected .outline {
+    height: 100%;
+    left: 0;
+    outline: 2px solid #50852c;
+    outline-offset: -2px;
+    position: absolute;
+    top: 0;
+    width: 141px;
+    z-index: 100;
+}
+.membership-table .select-button {
+    z-index: 1000;
+}
+@media (max-width:767px) {
+.big_text {
+  color: #7e7e7e;
+  font-size: 16px;
+  font-weight: bold;
+}
+.sub_text {
+  color: #7e7e7e;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.membership-table .col.plan .current-tag { 
+width:100%;
+}
+.membership-table {
+margin-top:0px;
+}
+}

@@ -1,0 +1,184 @@
+<style>
+    .parsely_custom_msg .parsley-required {
+      width: 142px;
+      padding-top: 9px;
+      padding-left: 6px;
+  }
+  .parsely_custom_msg .parsley-min{
+    width: 274px;
+    padding-top: 9px;
+    padding-left: 4px;    
+}
+.parsely_custom_msg .parsley-type{
+   width:221px;
+   padding-top: 9px;
+   padding-left: 4px;
+}
+</style>
+<div class="main_container">
+    <div class="container user_profile">
+        <%= render partial: "shared/header_back" %>
+        <aside class="user_left">
+            <%= render partial: "account/menu" %>
+        </aside>
+
+        <section class="row user_right">
+            <h3 class="orange">New Ad</h3>
+            <%= form_for(@advertisement, :html => {"data-parsley-validate" => true,class:'advertisement_form'}) do |f| %>
+            <%= f.hidden_field :user_id, value: current_user.id %>
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Ad Name*</label></div>
+                <div class="col-md-9">
+                    <%=f.text_field :campaign_name, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter Ad Name', maxlength: "200" %>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Ad title</label></div>
+                <div class="col-md-9">
+                    <%=f.text_field :ad_title, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter Ad title', :rows => "6", maxlength: "1000" %>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Ad content</label></div>
+                <div class="col-md-9">
+                    <%= f.text_field :ad_content, :class=>'form-control',:rows => "6", maxlength: "1000" %>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Ad URL*</label></div>
+                <div class="col-md-9">
+                    <%= f.text_field :ad_url, :class=>'form-control','data-parsley-required'=>"true", 'data-parsley-type'=>"url",'data-parsley-required-message'=>'Please Ad URL', maxlength: "200" %>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Banner*</label></div>
+                <div class="col-md-9">
+                    <% if  @advertisement && @advertisement.banner_photo.present? %>
+                    <%= image_tag @advertisement.banner_photo,:class=>"pro_pic" %>
+                    <%= link_to "Remove", {:controller => "advertisements", :action => "remove_banner", :advertisement_id => @advertisement.id }%>
+                    <%#=link_to '', advertisements_remove_banner_path(@advertisement), :confirm => "Are you sure?", :method => :get %>
+                    <% else %>
+                    <%= f.file_field :banner_photo,'data-parsley-required'=>"true",'data-parsley-required-message'=>'Please select your banner image'%>
+                    <% end %>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Show Campaign Duration</label></div>
+                <div class="col-md-9" id="ad_spec_date_radio">
+                    <% unless @advertisement.show_continuously.present? %>
+                    <input type="radio" name="advertisement[days_week]" class="radio-input" value="true">Continuously (you can pause or remove your campaign any time)  </br>
+                    <input type="radio" name="advertisement[days_week]" class="radio-input specific_date" value="false" checked>
+                    Until a specific date
+                    <% else %>
+                    <input type="radio" name="advertisement[days_week]" class="radio-input" value="true" checked>Continuously (you can pause or remove your campaign any time)  </br>
+                    <input type="radio" name="advertisement[days_week]" class="radio-input specific_date" value="false">
+                    Until a specific date
+                    <% end %>
+                </div>
+                <%= f.hidden_field :show_continuously, value: true %>
+            </div>
+
+            <div class="row" id='ad_stop_date_div' style="display:none">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class='input-group date'>
+                        <%=f.datetime_field :stop_date, :class=>'form-control ad_date', readonly: true, value: @advertisement.stop_date.present? ? @advertisement.stop_date.strftime("%-m/%-d/%Y") : "" %>
+                        <span class="input-group-addon" onclick="$('.ad_date').focus();">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row ads_row_set" style="padding-top:20px;">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Days of the Week*</label></div>
+                <div class="col-md-9" id="banner_show_day_check">
+                    <ul>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="0" <%= @advertisement.show_week_day?(0)%> >Sunday
+                        </label></li>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="1" <%= @advertisement.show_week_day?(1)%> >Monday
+                        </label></li>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="2" <%= @advertisement.show_week_day?(2)%> >Tuesday</label></li>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="3" <%= @advertisement.show_week_day?(3)%> >Wednesday</label></li>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="4"  <%= @advertisement.show_week_day?(4)%> >Thursday</label></li>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="5" <%= @advertisement.show_week_day?(5)%> >Friday</label></li>
+                        <li><label class="checkbox-inline"><input type="checkbox" value="6" <%= @advertisement.show_week_day?(6)%> >Saturday</label></li>
+                    </ul>
+                    <br>
+                    <small>Note: If none is selected, ad will get displayed on all the days.</small>
+                </div>
+                <%= f.hidden_field :days_week, value: '' %>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ">Targeting Sections*</label></div>
+                <div class="col-md-9" id="ad_section_ids_banner">
+                    <ul>
+                        <% AdSection.all.each do |section|%>
+                        <li>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="ad_sections_ids" value="<%= section.try(:id) %>"
+                                <%= @advertisement.show_section(section.try(:id))%>>
+                                <%= section.try(:name)%>&nbsp;&nbsp;&nbsp;
+                            </label>
+                        </li>
+                        <% end %>
+                    </ul>
+                    <br>
+                    <small>Note: If none is selected, ad will get displayed in all sections.</small>
+                </div>
+                <%=f.hidden_field :ad_sections_ids,value: '' %>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Keywords</label></div>
+                <div class="col-md-9">
+                    <%=f.text_field :keywords, :class=>'form-control', maxlength: "200" %>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"><label class="alg_reg reg_lbl ftwg100">Campaign Budget</label></div>
+                <div class="col-md-9 parsely_custom_msg">
+                    Your bid (the maximum you are willing to pay per click)
+                    <br>
+                    <div class="form-group parsely_custom_msg" style="width: 25%;display: inline-flex;">
+                        <label style="float: left; margin-right: 10px; margin-top: 7px;"><b>$</b></label>
+                        <%=f.text_field :budget_per_click, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter amount', maxlength: "10", 'data-parsley-min'=> "2",'data-parsley-type'=>"number",'step'=>"0.01",'style'=>"width: 800px;"%>
+                    </div>
+                    <div>Minimum bid : US$2.00 Per Click</div>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"></div>
+                <div class="col-md-9 ">What is the most you're willing to spend per day?
+                    <br>
+                    <div class="form-group parsely_custom_msg" style="width: 25%;display: inline-flex;">
+                        <label style="float: left; margin-right: 10px; margin-top: 7px;"><b>$</b></label>
+                        <%= f.text_field :budget_per_day, :class=>'form-control','data-parsley-required'=>"true",'data-parsley-required-message'=>'Please enter amount', maxlength: "20", 'data-parsley-min'=> "5",'data-parsley-type'=>"number",'style'=>"width: 800px;"%>
+                    </div>
+                    <div>Minimum budget : US$5.00 per day</div>
+                </div>
+            </div>
+
+            <div class="row ads_row_set">
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                    <% if  @advertisement.campaign_name.present? %>
+                    <%= f.submit 'Update Campaign',class: 'btn btn-warning bget_started', id: 'post_update_banner_ad' %>
+                    <% else %>
+                    <%= f.submit 'Create Campaign',class: 'btn btn-warning bget_started', id: 'post_update_banner_ad' %>
+                    <% end %>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <% end %>
+        </section>
+    </div>
+</div>

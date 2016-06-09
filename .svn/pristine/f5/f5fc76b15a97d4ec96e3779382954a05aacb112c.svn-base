@@ -1,0 +1,117 @@
+source 'https://rubygems.org'
+
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.1.5'
+# Use mysql as the database for Active Record
+gem 'mysql2'
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 4.0.3'
+
+#admin access gems
+gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'paypal-sdk-invoice'
+gem 'recursive-open-struct'
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails', '~> 4.0.0'
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'execjs'
+gem 'wannabe_bool'
+gem 'paypal-sdk-adaptivepayments'
+
+gem 'paypal-sdk-merchant'
+
+gem 'useragent'
+gem 'customerio'
+#Location gem
+gem 'geocoder'
+gem 'sendgrid-ruby'
+gem 'mail'
+gem 'therubyracer',  platforms: :ruby
+gem 'carrierwave'
+# Use jquery as the JavaScript library
+gem 'jquery-rails'
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.0'
+# bundle exec rake doc:rails generates the API under doc/api.
+gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'wisper'
+# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+gem 'spring',        group: :development
+gem 'rake', '~> 10.4.2'
+#authntication 
+gem 'devise', '~> 3.4.1'
+#validation
+gem "parsley-rails"
+
+#state machine gem
+gem 'statesman', github: 'gocardless/statesman'
+#pagination gem
+gem 'kaminari'
+gem "cancan"
+gem 'thin'
+gem 'country_select', github: 'stefanpenner/country_select'
+# Use ActiveModel has_secure_password
+# gem 'bcrypt', '~> 3.1.7'
+
+# Use unicorn as the app server
+# gem 'unicorn'
+
+# Use Capistrano for deployment
+# gem 'capistrano-rails', group: :development
+
+# Use debugger
+# gem 'debugger', group: [:development, :test]
+
+# Prawn Gem for PDF Generation
+gem 'prawn', '1.3.0'
+gem 'pdf-writer', :git => 'git://github.com/metaskills/pdf-writer.git'
+gem 'prawn-table', '~> 0.1.0'
+# An IRB alternative and runtime developer console
+# gem 'pry'
+
+gem 'whenever', :require => false
+
+# Delayed job Gems
+gem 'delayed_job_active_record'
+gem 'daemons'
+gem 'daemon-spawn'
+
+# Multiselection
+gem 'chosen-rails'
+
+gem "mini_magick"
+
+gem 'ckeditor'
+
+#Payfast payment.
+gem 'offsite_payments'
+
+#Authorize.net Payment
+gem 'authorize-net'
+
+# Development gems
+group :development, :test do
+  # gem 'better_errors', '~> 1.1.0'
+  gem 'pry', '~> 0.10.0'
+end
+
+# Brain treePayments
+gem 'braintree', '~> 2.33.1'
+
+gem 'figaro', '~> 0.7.0' # Environment variables
+gem 'gon', '~> 5.1.2' # Passing Rails variables to JS
+
+
+# Excel Generation
+gem 'axlsx_rails'
+gem 'groupdate', '~> 2.1.1'
+gem 'active_median', '~> 0.1.0'
+gem 'chartkick', '~> 1.2.4'
+
+gem 'omniauth-facebook'
+gem 'omniauth-linkedin'

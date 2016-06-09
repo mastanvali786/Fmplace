@@ -1,0 +1,53 @@
+<div class="main_container">
+<div class="container user_profile">
+<%= render(:partial => '/projects/dashboard_header') %>
+  <div style="margin-top: 10px;margin-left: 2px;">
+    <a onclick="history.back(-1)" style="color:#001FE2;font-size:12px;">
+      Go Back</a>
+  </div>
+  <h3><%= @project.full_title%></h3>
+<aside class="user_left1 alg_reg">
+  <div class="usr_lbl">
+    <a class="<%= request.fullpath.include?("message") == true ? 'active' : '' %>" href="<%= projects_action_message_path(id:@project.id)%>">
+    Messages</a>
+  </div>
+  <div class="usr_lbl">
+    <a class="<%= request.fullpath.include?("file") == true ? 'active' : '' %>" href="<%= projects_action_file_path(id:@project.id)%>">
+    Files</a>
+  </div>
+  <div class="usr_lbl">
+    <a class="<%= request.fullpath.include?("milestone") == true ? 'active' : '' %>" href="<%= projects_action_milestone_path(id:@project.id)%>">
+    Milestones</a>
+  </div>
+  <div class="usr_lbl">
+    <a class="action_menu" href="<%= projects_action_proposal_path(id:@project.id)%>">
+    Proposals</a>
+  </div>
+  <div class="usr_lbl">
+    <a class="<%= request.fullpath.include?("payment") == true ? 'active' : '' %>" href="<%= projects_action_payment_path(id:@project.id)%>">
+    Payments</a>
+  </div>
+  <div class="usr_lbl">
+    <% if @project.given_feedback?(current_user) %>
+      <% if current_user.id == @project.buyer.id %>
+        <% reference_url = "/account/user_public_profile?id=#{@project.seller.id}"%>
+      <% else %>
+        <% reference_url = "/account/user_public_profile?id=#{@project.buyer.id}"%>
+      <% end %>
+    <% else %>
+      <% reference_url = "#{projects_action_feedback_path(id:@project.id)}"%>
+    <% end %>
+     <a class="<%= request.fullpath.include?("feedback") == true ? 'active' : '' %>" href="<%= reference_url%>">
+      Leave Feedback</a>
+  </div>
+  <div class="usr_lbl">
+    <a class="<%= request.fullpath.include?("mark") == true ? 'active' : '' %>" href="<%=projects_action_mark_path(id:@project.id)%>">
+    Mark As Complete</a>
+  </div>
+  <div class="usr_lbl">
+    <a class="<%= request.fullpath.include?("dispute") == true ? 'active' : '' %>" href="<%=projects_action_dispute_path(id:@project.id)%>">
+    Dispute</a>
+  </div>
+</aside>
+<%= render @section %>
+</div>

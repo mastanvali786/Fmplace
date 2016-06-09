@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="page-header">
+        <h1><big>Advertisements</big></h1>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+        <ul class="thumbnails list-unstyled">
+            <% @advertisements.each do |advertisement| %>
+                <li class="col-md-3">
+                    <div class="thumbnail" style="padding: 0">
+                        <div style="padding:4px">
+                            <!-- <img alt="300x200" style="width: 100%" src="http://placehold.it/200x150"> -->
+                             <%= link_to image_tag(advertisement.banner_photo, :class => "media-object", :alt => "Advertisement", :width => "200",  :height => "150"), advertisements_click_on_ads_path(:advertisement_id => advertisement.id), remote: true, class: 'pull-left call_controller'%>
+                             <br><br>
+                        </div>
+                        <br><br>
+                        <div class="caption">
+                            <%= link_to advertisement.ad_title, advertisements_click_on_ads_path(:advertisement_id => advertisement.id), remote: true , class: 'call_controller'%>
+                        </div>
+
+                        <div class="modal-footer" style="text-align: left">
+                            <div class="row">
+                                 <p style="margin-left: 10px; margin-right: 10px; text-align: justify;"><small><%= advertisement.ad_content %></small>
+                                 <br>
+                                    <b><small class="pull-right"><%= advertisement.updated_at.strftime("%b, %-d %Y") %></small></b>
+                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            <% end %>
+        </ul>
+    </div>
+</div>

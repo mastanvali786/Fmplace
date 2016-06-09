@@ -1,0 +1,2 @@
+class ReferalBonus < Payment
+end

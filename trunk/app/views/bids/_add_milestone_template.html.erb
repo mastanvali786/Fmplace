@@ -1,0 +1,31 @@
+<script type="text/template" id="add-bid-milestone-template">
+  <table id="milestone_${id}">
+    <tr>
+      <td colspan='2'>
+        <span style='color:#666666;'></span>&nbsp;
+        <%= hidden_field_tag '${milestone}[bid_id]' %>
+        <input placeholder="Description" name="${milestone}[description]" style='width:227px;border: 1px solid #CCCCCC;color:#666666;' type=
+          'text' required>&nbsp;&nbsp;
+        <a class="milestone-remove" data-parent="#milestone_${id}" href="javascript:void(0)" style='color:#001FE2;'>[X]</a>
+      </td>
+    </tr>
+
+    <tr>
+      <td style='padding-left:9px'>
+              <span style='float:left;'>
+              <input class="milestone-cal" placeHolder="Delivery Date"  name="${milestone}[delivery_date]" style='width:90px;border: 1px solid #CCCCCC;color:#666666;' type=
+                'text' required></span>&nbsp;
+       <div style="display:none">
+        <span class="milestone-cal-icon" style="position:relative;top:6px;margin-left:-4px"> <img  height='18' src='<%= url_base %>/simple_files/calendar.png' style='' width='23' >
+        </span>
+       </div>
+      </td>
+
+      <td valign="bottom"><div style="margin-right:10px">
+        <span style='color:#666666;position:relative;top:1px;left:3px'>$</span>&nbsp;
+        <input placeholder="Amount" class="numeric milestone-amount" name="${milestone}[price]" style='width:55px;border: 1px solid #CCCCCC;color:#666666;' type='text' required>
+        </div>
+      </td>
+    </tr>
+  </table>
+</script>

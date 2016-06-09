@@ -1,0 +1,232 @@
+<style type="text/css">
+  .monst1w{
+    z-index: 26 !important;
+}
+.margin_categary
+{
+    margin-bottom: 7px;
+    margin-left: 12px
+}
+.clock_comman
+{
+    font-size: 14px!important;
+
+}
+</style>
+<div class="main_container">
+    <div class="container mpro_container">
+        <%= render(:partial => 'dashboard_header') %>
+        <div class="row sd_gbox">
+            <div class="col-xs-12 col-sm-6 col-md-1 st_lbl alg_reg">Status</div>
+            <div class="col-xs-12 col-sm-6 col-md-2">
+                <label class="field select monst1" style="z-index: 26">
+                    <select id="search_status_project" class="select">
+                        <option value="all">All</option>
+                        <option value="opened">Hiring Open</option>
+                        <option value="awarded">Working</option>
+                        <option value="completed">Completed</option>
+                        <option value="closed">Hiring Closed</option>
+                    </select>
+                    <i class="arrow"></i>
+                </label>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-7 sboxs">
+                <form class="search-box" action="/projects" method="get">
+                    <div class="input-group search_bs">
+                        <input type="search" placeholder="Search My Projects" class="search form-control pull-left" name="sq" value="<%= @searchseller %>">
+                        <button type="submit" class="input-group-addon" value=""><i class="fa fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-2">
+                <%= link_to 'Post New Project',new_project_path,:class=>"btn btn-warning alg_reg"%>
+            </div>
+        </div>
+
+        <!-- <div class="row srch_result fprojec">
+
+            <div class="scwdth col-xs-12 col-sm-6 col-md-4 main_fc pdlf5">
+              <div class='margin_categary main_label'>Category:</div>
+              <label class="field select">
+                <%#= select("person", "category", @categories.collect{ |u| [u.name, u.id] },{:prompt => "All" }) %>
+                <i class="arrow"></i>
+            </label>
+        </div>
+
+        <%# if @subcat_show %>
+
+        <div class="scwdth col-xs-12 col-sm-6 col-md-4 main_fc" id="subcategory_div">
+         <div class='margin_categary main_label'>Subcategory:</div>
+         <label class="field select">
+             <%#= select("subperson", "subcategory", @subcategories.collect{ |u| [u.name, u.id] },{:prompt => "All" }) %>
+             <i class="arrow"></i>
+         </label>
+     </div>
+     <%# end %>
+ </div> -->
+
+ <div class="col-md-8 sd_content pd000">
+    <% if @projects.count >=1 %>
+    <% @projects.each do |project| %>
+    <div class="ds row my_pro">
+        <div>
+            <div class="row" style="padding-left: 15px;">
+                <div class="col-xs-12 col-sm-6 col-md-9 pro_title pull-left gotham_medium">
+                    <%= link_to project.full_title, project_path(project.id),:class=>"pro_title title_anchor" %>
+                    <% if project.current_state == "opened" %>
+                    <div class='clock_comman' id="clock_<%=project.id%>" data-id='<%=project.id%>' style="color:#FE5A01" data-until="<%=project.end_date%>"></div>
+                    <%end%>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 pull-right alg_reg">
+                    <% if project.can_manage_now? %>
+                    <%= link_to 'Manage Project',projects_action_milestone_path(id:project.id),:class=>"btn btn-warning"%>
+                    <% end %>
+                </div>
+            </div>
+
+            <button class="ds_narrow pdtls search_nav gotham_medium navbar-toggle " data-toggle="collapse" data-target="#<%= project.id %>">Project Details <span class="pull-right"><i class="fa fa-chevron-down"></i></span></span></button>
+
+            <div id="<%= project.id %>" class="navbar-collapse collapse" >
+                <div class="pr_tlbl alg_reg">
+                    <div class="pull-left"><span class="main_label">Project Status:</span>&nbsp;
+                        <span class="project_value"></span>
+                        <span class="value_proj"><%= project.project_state %></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </div>
+
+                    <div class="pull-left">
+                        <% if project.project_awarded? %>
+                        <%= DISPLAY_LABEL_SHORT%>:&nbsp;
+                        <span class="blue_txt1">
+                            <a class="title_anchor" style="color: #004A82;" href="/account/user_public_profile?id=<%= project.seller.try(:id)%>"><%= project.seller.try(:display_name) %></a>
+                        </span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <% else %>
+                        <span class="main_label">Ends:</span>&nbsp;<span class="blue_txt1"></span><%= user_time_zone(project.end_date) %>&nbsp;|&nbsp;&nbsp;
+                        <% end %>
+                    </div>
+
+                    <div class="pull-left">
+                        <span class="value_proj"><%= project.bids.count %>&nbsp;<span class="main_label">Proposals</span></span>
+                    </div>
+
+                    <div class="rehire-button pull-right">
+                        <% if project.completed? %>
+                        <%= link_to "Rehire", new_project_path(rehire: project.seller.id), class: "rehire-badge" %>
+                        <% end %>
+                    </div>
+                </div>
+
+                <div class="pr_tlbl alg_reg">
+                    <div class="pull-left">
+                        <% if project.project_awarded? %>
+                        <span class="main_label">Awarded On:</span>&nbsp;<%= user_time_zone project.project_awarded_date%>
+                        <% else %>
+                        <span class="main_label">Posted On:</span>&nbsp;<%= user_time_zone(project.created_at) %>
+                        <% end %>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </div>
+                    <div class="pull-left">New Messages:&nbsp;&nbsp;<%=project.message_count%></div>
+                </div>
+
+                <div class="pv_lbl project_details alg_reg">
+                    <span class="main_label">Project Description:</span>&nbsp;&nbsp;
+                    <span><%= project.description[0...300] %></span>
+                    <span class="full_state2_<%=project.id%>" style="display:none;"><%= project.description[300..-1]%></span>
+                    <% if project.description.length >= 300%>
+                    <br><a href="javascript:void(0);" class="flip2_<%=project.id%>" style="color:#001FE2;" onclick="show_read_more(<%= project.id %>)"><i class="fa fa-sort-desc fa-2x "></i> More</a>
+                    <% end %>
+                </div>
+
+                <div class="pr_tlbl alg_reg">
+                    <div class="pull-left"><span class="main_label">Service Required:</span>&nbsp;
+                        <span class="value_proj"><%= project.try(:category_name)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </div>
+                    <div class="pull-left"><span class="main_label">Positions:</span>&nbsp;
+                        <span class="value_proj"><%= project.try(:subcategory_name)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </div>
+                    <div class="pull-left"><span class="main_label">Business Type:</span>&nbsp;
+                        <span class="value_proj"><%= project.try(:business_type_name)  %></span>
+                    </div>
+
+                </div>
+
+                <div class="pr_tlbl alg_reg">
+                    <div class="pull-left"><span class="main_label">Additional Services:</span>&nbsp;
+                        <span class="value_proj"><%= project.try(:skills)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </div>
+                   <!--  <div class="pull-left"><span class="main_label">Budget:</span>&nbsp;
+                        <span class="value_proj"><%#= project.try(:budget)%></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </div> -->
+                    <div class="pull-left"><span class="main_label">Photography Date:</span>&nbsp;
+                        <span class="value_proj"><%= project.try(:estimated_time)%></span>
+                    </div>
+                     <div class="pr_tlbl alg_reg">
+                        <div class="pull-left"><span class="main_label">Location:</span>&nbsp;
+                            <span class="value_proj"><%= project.location%></span>&nbsp;&nbsp;
+                        </div>
+                    </div>
+                </div>
+
+                <% if project.current_state.eql?('awarded') && !project.project_accepted? %>
+                <br><br><div class="pull-left"> Waiting for Seller to accept award </div>
+                <% end %>
+
+                <% if project.current_state.eql?('opened') && project.project_declined? %>
+                <br><br>
+                <div class="pull-left">Your awarded seller has declined this award. Please select another seller or re-list the project.</div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <% end %>
+    <% else %>
+    <div class="ds row my_pro alg_reg " style="font-size: 15px;text-align:center">No Projects Found</div>
+    <% end %>
+
+    <div class="clearfix pagination_box">
+        <div class="pull-left">Page <%= @projects.current_page%> of <%= @projects.total_pages%></div>
+        <div class="pull-right"><%= paginate @projects %></div>
+    </div>
+</div>
+<%= render(:partial=>'profile_complete') %>
+<div class=" pull-right col-md-4">
+    <%= render :partial=>'advertisements/show_ads', locals: { page_no: "5"} %>
+</div>
+</div>
+</div>
+
+<script>
+    $(function(){
+        $('select#search_status_project').change( function() {
+            window.location = '/projects?find_status='+$(this).val();
+        });
+    });
+
+    $(document).ready(function() {
+        var url= window.location.href;
+        if(/=/i.test(url))
+        {
+            var result = url.split('=').pop();
+            var status = getUrlVars()["find_status"];
+            var find_posted = getUrlVars()["find_posted"];
+            if (typeof(status) == 'undefined')
+            {
+                $("#search_status_project").val('all');
+            }
+            else
+            {
+                $("#search_status_project").val(status);
+            }
+        }
+    });
+
+    $('#person_category').change(function(){
+        window.location = '/projects?find_category='+$(this).val();
+    });
+
+    $('#subperson_subcategory').change(function(){
+        var category_id = $('#person_category').val();
+        window.location = '/projects?find_category='+category_id+'&find_subcategory='+$(this).val();
+    });
+
+</script>

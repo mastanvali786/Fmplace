@@ -1,0 +1,2 @@
+class BrainTreeDepositRequest < DepositRequest
+end

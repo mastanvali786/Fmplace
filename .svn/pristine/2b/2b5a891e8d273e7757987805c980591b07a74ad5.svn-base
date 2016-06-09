@@ -1,0 +1,10 @@
+<div class="blue_sep"></div>
+<% if bids.count == 0 %>
+  <div class="no_result alg_reg value_proj"
+     style="border-style:solid;border-color:#F2F2F2;border-width:medium;padding:10px;">
+    <div style="color:#000;padding:40px 0px 40px 0px;" align="center">No results found</div>
+  </div>
+<% end  %>
+<div id="bids_list_buyer">
+  <%= render bids %>
+</div>

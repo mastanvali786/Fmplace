@@ -1,0 +1,125 @@
+<div style="top: 150px; left: 340px; width: 400px; height: 400px; z-index: 2; position: fixed; border: thin solid rgb(153, 153, 153); -webkit-box-shadow: rgb(204, 204, 204) 3px 3px 5px 6px; box-shadow: rgb(204, 204, 204) 3px 3px 5px 6px; display: none; background-color: rgb(229, 229, 229);" id="milestone_pop">
+  <div style="color:#30a0be;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">Add Milestones</div>
+  
+  <%=form_for milestone, :method=>:post,:html => {:class=> "form-post-preview"} do |m| %>
+  <%=hidden_field_tag 'project_id','',:value=>m.project_id %>
+  <table cellpadding="3" cellspacing="6" border="0" width="100%" style="padding-left:20px;border-collapse: inherit;">
+    <tbody>
+      <tr>
+        <td><strong>Milestone</strong><br><%=m.text_field :description %></td>
+      </tr> 
+      <tr>
+        <td>
+          <table cellpadding="2" cellspacing="2" border="0" width="100%">
+            <tbody>
+              <tr>
+                <td colspan="2"><strong>Delivery Date</strong></td>
+              </tr>
+              <tr>
+                <td width="21%" valign="top">
+                  <%=m.text_field :delivery_date %>
+                </td>
+                <td width="79%" align="left">
+                  <img src="/assets/calendar.png" style="cursor:pointer" width="23" height="21" id="f_btn3" class="calender_date" onclick="$('#f_date3').focus();">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Amount</strong><br>$<%=m.text_field :price %></td>
+      </tr>
+      <tr>
+        <td><strong>Notes</strong> (optional)<br><%=m.text_area :note %></td>
+      </tr>
+      <tr>
+        <td>
+          <table cellpadding="0" cellspacing="6" border="0" width="40%">
+            <tbody>
+              <tr>
+                <td> <div class="orangebutton5"><span>
+                  <%=m.submit 'save' %></span></div>
+                </td>
+                <td><div class="orangebutton5"> <span>       
+                  <a href="javascript:void(0);" onclick="hide_popup('#milestone_pop')">
+                    <img src="/assets/cancel_project1.png"></a></span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>   
+          </td>
+        </tr>
+      </tbody>
+    </table> 
+    <%end%>
+  </div>
+  <%project.milestones.each do |mi| %>
+  <div style="top: 150px; left: 340px; width: 400px; height: 400px; z-index: 2; position: fixed; border: thin solid rgb(153, 153, 153); -webkit-box-shadow: rgb(204, 204, 204) 3px 3px 5px 6px; box-shadow: rgb(204, 204, 204) 3px 3px 5px 6px; display: none; background-color: rgb(229, 229, 229);" id="edit_milestone_pop<%=mi.id%>">
+    <div style="color:#30a0be;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;">Edit Milestones</div>
+    <%=form_for mi do |f| %>
+    <input name="job" type="hidden" value="milestone">
+    <input name="invoiceid" type="hidden" value="459">
+    <input name="job_cmd" type="hidden" value="edit_milestone">
+    <input name="project_id" type="hidden" value="13778312">
+    <input type="hidden" name="id" value="13778312">
+    <input id="cpay" type="hidden" value="{amt}">
+    <input id="cbid" type="hidden" value="{bidamounts}">
+    <table cellpadding="3" cellspacing="6" border="0" width="100%" style="padding-left:20px;">
+      <tbody>
+        <tr>
+          <td><strong>Milestone</strong><br><%=f.text_field :description %></td>
+        </tr>
+        <tr>
+          <td valign="middle">
+            <table cellpadding="2" cellspacing="2" border="0" width="100%">
+              <tbody>
+                <tr>
+                  <td colspan="2"><strong>Delivery Date</strong></td>
+                </tr>
+                <tr>
+                  <td width="21%" valign="top">
+                    <%=f.text_field :delivery_date %>
+                  </td>
+                  <td width="79%" align="left"><img src="/assets/calendar.png" style="cursor:pointer;" width="23" height="21" id="f_btn104"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Amount</strong><br>$<%=f.text_field :price %></td>
+        </tr>
+        <tr>
+          <td><strong>Notes</strong> (optional)<br><%=f.text_area :note %></td>
+        </tr>
+        <tr>
+          <td>
+            <table cellpadding="0" cellspacing="6" border="0" width="40%">
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="orangebutton5">
+                      <span>
+                        <a href="javascript:void(0);" onclick="javascript:document.edit_milestone104.submit();">
+                          <img src="/assets/save2.png"></a></span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="orangebutton5">
+                          <span>
+                            <a href="javascript:void(0);" onclick="hide_popup('#edit_milestone_pop<%=mi.id%>')">
+                              <img src="/assets/cancel_project1.png"></a>
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <%end%>
+        </div>
+        <%end%>

@@ -1,0 +1,32 @@
+$main-color: #3E8E41;
+$text-white: #fff;
+$background_white: #fff;
+
+header {
+	background-color:  $main-color;
+}
+footer {
+	background: none repeat scroll 0 0 $main-color;
+}
+
+
+.browse_sec {
+	background-color: $main-color;
+}
+
+.section5 {
+	background-color: $background_white;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+	background-color: $main-color;
+	border-color: $main-color;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+	color: $text-white;
+}
+
+.light_blck {
+    color: $text-white;
+}

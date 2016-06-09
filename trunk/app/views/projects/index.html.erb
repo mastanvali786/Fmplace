@@ -1,0 +1,5 @@
+<% if current_user.role_id.eql?(1) %>
+  <%= render 'seller_dashboard' %>
+<% else %>
+  <%= render 'buyer_dashboard' %>
+<% end %>

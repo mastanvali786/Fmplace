@@ -1,0 +1,150 @@
+<style type="text/css">
+  footer{
+    margin: 0px;
+  }
+</style>
+<div class="main_container">
+  <div class="section1">
+    <!-- <div class="container"> -->
+      <%= render "banner" %>
+    <!-- </div> -->
+  </div>
+</div>
+
+<div class="section2">
+  <div class="container gotham_medium">
+    <div class="row ">
+      <div class="  hwminf_works text-center">Find & Hire The Professional Freelancers</div>
+      <div class="small_title text-center">At a price that's right for your project</div>
+      <div class="row text-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 text-center">
+              <div class="col-lg-4">
+                <img src="/assets/post_project.png">
+                <div align="center">
+                  <p class="sml_title">Post Your Project</p>
+                  <p>Post a project and you will receive customized quotes from  professional freelancers.</p>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <img src="/assets/get_quote.png">
+                <div align="center">
+                  <p class="sml_title">Get Your Quote</p>
+                  <p>
+                    <ul class="list-inline">
+                      <li>Estimated price</li>
+                      <li>A personalized message</li>
+                      <li>Freelancer profile and reviews</li>
+                    </ul>
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <img src="/assets/choose_pro.png">
+                <div align="center">
+                  <p class="sml_title">Choose Professional</p>
+                  <p>Message your favorites and hire the quality freelancer for your  project.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>     
+    </div>
+  </div>
+</div>
+
+<div class="browse_sec">
+  <div class="container gotham_medium ">
+    <div class=" gotham_medium h36">Browse Freelance Services</div>
+    <div class=" gotham_medium h24">View over 3,400,000 available services by category</div>
+    <div class="row browse_expts">
+      <div class="col-md-6">
+        <div class="media">
+          <div class="media-object pull-left"><img src="/assets/design.png" alt="" /></div>
+          <div class="media-body">Design Works</div>
+          <p class="list_title">More than 8,001 service providers.</p>
+        </div>
+      </div>
+      <div class="col-md-6 bex_wgak">
+        <div class="media">
+          <div class="media-object pull-left"><img src="/assets/web.png" alt="" /></div>
+          <div class="media-body">
+            Web, Software & IT
+          </div>
+          <p class="list_title">More than 1,001 service providers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row browse_expts">
+      <div class="col-md-6 bex_wgak">
+        <div class="media">
+          <div class="media-object pull-left"><img src="/assets/admin.png" alt="" /></div>
+          <div class="media-body">
+            Admin Support</div>
+            <p class="list_title">More than 256 service providers.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="media">
+              <div class="media-object pull-left"><img src="/assets/sales.png" alt="" /></div>
+              <div class="media-body">
+                Sales & Marketing
+              </div><p class="list_title">More than 346 service providers.</p></div>
+            </div>
+          </div>
+          <div class="row browse_expts">
+            <div class="col-md-6">
+              <div class="media">
+                <div class="media-object pull-left"><img src="/assets/legal.png" alt="" /></div>
+                <div class="media-body">
+                  Legal</div>
+                  <p class="list_title">More than 334 service providers.</p></div>
+                </div>
+                <div class="col-md-6 bex_wgak">
+                  <div class="media">
+                    <div class="media-object pull-left"><img src="/assets/management.png" alt="" /></div>
+                    <div class="media-body">
+                      Management & Finance  </div>
+                      <p class="list_title">More than 9,801 service providers.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row browse_expts">
+                  <div class="col-md-6 bex_wgak">
+                    <div class="media">
+                      <div class="media-object pull-left"><img src="/assets/writing.png" alt="" /></div>
+                      <div class="media-body">
+                        Writing and translation
+                      </div>
+                      <p class="list_title">More than 108 service providers.</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="media">
+                      <div class="media-object pull-left"><img src="/assets/engg.png" alt="" /></div>
+                      <div class="media-body">
+                        Engineering & Architecture
+                      </div>
+                      <p class="list_title">More than 301 service providers.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="hb24">Not sure which service you need?</div>
+                <div>
+                  <%= link_to "Post a Project", users_signup_buyer_path, class:'btn btn-warning btn-post-c'%>
+                </div>
+              </div>
+            </div>
+          <div class="section5 clearfix">
+            <div class="container mcompanies gotham_medium">
+              <h2 class="">What our Customers are saying about us</h2>
+              <div class="row">
+                <div class="col-lg-12 col-lg-offset-0 text-center">
+                <%= render 'testimonials' %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

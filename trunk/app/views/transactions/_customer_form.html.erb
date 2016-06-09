@@ -1,0 +1,20 @@
+<p class="alg_reg reg_lbl ftwg100">Please enter your personal info:</p>
+<div class="customer_form">
+<div class="row customer_field">
+  <div class="col-md-12">
+  <%= text_field_tag :first_name, "",placeholder: "First Name", class: "radius form-control",
+      'data-parsley-required'=>"true", value: current_user.try(:first_name) %>
+  </div>
+</div>
+<div class="row customer_field">
+  <div class="col-md-12">
+    <%= text_field_tag :last_name, "",placeholder: "Last Name", class: "radius form-control",
+        'data-parsley-required'=>"true",value: current_user.try(:last_name) %>
+  </div>
+</div> 
+<div class="row customer_field">
+  <div class="col-md-12">
+  <%= text_field_tag :phone, "",placeholder: "Phone", class: "radius form-control" %>
+  </div>
+</div>
+</div>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Hi <%= @seller.visible_name %>,</p>
+
+	<p>Your Buyer has submitted payment on <%= @project.full_title %> for following milestone.</p>
+  <p><b>Milestone Details</b></p>
+	<p><b>Description:</b>&nbsp;<%= @milestone.description %></p>
+	<p><b>Delivery Date:</b>&nbsp;<%= @delivery_date %></p>
+	<p><b>Amount:</b>&nbsp;US$<%= @milestone.price %></p>
+	<p><b><%= SITE_NAME %> Fee(<%= @seller.membership_plan.service_fee %> %):&nbsp;</b>US$<%= @overhaul_fee %></p>
+	<p>Amount on its way to your account:&nbsp;US$<%= @amount_earned%></p>
+
+	<p>Please let us know if you have any questions.</p><br><br>
+
+	<p>Sincerely,</p>
+	<img src="<%= SITE_LOGO %>" height="35px" />
+	<p><%= EMAIL_SIGN_EMAIL %></p>
+	<p><%= EMAIL_SIGN_NUMBER%></p>
+</body>
+</html>

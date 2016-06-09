@@ -1,0 +1,16 @@
+<%# @request = Withdrawal@request.find params[:id] %>
+<h1 style="padding: 13px;">Authorize Credit Card Payment</h1>
+  <h3><p style="margin-top: -23px; padding-left: 14px;">Click the button "Pay" to make payment to the professional.</p></h3>
+  <div>
+   <% @sim_transaction = AuthorizeNet::SIM::Transaction.new(PaymentType.authorize_api_login_id,
+      PaymentType.authorize_api_transaction_key, @request.amount, :hosted_payment_form => true) %>
+  <% @sim_transaction.set_hosted_payment_receipt(AuthorizeNet::SIM::HostedReceiptPage.new(:link_method => AuthorizeNet::SIM::HostedReceiptPage::LinkMethod::POST, :link_text => 'Continue', :link_url => ipn_authorize_credit_deposit_url(:only_path => false))) %>
+  <div style="padding-top:5px;padding-bottom: 10px;">
+    <%= form_for :sim_transaction, :url => PaymentType.authorize_mode_url do |f| %>
+      <%= sim_fields(@sim_transaction) %>
+      <%= hidden_field_tag("x_invoice_num", @request.invoice.id, {:id => @request.invoice.id}) %>
+      <%= hidden_field_tag("x_cust_id", @request.invoice.receiver_id, {:id => @request.invoice.receiver_id}) %>
+      <%= f.submit 'Click to Pay', class: 'btn btn-warning', style: 'padding-bottom: 3px;'%>
+    <% end %>
+  </div>
+  </div>

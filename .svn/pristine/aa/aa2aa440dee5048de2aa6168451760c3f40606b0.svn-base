@@ -1,0 +1,59 @@
+<style>
+  
+  .form-error {
+   color:red
+ }
+
+ input.error{
+   border: 2px solid red;
+ }
+ .user_right
+ {
+  margin-left: 0px !important;
+}
+
+</style>
+<div class="pop_box_wrap clearfix">
+<% header = "New Message" %>
+  <section class="row user_right mpop alg_reg">
+    <div class="clearfix">
+
+      <h3 class="orange pull-left "><%=header%></h3>
+      <div class="pull-right"><a class="hide-popup btn btn-warning img-circle" href="javascript:void(0);" id="cancel"> X </a></div>
+    </div>
+    <%= form_for @message, html: {id: 'popup-form',  multipart:true}, remote:true, enctype: "multipart/form-data" do |f| %>
+    <%= render partial: "shared/form_messages", locals: {message:@notice} %>
+    <%= render partial: "shared/form_errors", locals: {model:@message} %>
+    <%=f.hidden_field :type, :value => 'Normal' %>
+    <div class="row">
+      <div class="col-md-12">
+        <label class=" reg_lbl ">To</label>
+        <%= f.text_field :to,  {value:@to, :size => "40",:class =>"form-control", data: {validation:"email"}, :style => "color:#666666" } %>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+      <div class="col-md-12">
+        <label class=" reg_lbl ">Subject</label>
+        <%= f.text_field :subject,  {:size => "40", :class =>"form-control",:style => "color:#666666" } %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <label class=" reg_lbl ">Body</label>
+        <%= f.text_area :body,  :cols => "33", :rows => "5", :class =>"form-control",:style => "color:#666666;font-size:13px;" %>
+      </div>
+    </div>
+    <div class="row ppwrap" style="padding-top: 15px;padding-bottom: 10px;">
+      <div class="col-xs-6 col-md-3">
+        <a class="submit-popup btn btn-warning save" href="javascript:void(0);" >Submit</a>
+      </div>
+      <div class="col-xs-6 col-md-2">
+        <a class="hide-popup btn btn-default cancel" href="javascript:void(0);" id="cancel">
+          Cancel
+        </a>
+      </div>
+    </div>
+    <%end %>
+
+  </section>
+</div>

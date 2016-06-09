@@ -1,0 +1,316 @@
+class Project < ActiveRecord::Base
+  include Messageables::Project
+  include Statesman::Adapters::ActiveRecordQueries
+  include ApplicationHelper
+  include StateMachine
+  include BidsHelper
+  act_like_state_machine
+  belongs_to :user, foreign_key:"user_id", class_name:"User"
+
+  validates_presence_of :title,:end_date,:category_id,:user_id
+  has_many :post_messages
+  has_many :attachments
+  has_many :bids
+  has_one :project_seller
+  has_many :files, class_name: "ProjectFile"
+  has_many :milestones
+  belongs_to :category
+  belongs_to :subcategory
+  belongs_to :thirdcategory
+  belongs_to :country
+  belongs_to :state
+  has_many :project_messages
+  has_many :messages, through: :project_messages
+  has_many :disputes
+  has_many :report_violations
+  has_many :feedbacks
+  has_many :bidders, through: :bids, :source => :user
+  belongs_to :hired_freelancer, class_name: "User", foreign_key: "rehired_freelancer"
+  scope :opened, -> { in_state(:opened) }
+  scope :awarded, -> { in_state(:awarded) }
+  scope :closed, -> { in_state(:closed) }
+  scope :completed, ->  { in_state(:completed) }
+  scope :awardcomplete, ->  { in_state(:awarded, :completed) }
+  scope :unrehired_projects, ->  { where(rehire_project: false) }
+
+  belongs_to :project_tag
+  belongs_to :skill_tag
+  belongs_to :project_budget
+  belongs_to :budget_option
+  belongs_to :project_time_frame
+  belongs_to :project_option
+  mount_uploader :project_photo, AvatarUploader
+
+  after_create :send_mail_to_freelancer
+  delegate :name, to: :category, prefix: true, allow_nil: true
+  # Serialize
+  serialize :project_tag_ids, Array
+  serialize :skill_tags_ids, Array
+  attr_accessor :file_name
+
+  def bid_count
+    bids.count
+  end
+
+  def category_name
+    category.try(:name)
+  end
+
+  def subcategory_name
+    subcategory.try(:name)
+  end
+
+  def project_state
+    current_state.to_s.capitalize
+  end
+
+  def state_name
+    state.try(:state_name)
+  end
+
+  def country_name
+    country.try(:name)
+  end
+
+  def location
+    loc = "#{city}," if city
+    loc += " #{state_name}," if state_name
+    loc += " #{country_name}" if country_name
+  end
+
+  def full_title
+    title
+  end
+
+  def url
+    "#{SITE_URL}/projects/#{self.id}"
+  end
+  
+  def tags
+    get_name_by_ids(ProjectTag, project_tag_ids)
+  end
+
+  def skills
+    get_name_by_ids(SkillTag, skill_tags_ids)
+  end
+
+  def budget
+    if budget_option.present?
+      "#{budget_option.name} (#{budget_option.project_budget.name})"
+    end
+  end
+
+  def estimated_time
+    project_time_frame.try(:name)
+  end
+
+  def self.search_projects(search)
+    where(Project.arel_table[:title].matches("%#{search}%"))
+  end
+
+  def project_start_date
+    date_time = created_at #start_date || created_at
+    date_time.in_time_zone(User.current.try(:time_zone)).strftime("%e %b %Y, %I:%M %p")
+  end
+
+  def to_date(date)
+    Date.strptime(date, "%m/%d/%Y")
+  end
+
+  def project_end_date
+    date_time = end_date
+    date_time.in_time_zone(User.current.try(:time_zone)).strftime("%e %b %Y, %I:%M %p")
+  end
+
+  def ended?
+    #DateTime.now.strftime("%e %b %Y, %I:%M %p") >= project_end_date
+    DateTime.now >= end_date
+  end
+
+  after_find do |project|
+    if project.current_state == "opened" && project.ended?
+      project.transition_to!(:closed) if project.current_state != "closed"
+    end
+  end
+
+  def self.send_email_to_buyer
+    all.each do |project|
+      if project.current_state == "opened" && project.bids.count >= 3
+        one_day = project.bids.last.created_at + 1.days
+        seven_day = project.bids.last.created_at + 7.days
+        if one_day.to_date == Time.now.to_date
+             emailtemplate=EmailTemplate.find_by_template('quotes_one_day')
+    
+    body=emailtemplate.content % {visible_name: project.buyer.visible_name, count: project.bids.count,email_sign_name:EMAIL_SIGN_NAME,site_logo:SITE_LOGO,site_email:EMAIL_SIGN_EMAIL,site_phone:EMAIL_SIGN_NUMBER}
+    subject= emailtemplate.subject % {count: project.bids.count}
+    email_setting(User.current,subject,body,project.buyer.email)
+          #OverhaulMailer.delay.notify_buyer_about_quotes_one_day(project)
+        end
+        if seven_day.to_date == Time.now.to_date
+             emailtemplate=EmailTemplate.find_by_template('What did you Decide?')
+    subject= emailtemplate.subject
+    body=emailtemplate.content % {visible_name: project.buyer.visible_name,site_logo:SITE_LOGO,site_email:EMAIL_SIGN_EMAIL,site_phone:EMAIL_SIGN_NUMBER}
+    email_setting(User.current,subject,body,project.buyer.email)
+          #OverhaulMailer.delay.notify_buyer_about_quotes_one_week(project)
+        end
+      end
+    end
+  end
+
+  def send_mail_to_freelancer
+    if rehire_project
+      OverhaulMailer.send_mail_about_rehiring(self).deliver
+    end
+  end
+  # def buyer
+  #   user.full_name
+  # end
+
+  # def seller
+  #   project_seller.try(:user).try(:full_name)
+  # end
+
+  def buyer
+    user
+  end
+
+  def buyer_name
+    user.try(:visible_name)
+  end
+
+  def buyer_rating
+    user.try(:ratings)
+  end
+
+  def seller
+    project_seller.try(:user)
+  end
+
+  def buyer?(user_current)
+    buyer == user_current
+  end
+
+  def seller?(user_current)
+    seller == user_current
+  end
+
+  def seller_shop
+    project_seller.try(:user).try(:visible_name)
+  end
+
+  def amount
+    project_seller.bid.proposed_amount  if project_seller
+  end
+
+  def project_awarded?
+    if project_seller
+      project_seller.bid.awarded.eql?(true)
+    else
+      return false
+    end
+  end
+
+  def project_accepted?
+    if project_seller
+      project_seller.bid.accepted.eql?(true)
+    else
+      return false
+    end
+  end
+
+  def project_declined?
+    if project_seller
+      project_seller.bid.declined.eql?(true)
+    else
+      return false
+    end
+  end
+
+  def message_count
+    messages.count
+  end
+
+  def workroom_url
+    "#{SITE_URL}/projects/action/milestone?id=#{self.id}"
+  end
+
+  def payment_url
+    "#{SITE_URL}/projects/action/payment?id=#{self.id}"
+  end
+
+  def project_awarded_date
+    project_seller.bid.awarded_date if project_seller
+  end
+
+  def project_accepted_date
+    project_seller.bid.accepted_date if project_seller
+  end
+
+  def project_declined_date
+    project_seller.bid.declined_date if project_seller
+  end
+
+  def given_feedback?(user)
+    if feedbacks
+      return feedbacks.map(&:from_id).include?(user.id)
+    else
+      return false
+    end
+  end
+
+  def completed?
+    current_state == "completed"
+  end
+
+  def awarded?
+    current_state == "awarded"
+  end
+
+  def can_manage_now?
+    return true if project_seller && project_seller.bid.accepted?
+    return false
+  end
+
+  def paid_amount
+    if milestones
+      amount_array = milestones.accepted.map(&:release_fund_request).compact.map(&:amount)
+      amount = amount_array.inject { |sum,x| sum.to_f + x.to_f } if amount_array
+    else
+      amount = 0
+    end
+  end
+
+  def total_amount
+    if milestones
+      amount = milestones.accepted.sum(:price)
+    else
+      amount = 0
+    end
+    amount
+  end
+
+  def pending_amount
+    total = total_amount.nil? ? 0 : total_amount.to_f
+    remaining = paid_amount.nil? ? 0 : paid_amount.to_f
+    total - remaining
+  end
+
+
+  def other_shop_notifications
+    project = self
+    all_bids = project.bids
+    all_bids.each do |bid|
+      user = bid.user
+      if user && user.id != project.seller.id
+            emailtemplate=EmailTemplate.find_by_template('send_others_about_reward')
+    @estimates=estimated_days_display bid.estimated_days
+    body=emailtemplate.content % {user_visible_name: user.visible_name, full_title: project.full_title, category_name: project.category_name,subcategory_name: project.subcategory_name,tags: project.tags,skills: project.skills,budget: project.budget,estimated_time: project.estimated_time,location: project.location,description: project.description,details: bid.details,estimated_days: @estimates,proposed_amount: bid.proposed_amount,site_logo:SITE_LOGO,login_url:SITE_LOGIN_URL,site_email:EMAIL_SIGN_EMAIL,site_phone:EMAIL_SIGN_NUMBER}
+    subject=emailtemplate.subject % {full_title: project.full_title,label_short: DISPLAY_LABEL_SHORT}
+    email_setting(User.current,subject,body,user.email)
+       # OverhaulMailer.delay.send_others_about_award(project, bid, user)
+      end
+    end
+  end
+
+  
+end

@@ -1,0 +1,200 @@
+<%= render(:partial => '/projects/dashboard_header') %>
+<% if current_user.role.eql?('1')%>
+<div style="padding-left:40px">
+  <div style="color:#30a0be;font-size:16px;font-weight:bold;padding-bottom:2px;padding-left:12px;">Edit Profile</div>
+  <div style="color:#999999;font-size:12px;padding-left:14px;">Basic information</div><br>
+  <div style="color:red;font-size:10px;padding-bottom:0px;padding-top:5px;padding-left:14px;">* Required</div>
+  <table cellpadding="0" cellspacing="0" border="0" width="98%">
+	<tbody><tr valign="top">
+	<td>
+
+<%= form_for 'account', url: {action: "profile"},:html => {:"data-validate" => 'parsley' ,:id=>'contractor_profile'} do |f| %>
+<%=f.hidden_field :save_type,value: 'contractor'%>
+<table cellpadding="12" cellspacing="0" border="0" width="100%">
+<tbody><tr>
+<td><strong style="color:#666666;">Display Name</strong><span style="color:red;">*</span><br>
+ <%= f.text_field :display_name,'required' => '',:value => current_user.display_name %>
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+</tr>
+<tr>
+<td><strong style="color:#666666;">Tagline</strong><span style="color:red;"> </span><br>
+<%= f.text_field :tagline,:value => current_user.tagline %>
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+</tr>
+<tr>
+<td>
+<strong style="color:#666666;">Minimum Hourly Rate(optional)</strong><br><br>
+<span style="color:#666666;padding-right:100px;">My hourly rate: </span><span style="color:#666666;">US$</span>
+<%= f.text_field :hourly_rate,:value => @hourly_rate %>
+<span style="color:#666666;">&nbsp;/hr</span>
+</td>
+</tr>
+<tr>
+<td><strong style="color:#666666;">Summary</strong><span style="color:red;">*</span><br>
+<%= f.text_area :summary,'required' => '', size: "60x12",:value => @summary %>
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+</tr>
+<tr>
+<td><strong style="color:#666666;">Detailed Skills &amp; Services</strong><span style="color:red;">*</span><br>
+<%= f.text_area :detailed_skills_services,'required' => '', size: "60x12",
+:value => @skills_service %>
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+</tr>
+<tr>
+<td>
+<strong style="color:#666666;">Categories your profile will be visible</strong><span style="color:red;">*</span><br>
+<table cellpadding="0" cellspacing="0" border="0" width="55%">
+<tbody><tr>
+<td align="left">
+
+<%=f.select :categories_visible,options_for_select(@category.collect{ |u| [u.name, u.id] },
+	:selected => @cat_ids),
+ {},{ :class => "select_box",:multiple => true,
+ :size => 10,'required' => '' }%>
+
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+<td align="left" valign="top" style="padding-left:5px;">
+<div style="width:245px;height:90px;background-color:#CBF8FA;padding:6px;">
+<span style="color:#666666;">
+Hold down the CTRL key (on your keyboard)<br>to select multiple categories of expertise</span><br><br>
+<span style="color:#666666;">
+Profile Visibility:<br>You may select up to <strong style="color:#666666;">10</strong> categories within which you will be listed us a service provider.</span>
+</div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td>
+<strong style="color:#666666;">Skills your profile will be visible</strong><span style="color:red;">*</span><br>
+<table cellpadding="0" cellspacing="0" border="0" width="55%">
+<tbody><tr>
+<td align="left">
+<%=f.select :skills, options_for_select(@skills.collect{ |u| [u.name, u.id] },
+	:selected => @skill_ids), {},{ :class => "select_box",:multiple => true, :size => 10,'required' => '' }%>
+
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+<td align="left" valign="top" style="padding-left:5px;">
+<div style="width:245px;height:90px;background-color:#CBF8FA;padding:6px;">
+<span style="color:#666666;">
+Hold down the CTRL key (on your keyboard)<br>to select multiple skills</span><br><br>
+<span style="color:#666666;">
+Profile Visibility:<br>You may select up to <strong style="color:#666666;">10</strong> skills within which you will be listed us a service provider.</span>
+</div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td>
+<table cellpadding="0" cellspacing="0" border="0" width="42%">
+<tbody><tr>
+<td align="left">
+<a href="/account/profile"><img src="http://dev.archability.com/arch/images/back1.jpg" name="Image3" width="110" height="30" border="0"></a>
+</td>
+<td align="left">
+ <%= f.submit 'save_profile', :type => :image, :src => "http://dev.archability.com/arch/images/save1_1.jpg",:id=>'save_personal' %>
+</td>
+<td align="left">
+<a href="/account/profile"><img src="http://dev.archability.com/arch/images/cancel1.jpg" name="Image2" width="109" height="30" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+<% end %>
+ 
+</td>
+</tr>
+</tbody></table>
+<div style="padding-bottom:20px;"></div>
+</div>
+
+<% else %>
+
+<%= form_for 'account', url: {action: "profile"},:html => {:"data-validate" => 'parsley' ,:id=>'contractor_profile'} do |f| %>
+<table cellpadding="12" cellspacing="0" border="0" width="100%">
+<tbody><tr>
+<td><strong style="color:#666666;">Display Name</strong><span style="color:red;">*</span><br>
+ <%= f.text_field :display_name,'required' => '',:value => current_user.display_name %>
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+</tr>
+<tr>
+<td><strong style="color:#666666;">Tagline</strong><span style="color:red;">* </span><br>
+<%= f.text_field :tagline,:value => current_user.tagline %>
+<div class="hint">This information is required to continue<div class="hint-pointer">&nbsp;</div></div>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" border="0" width="42%">
+<tbody><tr>
+<td align="left">
+<a href="/account/profile"><img src="http://dev.archability.com/arch/images/back1.jpg" name="Image3" width="110" height="30" border="0"></a>
+</td>
+<td align="left">
+ <%= f.submit 'save_profile_client', :type => :image, :src => "http://dev.archability.com/arch/images/save1_1.jpg",:id=>'save_personal' %>
+</td>
+<td align="left">
+<a href="/account/profile"><img src="http://dev.archability.com/arch/images/cancel1.jpg" name="Image2" width="109" height="30" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+<% end %>
+<% end %>
+
+<script>
+  $('#save_personal').click(function(e){
+    e.preventDefault();
+    var display_name = $('#account_display_name').val();
+    var tagline = $('#account_tagline').val();
+		var hourly_rate = $('#account_hourly_rate').val();
+		// var summary = $('#account_summary').val();
+		// var skills_services = $('#account_detailed_skills_services').val();
+		var name_regex =  /^[a-zA-Z ]*$/;
+		var number_regex = /^-?\d+(\.\d+)?$/;
+
+    if(!display_name.match(name_regex)){
+      $('#account_display_name').val('');
+      $('#account_display_name').focus();
+      $('#account_display_name').css({'border-color' : 'red'});
+      $('#account_display_name').attr('placeholder', 'Please use alphabets only.');
+      return false;
+    }else if(!tagline.match(name_regex)){
+      $('#account_tagline').val('');
+      $('#account_tagline').focus();
+      $('#account_tagline').css({'border-color' : 'red'});
+      $('#account_tagline').attr('placeholder', 'Please use alphabets only.');
+      return false;
+    // }else if(!summary.match(name_regex)){
+    //   $('#account_summary').val('');
+    //   $('#account_summary').focus();
+    //   $('#account_summary').css({'border-color' : 'red'});
+    //   $('#account_summary').attr('placeholder', 'Please enter valid address.');
+    //   return false;
+    // }else if(!skills_services.match(name_regex)){
+    //   $('#account_detailed_skills_services').val('');
+    //   $('#account_detailed_skills_services').focus();
+    //   $('#account_detailed_skills_services').css({'border-color' : 'red'});
+    //   $('#account_detailed_skills_services').attr('placeholder', 'Please enter valid address.');
+    //   return false;
+    }else if(hourly_rate && !hourly_rate.match(number_regex)){
+      $('#account_hourly_rate').val('');
+      $('#account_hourly_rate').focus();
+      $('#account_hourly_rate').css({'border-color' : 'red'});
+      $('#account_hourly_rate').attr('placeholder', 'Please enter number only.');
+      return false;
+    }else{
+      $( "form#contractor_profile" ).submit();  
+    }
+  });
+    </script>

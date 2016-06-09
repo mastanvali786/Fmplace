@@ -1,0 +1,6 @@
+payfast:
+  test_mode: true
+  login: laxman@auctionsoftware.com
+  merchant_id: 10002051
+  merchant_key: c88azknx8uiu4
+  password: clientpass

@@ -1,0 +1,2 @@
+class BrainTreeWithdrawalRequest < WithdrawalRequest
+end

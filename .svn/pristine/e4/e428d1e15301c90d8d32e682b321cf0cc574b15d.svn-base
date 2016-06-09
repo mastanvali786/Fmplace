@@ -1,0 +1,2 @@
+class PayFastDepositRequest < DepositRequest
+end

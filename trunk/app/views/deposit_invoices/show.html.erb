@@ -1,0 +1,83 @@
+<%= stylesheet_link_tag "alert" %>
+<style>
+  #invoice a {
+    color: blue
+  }
+</style>
+<div class="main_container">
+  <div class="container mpro_container">
+    <%= render partial: "shared/header_back" %>
+    <div id="milestone-messages">
+      <%= render partial: "shared/alert" %>
+    </div>
+    <div style="color:#fe5a01;font-size:14px;font-weight:bold;padding:15px 0px 5px 20px;font-family: 'GothamMedium' !important;">
+      <span >
+        Deposit Invoice
+      </span>
+      <span>
+        <a href="<%= deposit_invoices_path %>" style="color:#fe5a01;float:right">Invoices</a>
+      </span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover alg_reg" border="0" cellpadding="3" cellspacing="6" id="invoice" style="padding-left:20px;">
+        <tbody>
+          <tr>
+            <td>
+              <strong>Invoice Id</strong>
+            </td>
+            <td>
+              <%= @invoice.id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Deposit Request</strong>
+            </td>
+            <td>
+              <% request = @invoice.request %>
+              <%= link_to "Deposit Request", deposit_request_path(request) %>
+            </td>
+          </tr>
+          <% funded = @invoice.paid? %>
+          <tr>
+            <td>
+              <strong>Deposited</strong>
+            </td>
+            <td>
+              <%= yes_no funded %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Amount</strong>
+            </td>
+            <td>
+              <%= to_currency @invoice.amount %>
+            </td>
+          </tr>
+          <% if funded %>
+            <tr>
+              <td>
+                <strong>Paid On</strong>
+              </td>
+              <td>
+                <%= user_time_zone @invoice.paidOn %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @invoice.payer?(current_user) and !funded %>
+            <tr>
+              <% link = @invoice.pay_url %>
+              <td>
+                <strong>Action</strong>
+              </td>
+              <td>
+                <%= link_to "Deposit Invoice", link, class:'blank' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
